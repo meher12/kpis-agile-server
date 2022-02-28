@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+
+  app:
+      image: 'kpis-auth-model:latest'
+      ports:
+         - "8080:8080"
+      build:
+         context: .
+      container_name: app
+      restart: on-failure
+      depends_on:
+         - db
+      environment:
+            #compose-postgres name db user pass
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+            - SPRING_DATASOURCE_USERNAME=postgres
+            - SPRING_DATASOURCE_PASSWORD=mypass
+            - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+            - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+  db:
+     image: 'postgres:13.1-alpine'
+     restart: always
+     container_name: db
+     volumes:
+      - postgres-datakpi:/var/lib/postgresql/data
+     environment:
+         - POSTGRES_USER=postgres
+         - POSTGRES_PASSWORD=mypass
+volumes:
+  postgres-datakpi:     
+  
