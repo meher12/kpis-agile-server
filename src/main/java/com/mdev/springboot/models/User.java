@@ -43,11 +43,11 @@ public class User {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(mappedBy = "team_membres")
-    private List<Projet> projet;
+//    @ManyToMany(mappedBy = "team_membres")
+//    private List<Projet> projet;
 
-    @ManyToMany(mappedBy = "developer")
-    Set<Task> tasks;
+//    @ManyToMany(mappedBy = "developer")
+//    Set<Task> tasks;
 
     public User() {
         super();
@@ -60,14 +60,14 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String email, String password, Set<Role> roles, List<Projet> projet, Set<Task> tasks) {
+    public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email,
+            @NotBlank @Size(max = 120) String password, Set<Role> roles) {
         super();
         this.username = username;
         this.email = email;
         this.password = password;
         this.roles = roles;
-        this.projet = projet;
-        this.tasks = tasks;
+        
     }
 
     public Long getId() {
@@ -110,20 +110,8 @@ public class User {
         this.roles = roles;
     }
 
-    public List<Projet> getProjet() {
-        return projet;
-    }
+  
 
-    public void setProjet(List<Projet> projet) {
-        this.projet = projet;
-    }
-
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }
+    
 
 }

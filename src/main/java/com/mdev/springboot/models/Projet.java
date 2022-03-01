@@ -41,15 +41,15 @@ public class Projet {
     @Column(length = 10, nullable = false)
     private int iteration_sprint;
 
-    @Column(length = 20, nullable = false)
-    private String nomPO;
+//    @Column(length = 20, nullable = false)
+//    private String nomPO;
+//
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(name = "users_projets", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "projets_id", referencedColumnName = "id"))
+//    private Set<User> team_membres;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_projets", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "projets_id", referencedColumnName = "id"))
-    private Set<User> team_membres;
-
-    @OneToMany(mappedBy = "story_of_projet")
-    private Set<Story> stories;
+//    @OneToMany(mappedBy = "story_of_projet")
+//    private Set<Story> stories;
 
     @OneToMany(mappedBy = "sprint_of_project")
     private Set<Sprint> sprints;
@@ -106,29 +106,6 @@ public class Projet {
         this.iteration_sprint = iteration_sprint;
     }
 
-    public String getNomPO() {
-        return nomPO;
-    }
-
-    public void setNomPO(String nomPO) {
-        this.nomPO = nomPO;
-    }
-
-    public Set<User> getTeam_membres() {
-        return team_membres;
-    }
-
-    public void setTeam_membres(Set<User> team_membres) {
-        this.team_membres = team_membres;
-    }
-
-    public Set<Story> getStories() {
-        return stories;
-    }
-
-    public void setStories(Set<Story> stories) {
-        this.stories = stories;
-    }
 
     public Set<Sprint> getSprints() {
         return sprints;

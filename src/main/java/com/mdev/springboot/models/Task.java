@@ -50,16 +50,16 @@ public class Task {
     @JoinColumn(name = "story_id", referencedColumnName = "id")
     private Story story;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "developer_tasks", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
-    private Set<User> developer;
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(name = "developer_tasks", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+//    private Set<User> developer;
 
     public Task() {
         super();
     }
 
     public Task(String nom, String description, Date date_debut, Date date_fin, int estimation, ETask statut,
-            Story story, Set<User> developer) {
+            Story story) {
         super();
         this.nom = nom;
         this.description = description;
@@ -68,7 +68,6 @@ public class Task {
         this.estimation = estimation;
         this.statut = statut;
         this.story = story;
-        this.developer = developer;
     }
 
     public Long getId() {
@@ -134,15 +133,5 @@ public class Task {
     public void setStory(Story story) {
         this.story = story;
     }
-
-    public Set<User> getDeveloper() {
-        return developer;
-    }
-
-    public void setDeveloper(Set<User> developer) {
-        this.developer = developer;
-    }
-
-   
 
 }

@@ -17,7 +17,7 @@ import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.SprintRepository;
 
 @RestController
-@RequestMapping("api/v1/sprint")
+@RequestMapping("api/sprint")
 public class SprintController {
 
     @Autowired

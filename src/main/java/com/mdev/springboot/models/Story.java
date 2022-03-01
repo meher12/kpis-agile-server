@@ -40,12 +40,11 @@ public class Story {
     @JoinColumn(name = "sprint_id", referencedColumnName = "id")
     private Sprint story_of_sprint;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "projet_id", referencedColumnName = "id")
-    private Projet story_of_projet;
+//    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "projet_id", referencedColumnName = "id")
+//    private Projet story_of_projet;
 
-    public Story(String name, String description, int story_point, int priorite, Set<Task> task, Sprint story_of_sprint,
-            Projet story_of_projet) {
+    public Story(String name, String description, int story_point, int priorite, Set<Task> task, Sprint story_of_sprint) {
         super();
         this.name = name;
         this.description = description;
@@ -53,7 +52,7 @@ public class Story {
         this.priorite = priorite;
         this.task = task;
         this.story_of_sprint = story_of_sprint;
-        this.story_of_projet = story_of_projet;
+        
     }
 
     public Long getId() {
@@ -112,12 +111,6 @@ public class Story {
         this.story_of_sprint = story_of_sprint;
     }
 
-    public Projet getStory_of_projet() {
-        return story_of_projet;
-    }
-
-    public void setStory_of_projet(Projet story_of_projet) {
-        this.story_of_projet = story_of_projet;
-    }
+   
 
 }
