@@ -19,7 +19,7 @@ import com.mdev.springboot.repository.ProjetRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("api/projet")
+@RequestMapping("api/projets")
 public class ProjetController {
 
     @Autowired

@@ -19,7 +19,7 @@ import com.mdev.springboot.repository.SprintRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("api/sprint")
+@RequestMapping("api/sprints")
 public class SprintController {
 
     @Autowired
