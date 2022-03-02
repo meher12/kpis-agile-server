@@ -43,6 +43,8 @@ public class Sprint {
     @JoinColumn(name = "projet_id", referencedColumnName = "id")
     private Projet sprint_of_project;
 
+   
+
     public Sprint(String stitre, String sdescription, Date sdate_debut, Date sdate_fin, Set<Story> story,
             Projet sprint_of_project) {
         super();
@@ -94,13 +96,6 @@ public class Sprint {
         this.sdate_fin = sdate_fin;
     }
 
-    public Set<Story> getStory() {
-        return story;
-    }
-
-    public void setStory(Set<Story> story) {
-        this.story = story;
-    }
 
     public Projet getSprint_of_project() {
         return sprint_of_project;
@@ -109,5 +104,15 @@ public class Sprint {
     public void setSprint_of_project(Projet sprint_of_project) {
         this.sprint_of_project = sprint_of_project;
     }
+
+    public Set<Story> getStory() {
+        return story;
+    }
+
+    public void setStory(Set<Story> story) {
+        this.story = story;
+    }
+    
+    
 
 }

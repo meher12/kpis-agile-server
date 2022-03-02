@@ -56,6 +56,7 @@ public class ProjetController {
         projet.setDescription(projetDetails.getDescription());
         projet.setDate_debut(projetDetails.getDate_debut());
         projet.setDate_fin(projetDetails.getDate_fin());
+        //projet.setSprints(projetDetails.getSprints());
 
         Projet updatedProjet = this.projetRepository.save(projet);
         return ResponseEntity.ok(updatedProjet);
