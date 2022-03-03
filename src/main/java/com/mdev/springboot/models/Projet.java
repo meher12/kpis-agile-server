@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "projets")
@@ -26,11 +27,13 @@ public class Projet {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(length = 50, nullable = false)
+    @NotNull
+    @Column(length = 50)
     private String titre;
 
-    @Column(length = 250, nullable = false)
-    private String description;
+    @NotNull
+    @Column(length = 1200)
+    private String description_project;
 
     @Temporal(TemporalType.DATE)
     private Date date_debut;
@@ -64,7 +67,7 @@ public class Projet {
     public Projet(String titre, String description, Date date_debut, Date date_fin, Set<Sprint> sprints) {
     super();
     this.titre = titre;
-    this.description = description;
+    this.description_project = description;
     this.date_debut = date_debut;
     this.date_fin = date_fin;
     this.sprints = sprints;
@@ -88,11 +91,11 @@ public class Projet {
     }
 
     public String getDescription() {
-        return description;
+        return description_project;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description_project = description;
     }
 
     public Date getDate_debut() {
