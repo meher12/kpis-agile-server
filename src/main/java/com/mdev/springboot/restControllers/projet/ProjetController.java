@@ -1,11 +1,15 @@
 package com.mdev.springboot.restControllers.projet;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,20 +19,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mdev.springboot.exception.ResourceNotFoundException;
 import com.mdev.springboot.models.Projet;
+import com.mdev.springboot.payload.response.MessageResponse;
 import com.mdev.springboot.repository.ProjetRepository;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600)
 @RestController
-@RequestMapping("api/projets")
+@RequestMapping("api/projects")
 public class ProjetController {
 
     @Autowired
     ProjetRepository projetRepository;
 
     // get project list
+    //@PreAuthorize("hasRole('PRODUCTOWNER')")
     @RequestMapping(value = "/projects", method = RequestMethod.GET)
-    public List<Projet> getProjetList() {
-        return this.projetRepository.findAll();
+    public ResponseEntity<?> getProjetList() {
+
+        List<Projet> projets = new ArrayList<>();
+        projets = this.projetRepository.findAll();
+
+       if ((AuthorityUtils.authorityListToSet(SecurityContextHolder.getContext().getAuthentication().getAuthorities()).contains("ROLE_PRODUCTOWNER"))) {
+            return ResponseEntity.ok(projets);
+        } else {
+            return ResponseEntity.badRequest().body(new MessageResponse("Sorry, you are not allowed to access this content!"));
+        }
     }
 
     // get project by id
@@ -56,7 +70,7 @@ public class ProjetController {
         projet.setDescription(projetDetails.getDescription());
         projet.setDate_debut(projetDetails.getDate_debut());
         projet.setDate_fin(projetDetails.getDate_fin());
-        //projet.setSprints(projetDetails.getSprints());
+        // projet.setSprints(projetDetails.getSprints());
 
         Projet updatedProjet = this.projetRepository.save(projet);
         return ResponseEntity.ok(updatedProjet);
@@ -69,7 +83,7 @@ public class ProjetController {
         Projet projet = this.projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found project with id: " + id));
         this.projetRepository.delete(projet);
-        
+
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);

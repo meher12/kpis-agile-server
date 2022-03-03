@@ -111,6 +111,9 @@ public class Sprint {
 
     public void setStory(Set<Story> story) {
         this.story = story;
+        for (Story r : story) {
+            r.setStory_of_sprint(this);
+        }
     }
     
     

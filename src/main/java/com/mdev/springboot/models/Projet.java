@@ -118,6 +118,9 @@ public class Projet {
 
     public void setSprints(Set<Sprint> sprints) {
         this.sprints = sprints;
+        for (Sprint r : sprints) {
+            r.setSprint_of_project(this);
+        }
     }
 
    
