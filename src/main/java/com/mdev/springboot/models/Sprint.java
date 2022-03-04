@@ -1,28 +1,36 @@
 package com.mdev.springboot.models;
 
 import java.util.Date;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "sprint")
 public class Sprint {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sprint_generator")
     private Long id;
+
+    @NotNull
+    @Column(length = 15)
+    private String sUniqueID;
 
     @Column(length = 50, nullable = false)
     private String stitre;
@@ -31,29 +39,31 @@ public class Sprint {
     private String sdescription;
 
     @Temporal(TemporalType.DATE)
-    private Date sdate_debut;
+    private Date sdateDebut;
 
     @Temporal(TemporalType.DATE)
-    private Date sdate_fin;
+    private Date sdateFin;
 
-    @OneToMany(mappedBy = "story_of_sprint")
-    private Set<Story> story;
+//    @OneToMany(mappedBy = "story_of_sprint")
+//    private Set<Story> story;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "projet_id", referencedColumnName = "id")
-    private Projet sprint_of_project;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "projet_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Projet projetId;
 
-   
+    public Sprint() {
+        super();
+    }
 
-    public Sprint(String stitre, String sdescription, Date sdate_debut, Date sdate_fin, Set<Story> story,
-            Projet sprint_of_project) {
+    public Sprint(String stitre, String sdescription, Date sdateDebut, Date sdateFin, Projet projet) {
         super();
         this.stitre = stitre;
         this.sdescription = sdescription;
-        this.sdate_debut = sdate_debut;
-        this.sdate_fin = sdate_fin;
-        this.story = story;
-        this.sprint_of_project = sprint_of_project;
+        this.sdateDebut = sdateDebut;
+        this.sdateFin = sdateFin;
+        this.projetId = projet;
     }
 
     public Long getId() {
@@ -62,6 +72,14 @@ public class Sprint {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getsUniqueID() {
+        return sUniqueID;
+    }
+
+    public void setsUniqueID(String sUniqueID) {
+        this.sUniqueID = sUniqueID;
     }
 
     public String getStitre() {
@@ -80,42 +98,30 @@ public class Sprint {
         this.sdescription = sdescription;
     }
 
-    public Date getSdate_debut() {
-        return sdate_debut;
+    public Date getSdateDebut() {
+        return sdateDebut;
     }
 
-    public void setSdate_debut(Date sdate_debut) {
-        this.sdate_debut = sdate_debut;
+    public void setSdateDebut(Date sdateDebut) {
+        this.sdateDebut = sdateDebut;
     }
 
-    public Date getSdate_fin() {
-        return sdate_fin;
+    public Date getSdateFin() {
+        return sdateFin;
     }
 
-    public void setSdate_fin(Date sdate_fin) {
-        this.sdate_fin = sdate_fin;
+    public void setSdateFin(Date sdateFin) {
+        this.sdateFin = sdateFin;
     }
 
-
-    public Projet getSprint_of_project() {
-        return sprint_of_project;
+    public Projet getProjetId() {
+        return projetId;
     }
 
-    public void setSprint_of_project(Projet sprint_of_project) {
-        this.sprint_of_project = sprint_of_project;
+    public void setProjetId(Projet projetId) {
+        this.projetId = projetId;
     }
 
-    public Set<Story> getStory() {
-        return story;
-    }
-
-    public void setStory(Set<Story> story) {
-        this.story = story;
-        for (Story r : story) {
-            r.setStory_of_sprint(this);
-        }
-    }
     
     
-
 }

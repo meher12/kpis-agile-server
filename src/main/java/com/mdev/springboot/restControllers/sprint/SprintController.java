@@ -47,21 +47,21 @@ public class SprintController {
     }
 
     // update sprint by id rest api
-    @RequestMapping(value = "/sprints/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Sprint> updateSprint(@PathVariable Long id, @RequestBody Sprint sprintDetails) {
-        Sprint sprint = this.sprintRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Sprint not found for this id :" + id));
-
-        sprint.setStitre(sprintDetails.getStitre());
-        sprint.setSdescription(sprintDetails.getSdescription());
-        sprint.setSdate_debut(sprintDetails.getSdate_debut());
-        sprint.setSdate_fin(sprintDetails.getSdate_fin());
-        sprint.setStory(sprintDetails.getStory());
-        sprint.setSprint_of_project(sprintDetails.getSprint_of_project());
-
-        Sprint updatedSprint = this.sprintRepository.save(sprint);
-        return ResponseEntity.ok(updatedSprint);
-    }
+//    @RequestMapping(value = "/sprints/{id}", method = RequestMethod.PUT)
+//    public ResponseEntity<Sprint> updateSprint(@PathVariable Long id, @RequestBody Sprint sprintDetails) {
+//        Sprint sprint = this.sprintRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Sprint not found for this id :" + id));
+//
+//        sprint.setStitre(sprintDetails.getStitre());
+//        sprint.setSdescription(sprintDetails.getSdescription());
+//        sprint.setSdate_debut(sprintDetails.getSdate_debut());
+//        sprint.setSdate_fin(sprintDetails.getSdate_fin());
+//        sprint.setStory(sprintDetails.getStory());
+//        sprint.setSprint_of_project(sprintDetails.getSprint_of_project());
+//
+//        Sprint updatedSprint = this.sprintRepository.save(sprint);
+//        return ResponseEntity.ok(updatedSprint);
+//    }
 
     // update sprint by id rest api
     @RequestMapping(value = "/sprints/{id}", method = RequestMethod.DELETE)
