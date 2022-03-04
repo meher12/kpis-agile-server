@@ -24,8 +24,12 @@ import javax.validation.constraints.NotNull;
 public class Projet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_generator")
     private Long id;
+
+    @NotNull
+    @Column(length = 15)
+    private String uniqueID;
 
     @NotNull
     @Column(length = 50)
@@ -33,19 +37,19 @@ public class Projet {
 
     @NotNull
     @Column(length = 1200)
-    private String description_project;
+    private String descriptionProject;
 
     @Temporal(TemporalType.DATE)
-    private Date date_debut;
+    private Date dateDebut;
 
     @Temporal(TemporalType.DATE)
-    private Date date_fin;
+    private Date dateFin;
 
 //    @Column(length = 10, nullable = false)
 //    private int iteration_sprint;
-    
-    @OneToMany(mappedBy = "sprint_of_project")
-    private Set<Sprint> sprints;
+
+//    @OneToMany(mappedBy = "sprint_of_project")
+//    private Set<Sprint> sprints;
 
 //    @Column(length = 20, nullable = false)
 //    private String nomPO;
@@ -57,22 +61,17 @@ public class Projet {
 //    @OneToMany(mappedBy = "story_of_projet")
 //    private Set<Story> stories;
 
-   
-
     public Projet() {
         super();
     }
 
-
-    public Projet(String titre, String description, Date date_debut, Date date_fin, Set<Sprint> sprints) {
-    super();
-    this.titre = titre;
-    this.description_project = description;
-    this.date_debut = date_debut;
-    this.date_fin = date_fin;
-    this.sprints = sprints;
-}
-
+    public Projet(String titre, String descriptionProject, Date dateDebut, Date dateFin) {
+        super();
+        this.titre = titre;
+        this.descriptionProject = descriptionProject;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+    }
 
     public Long getId() {
         return id;
@@ -80,6 +79,14 @@ public class Projet {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUniqueID() {
+        return uniqueID;
+    }
+
+    public void setUniqueID(String uniqueID) {
+        this.uniqueID = uniqueID;
     }
 
     public String getTitre() {
@@ -90,42 +97,34 @@ public class Projet {
         this.titre = titre;
     }
 
-    public String getDescription() {
-        return description_project;
+    public String getDescriptionProject() {
+        return descriptionProject;
     }
 
-    public void setDescription(String description) {
-        this.description_project = description;
+    public void setDescriptionProject(String descriptionProject) {
+        this.descriptionProject = descriptionProject;
     }
 
-    public Date getDate_debut() {
-        return date_debut;
+    public Date getDateDebut() {
+        return dateDebut;
     }
 
-    public void setDate_debut(Date date_debut) {
-        this.date_debut = date_debut;
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut = dateDebut;
     }
 
-    public Date getDate_fin() {
-        return date_fin;
+    public Date getDateFin() {
+        return dateFin;
     }
 
-    public void setDate_fin(Date date_fin) {
-        this.date_fin = date_fin;
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
     }
 
-    public Set<Sprint> getSprints() {
-        return sprints;
+    @Override
+    public String toString() {
+        return "Projet [id=" + id + ", uniqueID=" + uniqueID + ", titre=" + titre + ", descriptionProject="
+                + descriptionProject + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + "]";
     }
-
-
-    public void setSprints(Set<Sprint> sprints) {
-        this.sprints = sprints;
-        for (Sprint r : sprints) {
-            r.setSprint_of_project(this);
-        }
-    }
-
-   
 
 }

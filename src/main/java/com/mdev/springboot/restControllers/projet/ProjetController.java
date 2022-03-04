@@ -92,10 +92,10 @@ public class ProjetController {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found project with id: " + id));
 
         projet.setTitre(projetDetails.getTitre());
-        projet.setDescription(projetDetails.getDescription());
-        projet.setDate_debut(projetDetails.getDate_debut());
-        projet.setDate_fin(projetDetails.getDate_fin());
-        // projet.setSprints(projetDetails.getSprints());
+        projet.setDescriptionProject(projetDetails.getDescriptionProject());
+        projet.setDateDebut(projetDetails.getDateDebut());
+        projet.setDateFin(projetDetails.getDateFin());
+
 
         Projet updatedProjet = this.projetRepository.save(projet);
         return ResponseEntity.ok(updatedProjet);
