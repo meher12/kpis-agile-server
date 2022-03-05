@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mdev.springboot.exception.ApiResourceNotFoundException;
 import com.mdev.springboot.models.ERole;
 import com.mdev.springboot.models.Role;
 import com.mdev.springboot.models.User;
@@ -36,7 +37,7 @@ import com.mdev.springboot.services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -64,7 +65,7 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
+        
         return ResponseEntity.ok(
                 new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
     }
@@ -83,8 +84,6 @@ public class AuthController {
         User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
-
-        
         String strEmail = signUpRequest.getEmail();
         Set<Role> roles = new HashSet<>();
 
@@ -92,20 +91,18 @@ public class AuthController {
             Role userRole = roleRepository.findByName(ERole.ROLE_PRODUCTOWNER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
-        } 
+        }
         if (strEmail.contains("@scrumm.tn")) {
             Role userRole = roleRepository.findByName(ERole.ROLE_SCRUMMASTER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
-        } 
+        }
         if (strEmail.contains("@developer.tn")) {
             Role userRole = roleRepository.findByName(ERole.ROLE_DEVELOPER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         }
-        
-      
-        
+
         // ******************************
 
         user.setRoles(roles);

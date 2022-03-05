@@ -1,7 +1,9 @@
 package com.mdev.springboot.restControllers.projet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mdev.springboot.exception.ApiResourceNotFoundException;
 import com.mdev.springboot.exception.ResourceNotFoundException;
 import com.mdev.springboot.models.Projet;
 import com.mdev.springboot.repository.ProjetRepository;
@@ -77,18 +80,43 @@ public class ProjetController {
         return new ResponseEntity<>(projetRepository.save(_projet), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteProjet(@PathVariable("id") Long id) {
-        projetRepository.deleteById(id);
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<HttpStatus> deleteProjet(@PathVariable("id") Long id) {
+//        projetRepository.deleteById(id);
+//
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteProjectById(@PathVariable Long id) {
+
+        Projet projet = this.projetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found project with id: " + id));
+        this.projetRepository.delete(projet);
+
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+
     }
 
     @DeleteMapping()
-    public ResponseEntity<HttpStatus> deleteAllProjects() {
-        projetRepository.deleteAll();
+    public ResponseEntity<Map<String, Boolean>> deleteAllProjects() throws ApiResourceNotFoundException {
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        List<Projet> deletedProject = projetRepository.findAll();
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+
+        response.put("Not found Projects to Delete it!", Boolean.FALSE);
+        if (deletedProject.isEmpty()) {
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        else {
+            projetRepository.deleteAll();
+            response.put("Projects Deleted", Boolean.TRUE);
+            return ResponseEntity.ok(response);
+        }
+
     }
 
 }
