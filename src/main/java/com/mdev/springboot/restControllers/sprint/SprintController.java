@@ -79,13 +79,13 @@ public class SprintController {
         sprint.setSdateDebut(sprintRequest.getSdateDebut());
         sprint.setSdateFin(sprintRequest.getSdateFin());
         sprint.setsUniqueID(sprintRequest.getsUniqueID());
-        sprint.setProjet(sprintRequest.getProjet());
+        //sprint.setProjet(sprintRequest.getProjet());
 
         return new ResponseEntity<>(sprintRepository.save(sprint), HttpStatus.OK);
     }
 
     // delete Sprint By id
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/projects/sprints/{id}")
     public ResponseEntity<HttpStatus> deleteSprint(@PathVariable("id") long id) {
         sprintRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
