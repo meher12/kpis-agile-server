@@ -48,8 +48,8 @@ public class Projet {
 //    @Column(length = 10, nullable = false)
 //    private int iteration_sprint;
 
-//    @OneToMany(mappedBy = "sprint_of_project")
-//    private Set<Sprint> sprints;
+    @OneToMany(mappedBy = "projet")
+    private Set<Sprint> sprints;
 
 //    @Column(length = 20, nullable = false)
 //    private String nomPO;
@@ -65,13 +65,20 @@ public class Projet {
         super();
     }
 
-    public Projet(String titre, String descriptionProject, Date dateDebut, Date dateFin) {
-        super();
-        this.titre = titre;
-        this.descriptionProject = descriptionProject;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
-    }
+   
+
+    public Projet(@NotNull String uniqueID, @NotNull String titre, @NotNull String descriptionProject, Date dateDebut,
+        Date dateFin, Set<Sprint> sprints) {
+    super();
+    this.uniqueID = uniqueID;
+    this.titre = titre;
+    this.descriptionProject = descriptionProject;
+    this.dateDebut = dateDebut;
+    this.dateFin = dateFin;
+    this.sprints = sprints;
+}
+
+
 
     public Long getId() {
         return id;
@@ -119,6 +126,15 @@ public class Projet {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
+    }
+    
+
+    public Set<Sprint> getSprints() {
+        return sprints;
+    }
+
+    public void setSprints(Set<Sprint> sprints) {
+        this.sprints = sprints;
     }
 
     @Override

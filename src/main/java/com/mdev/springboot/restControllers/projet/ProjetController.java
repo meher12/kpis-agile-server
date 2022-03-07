@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mdev.springboot.exception.ApiResourceNotFoundException;
 import com.mdev.springboot.exception.ResourceNotFoundException;
 import com.mdev.springboot.models.Projet;
+import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
+import com.mdev.springboot.repository.SprintRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -34,6 +36,7 @@ public class ProjetController {
     ProjetRepository projetRepository;
 
     // get all project by Title or All
+    @PreAuthorize("hasRole('PRODUCTOWNER')")
     @GetMapping()
     public ResponseEntity<List<Projet>> getAllProjects(@RequestParam(required = false) String titre) {
         List<Projet> projets = new ArrayList<Projet>();
@@ -68,7 +71,7 @@ public class ProjetController {
 
     // update project by id
     @PutMapping("/{id}")
-    public ResponseEntity<Projet> updateProjet(@PathVariable("id") long id, @RequestBody Projet projetDetails) {
+    public ResponseEntity<Projet> updateProjet(@PathVariable("id") Long id, @RequestBody Projet projetDetails) {
         Projet _projet = projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
 
