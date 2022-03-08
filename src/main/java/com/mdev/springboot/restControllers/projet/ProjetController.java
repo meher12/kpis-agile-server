@@ -36,7 +36,7 @@ public class ProjetController {
     ProjetRepository projetRepository;
 
     // get all project by Title or All
-    @PreAuthorize("hasRole('PRODUCTOWNER')")
+    //@PreAuthorize("hasRole('PRODUCTOWNER')")
     @GetMapping()
     public ResponseEntity<List<Projet>> getAllProjects(@RequestParam(required = false) String titre) {
         List<Projet> projets = new ArrayList<Projet>();

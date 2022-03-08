@@ -44,9 +44,14 @@ public class SprintController {
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
 
+    // get All Sprints
+    @GetMapping()
+    public ResponseEntity<List<Sprint>> getAllSprints() {
+        List<Sprint> sprints = sprintRepository.findAll();
+        return new ResponseEntity<>(sprints, HttpStatus.OK);
+    }
+
     // get Sprints By Id
-    // @GetMapping("/projects/sprints/{id}")
-    @PreAuthorize("hasRole('PRODUCTOWNER')")
     @GetMapping("/sprints/{id}")
     public ResponseEntity<Sprint> getSprintsById(@PathVariable(value = "id") Long id) {
         Sprint sprint = sprintRepository.findById(id)
@@ -66,13 +71,12 @@ public class SprintController {
 
         return new ResponseEntity<>(sprint, HttpStatus.CREATED);
     }
-   
 
     // update Sprint
     @PreAuthorize("hasRole('PRODUCTOWNER')")
-    //@PutMapping("/projects/{projet_id}/sprints/{id}")
-    @RequestMapping(value="/sprints/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Sprint> updateSprint(@PathVariable("id") Long id,  @RequestBody Sprint sprintRequest) {
+    // @PutMapping("/projects/{projet_id}/sprints/{id}")
+    @RequestMapping(value = "/sprints/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Sprint> updateSprint(@PathVariable("id") Long id, @RequestBody Sprint sprintRequest) {
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));
 
@@ -81,8 +85,8 @@ public class SprintController {
         sprint.setSdescription(sprintRequest.getSdescription());
         sprint.setSdateDebut(sprintRequest.getSdateDebut());
         sprint.setSdateFin(sprintRequest.getSdateFin());
-       
-        //sprint.setProjet(sprintRequest.getProjet());
+
+        // sprint.setProjet(sprintRequest.getProjet());
 
         return new ResponseEntity<>(sprintRepository.save(sprint), HttpStatus.OK);
     }

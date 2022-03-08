@@ -15,12 +15,15 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "projets", uniqueConstraints = { @UniqueConstraint(columnNames = "uniqueID") })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+//dealing with bi-directional relationships
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Projet{
 
     @Id
@@ -49,8 +52,7 @@ public class Projet{
 //    private int iteration_sprint;
 
     @OneToMany(mappedBy = "projet")
-    //@JsonBackReference
-    @JsonManagedReference
+    //@JsonManagedReference
     private Set<Sprint> sprints;
 
 //    @Column(length = 20, nullable = false)
