@@ -1,5 +1,6 @@
 package com.mdev.springboot.models;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -12,13 +13,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "projets")
-public class Projet {
+@Table(name = "projets", uniqueConstraints = { @UniqueConstraint(columnNames = "uniqueID") })
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class Projet implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_generator")
@@ -63,20 +67,16 @@ public class Projet {
         super();
     }
 
-
-
     public Projet(@NotNull String uniqueID, @NotNull String titre, @NotNull String descriptionProject, Date dateDebut,
-        Date dateFin, Set<Sprint> sprints) {
-    super();
-    this.uniqueID = uniqueID;
-    this.titre = titre;
-    this.descriptionProject = descriptionProject;
-    this.dateDebut = dateDebut;
-    this.dateFin = dateFin;
-    this.sprints = sprints;
-}
-
-
+            Date dateFin, Set<Sprint> sprints) {
+        super();
+        this.uniqueID = uniqueID;
+        this.titre = titre;
+        this.descriptionProject = descriptionProject;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.sprints = sprints;
+    }
 
     public Long getId() {
         return id;
@@ -125,7 +125,6 @@ public class Projet {
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
     }
-    
 
     public Set<Sprint> getSprints() {
         return sprints;

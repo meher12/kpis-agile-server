@@ -23,7 +23,7 @@ import com.mdev.springboot.repository.SprintRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/apipo")
+@RequestMapping("/api/sprints")
 public class SprintController {
 
     @Autowired
@@ -57,7 +57,6 @@ public class SprintController {
 
     // create Sprint
     @PostMapping("/projects/{projet_id}/sprints")
-    //@PostMapping("/sprints")
     public ResponseEntity<Sprint> createSprint(@PathVariable(value = "projet_id") Long projet_id,
             @RequestBody Sprint sprintRequest) {
         Sprint sprint = projetRepository.findById(projet_id).map(project -> {

@@ -1,5 +1,6 @@
 package com.mdev.springboot.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "sprint")
-public class Sprint {
+public class Sprint implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sprint_generator")
@@ -49,7 +50,7 @@ public class Sprint {
 
     
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "projet_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     //@JsonIgnore
