@@ -1,6 +1,5 @@
 package com.mdev.springboot.models;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,9 +18,11 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "sprint")
-public class Sprint implements Serializable{
+public class Sprint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sprint_generator")
@@ -54,6 +55,7 @@ public class Sprint implements Serializable{
     @JoinColumn(name = "projet_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     //@JsonIgnore
+    @JsonBackReference
     private Projet projet;
 
     public Sprint() {

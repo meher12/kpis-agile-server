@@ -1,6 +1,5 @@
 package com.mdev.springboot.models;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,13 +15,13 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "projets", uniqueConstraints = { @UniqueConstraint(columnNames = "uniqueID") })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Projet implements Serializable {
+public class Projet{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_generator")
@@ -50,7 +49,8 @@ public class Projet implements Serializable {
 //    private int iteration_sprint;
 
     @OneToMany(mappedBy = "projet")
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonManagedReference
     private Set<Sprint> sprints;
 
 //    @Column(length = 20, nullable = false)
