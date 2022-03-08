@@ -2,7 +2,6 @@ package com.mdev.springboot.models;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,8 +17,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "sprint")
@@ -50,13 +47,12 @@ public class Sprint {
 //    @OneToMany(mappedBy = "story_of_sprint")
 //    private Set<Story> story;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "projet_id", referencedColumnName = "id")
     
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "projet_id", referencedColumnName = "id", nullable = false)
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "projet_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    //@JsonIgnore
     private Projet projet;
 
     public Sprint() {
