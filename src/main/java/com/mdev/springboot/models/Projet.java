@@ -1,5 +1,6 @@
 package com.mdev.springboot.models;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -17,14 +18,20 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "projets", uniqueConstraints = { @UniqueConstraint(columnNames = "uniqueID") })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 //dealing with bi-directional relationships
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Projet{
+@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,   property = "id")
+public class Projet implements Serializable{
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_generator")

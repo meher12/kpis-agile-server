@@ -45,8 +45,8 @@ public class SprintController {
     }
 
     // get All Sprints
-    @GetMapping()
-    public ResponseEntity<List<Sprint>> getAllSprints() {
+    @GetMapping("/sprints")
+    public ResponseEntity<?> getAllSprints() {
         List<Sprint> sprints = sprintRepository.findAll();
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
