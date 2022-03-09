@@ -20,12 +20,11 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "sprint", uniqueConstraints = { @UniqueConstraint(columnNames = "sUniqueID") })
+@Table(name = "sprint", uniqueConstraints = { @UniqueConstraint(columnNames = "sReference") })
 //dealing with bi-directional relationships
 //@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Sprint implements Serializable{
@@ -41,7 +40,7 @@ public class Sprint implements Serializable{
 
     @NotNull
     @Column(length = 15)
-    private String sUniqueID;
+    private String sReference;
 
     @NotNull
     @Column(length = 50)
@@ -65,18 +64,18 @@ public class Sprint implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "projet_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    //@JsonBackReference
+    @JsonBackReference
     private Projet projet;
 
     public Sprint() {
         super();
     }
 
-    public Sprint(Long id, @NotNull String sUniqueID, @NotNull String stitre, @NotNull String sdescription,
+    public Sprint(Long id, @NotNull String sReference, @NotNull String stitre, @NotNull String sdescription,
             Date sdateDebut, Date sdateFin, Projet projet) {
         super();
         this.id = id;
-        this.sUniqueID = sUniqueID;
+        this.sReference = sReference;
         this.stitre = stitre;
         this.sdescription = sdescription;
         this.sdateDebut = sdateDebut;
@@ -92,12 +91,14 @@ public class Sprint implements Serializable{
         this.id = id;
     }
 
-    public String getsUniqueID() {
-        return sUniqueID;
+   
+
+    public String getsReference() {
+        return sReference;
     }
 
-    public void setsUniqueID(String sUniqueID) {
-        this.sUniqueID = sUniqueID;
+    public void setsReference(String sReference) {
+        this.sReference = sReference;
     }
 
     public String getStitre() {
@@ -138,6 +139,7 @@ public class Sprint implements Serializable{
 
     public void setProjet(Projet projet) {
         this.projet = projet;
+       
     }
 
    

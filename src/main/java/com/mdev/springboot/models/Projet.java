@@ -16,16 +16,17 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@Table(name = "projets", uniqueConstraints = { @UniqueConstraint(columnNames = "uniqueID") })
+@Table(name = "projets", uniqueConstraints = { @UniqueConstraint(columnNames = "pReference") })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 //dealing with bi-directional relationships
-@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,   property = "id")
+//@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,   property = "id")
 public class Projet implements Serializable{
 
     /**
@@ -39,7 +40,7 @@ public class Projet implements Serializable{
 
     @NotNull
     @Column(length = 15)
-    private String uniqueID;
+    private String pReference;
 
     @NotNull
     @Column(length = 50)
@@ -59,7 +60,7 @@ public class Projet implements Serializable{
 //    private int iteration_sprint;
 
     @OneToMany(mappedBy = "projet")
-    //@JsonManagedReference
+    @JsonManagedReference
     private Set<Sprint> sprints;
 
 //    @Column(length = 20, nullable = false)
@@ -76,10 +77,10 @@ public class Projet implements Serializable{
         super();
     }
 
-    public Projet(@NotNull String uniqueID, @NotNull String titre, @NotNull String descriptionProject, Date dateDebut,
+    public Projet(@NotNull String pReference, @NotNull String titre, @NotNull String descriptionProject, Date dateDebut,
             Date dateFin, Set<Sprint> sprints) {
         super();
-        this.uniqueID = uniqueID;
+        this.pReference = pReference;
         this.titre = titre;
         this.descriptionProject = descriptionProject;
         this.dateDebut = dateDebut;
@@ -95,12 +96,13 @@ public class Projet implements Serializable{
         this.id = id;
     }
 
-    public String getUniqueID() {
-        return uniqueID;
+   
+    public String getpReference() {
+        return pReference;
     }
 
-    public void setUniqueID(String uniqueID) {
-        this.uniqueID = uniqueID;
+    public void setpReference(String pReference) {
+        this.pReference = pReference;
     }
 
     public String getTitre() {
@@ -145,7 +147,7 @@ public class Projet implements Serializable{
 
     @Override
     public String toString() {
-        return "Projet [id=" + id + ", uniqueID=" + uniqueID + ", titre=" + titre + ", descriptionProject="
+        return "Projet [id=" + id + ", pReference=" + pReference + ", titre=" + titre + ", descriptionProject="
                 + descriptionProject + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + "]";
     }
 

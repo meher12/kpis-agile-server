@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mdev.springboot.exception.ResourceNotFoundException;
+import com.mdev.springboot.models.Projet;
 import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
@@ -42,6 +43,18 @@ public class SprintController {
 
         List<Sprint> sprints = sprintRepository.findByProjetId(projet_id);
         return new ResponseEntity<>(sprints, HttpStatus.OK);
+    }
+
+    // get All Sprint By Projet Reference
+    @RequestMapping(value = "{pReference}/sprints/", method = RequestMethod.GET)
+    public ResponseEntity<List<Sprint>> getAllSprintByProjetReference(@PathVariable( value ="pReference") String pReference) {
+
+        Projet projet = projetRepository.findBypReference(pReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+
+        List<Sprint> sprints = sprintRepository.findByProjetId(projet.getId());
+        return new ResponseEntity<>(sprints, HttpStatus.OK);
+
     }
 
     // get All Sprints
@@ -73,14 +86,12 @@ public class SprintController {
     }
 
     // update Sprint
-    @PreAuthorize("hasRole('PRODUCTOWNER')")
     // @PutMapping("/projects/{projet_id}/sprints/{id}")
     @RequestMapping(value = "/sprints/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Sprint> updateSprint(@PathVariable("id") Long id, @RequestBody Sprint sprintRequest) {
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));
 
-        sprint.setsUniqueID(sprintRequest.getsUniqueID());
         sprint.setStitre(sprintRequest.getStitre());
         sprint.setSdescription(sprintRequest.getSdescription());
         sprint.setSdateDebut(sprintRequest.getSdateDebut());
