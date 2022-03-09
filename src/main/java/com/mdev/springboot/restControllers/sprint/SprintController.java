@@ -46,7 +46,7 @@ public class SprintController {
     }
 
     // get All Sprint By Projet Reference
-    @RequestMapping(value = "{pReference}/sprints/", method = RequestMethod.GET)
+    @RequestMapping(value = "/{pReference}/sprints/", method = RequestMethod.GET)
     public ResponseEntity<List<Sprint>> getAllSprintByProjetReference(@PathVariable( value ="pReference") String pReference) {
 
         Projet projet = projetRepository.findBypReference(pReference)
