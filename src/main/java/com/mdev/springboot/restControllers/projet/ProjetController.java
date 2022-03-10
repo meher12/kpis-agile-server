@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,6 +59,16 @@ public class ProjetController {
     public ResponseEntity<Projet> getProjectById(@PathVariable("id") Long id) {
         Projet projet = projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with id = " + id));
+        return new ResponseEntity<>(projet, HttpStatus.OK);
+    }
+    
+    //// get project by reference
+    @RequestMapping(value= "/{pReference}/", method = RequestMethod.GET)
+    public ResponseEntity<Projet> getProjectBypReference(@PathVariable("pReference") String pReference){
+        
+        Projet projet = projetRepository.findBypReference(pReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+        
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
 
