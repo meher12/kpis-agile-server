@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "projets", uniqueConstraints = { @UniqueConstraint(columnNames = "pReference") })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-//dealing with bi-directional relationships
+/* ----- dealing with bi-directional relationships  */
 //@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,   property = "id")
 public class Projet implements Serializable{
 
@@ -43,7 +43,7 @@ public class Projet implements Serializable{
     private String pReference;
 
     @NotNull
-    @Column(length = 50)
+    @Column(length = 100)
     private String titre;
 
     @NotNull
@@ -70,8 +70,7 @@ public class Projet implements Serializable{
 //    @JoinTable(name = "users_projets", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "projets_id", referencedColumnName = "id"))
 //    private Set<User> team_membres;
 
-//    @OneToMany(mappedBy = "story_of_projet")
-//    private Set<Story> stories;
+
 
     public Projet() {
         super();

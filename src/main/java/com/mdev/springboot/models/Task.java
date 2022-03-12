@@ -1,9 +1,8 @@
 package com.mdev.springboot.models;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,59 +12,75 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "tasks")
-public class Task {
+@Table(name = "tasks", uniqueConstraints = { @UniqueConstraint(columnNames = "tReference") })
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class Task implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_generator")
     private Long id;
 
-    @Column(length = 50, nullable = false)
-    private String nom;
+    @NotNull
+    @Column(length = 100)
+    private String tname;
 
-    @Column(length = 250, nullable = false)
-    private String description;
+    @NotNull
+    @Column(length = 15)
+    private String tReference;
+
+    @NotNull
+    @Lob
+    @Column(length = 1000)
+    private String tdescription;
 
     @Temporal(TemporalType.DATE)
-    private Date date_debut;
+    private Date tdateDebut;
 
     @Temporal(TemporalType.DATE)
-    private Date date_fin;
+    private Date tdateFin;
 
     @Column(length = 5)
-    private int estimation;
+    private int testimation;
 
     @Enumerated(EnumType.STRING)
     private ETask statut;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "story_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
     private Story story;
-
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinTable(name = "developer_tasks", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
-//    private Set<User> developer;
 
     public Task() {
         super();
     }
 
-    public Task(String nom, String description, Date date_debut, Date date_fin, int estimation, ETask statut,
-            Story story) {
+    public Task(@NotNull String tname, @NotNull String tReference, @NotNull String tdescription, Date tdateDebut,
+            Date tdateFin, int testimation, ETask statut, Story story) {
         super();
-        this.nom = nom;
-        this.description = description;
-        this.date_debut = date_debut;
-        this.date_fin = date_fin;
-        this.estimation = estimation;
+        this.tname = tname;
+        this.tReference = tReference;
+        this.tdescription = tdescription;
+        this.tdateDebut = tdateDebut;
+        this.tdateFin = tdateFin;
+        this.testimation = testimation;
         this.statut = statut;
         this.story = story;
     }
@@ -78,44 +93,52 @@ public class Task {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getTname() {
+        return tname;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setTname(String tname) {
+        this.tname = tname;
     }
 
-    public String getDescription() {
-        return description;
+    public String gettReference() {
+        return tReference;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void settReference(String tReference) {
+        this.tReference = tReference;
     }
 
-    public Date getDate_debut() {
-        return date_debut;
+    public String getTdescription() {
+        return tdescription;
     }
 
-    public void setDate_debut(Date date_debut) {
-        this.date_debut = date_debut;
+    public void setTdescription(String tdescription) {
+        this.tdescription = tdescription;
     }
 
-    public Date getDate_fin() {
-        return date_fin;
+    public Date getTdateDebut() {
+        return tdateDebut;
     }
 
-    public void setDate_fin(Date date_fin) {
-        this.date_fin = date_fin;
+    public void setTdateDebut(Date tdateDebut) {
+        this.tdateDebut = tdateDebut;
     }
 
-    public int getEstimation() {
-        return estimation;
+    public Date getTdateFin() {
+        return tdateFin;
     }
 
-    public void setEstimation(int estimation) {
-        this.estimation = estimation;
+    public void setTdateFin(Date tdateFin) {
+        this.tdateFin = tdateFin;
+    }
+
+    public int getTestimation() {
+        return testimation;
+    }
+
+    public void setTestimation(int testimation) {
+        this.testimation = testimation;
     }
 
     public ETask getStatut() {
@@ -132,6 +155,13 @@ public class Task {
 
     public void setStory(Story story) {
         this.story = story;
+    }
+
+    @Override
+    public String toString() {
+        return "Task [id=" + id + ", tname=" + tname + ", tReference=" + tReference + ", tdescription=" + tdescription
+                + ", tdateDebut=" + tdateDebut + ", tdateFin=" + tdateFin + ", testimation=" + testimation + ", statut="
+                + statut + ", story=" + story + "]";
     }
 
 }

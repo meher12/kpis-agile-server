@@ -1,4 +1,4 @@
-package com.mdev.springboot.restControllers.projet;
+package com.mdev.springboot.restControllers.crud;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mdev.springboot.exception.ApiResourceNotFoundException;
 import com.mdev.springboot.exception.ResourceNotFoundException;
 import com.mdev.springboot.models.Projet;
-import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
-import com.mdev.springboot.repository.SprintRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -134,3 +132,4 @@ public class ProjetController {
     }
 
 }
+

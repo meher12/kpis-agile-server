@@ -1,7 +1,7 @@
 package com.mdev.springboot.models;
 
+import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -21,9 +21,15 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
-public class User {
+public class User implements Serializable{
+    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
     private Long id;
 
     @NotBlank
@@ -110,8 +116,11 @@ public class User {
         this.roles = roles;
     }
 
-  
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", roles="
+                + roles + "]";
+    }
 
-    
 
 }

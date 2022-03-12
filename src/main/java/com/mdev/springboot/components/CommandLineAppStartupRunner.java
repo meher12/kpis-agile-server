@@ -1,4 +1,4 @@
-package com.mdev.springboot.component;
+package com.mdev.springboot.components;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
