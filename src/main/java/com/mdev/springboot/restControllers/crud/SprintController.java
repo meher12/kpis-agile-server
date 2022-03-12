@@ -25,7 +25,7 @@ import com.mdev.springboot.repository.SprintRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/sprints")
+@RequestMapping("/api")
 public class SprintController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class SprintController {
     ProjetRepository projetRepository;
 
     // get All Sprints By ProjectId
-    @GetMapping("/projects/{projet_id}/sprints")
+    @GetMapping("/sprints/projects/{projet_id}/sprints")
     public ResponseEntity<List<Sprint>> getAllSprintsByProjectId(@PathVariable("projet_id") Long projet_id) {
 
         if (!projetRepository.existsById(projet_id)) {
@@ -47,7 +47,7 @@ public class SprintController {
     }
 
     // get All Sprint By Projet Reference
-    @RequestMapping(value = "/{pReference}/sprints/", method = RequestMethod.GET)
+    @RequestMapping(value = "/sprints/{pReference}/sprints", method = RequestMethod.GET)
     public ResponseEntity<List<Sprint>> getAllSprintByProjetReference(@PathVariable( value ="pReference") String pReference) {
 
         Projet projet = projetRepository.findBypReference(pReference)
@@ -59,14 +59,14 @@ public class SprintController {
     }
 
     // get All Sprints
-    @GetMapping("/sprints")
-    public ResponseEntity<?> getAllSprints() {
+    @GetMapping("/sprints/sprints")
+    public ResponseEntity<List<Sprint>> getAllSprints() {
         List<Sprint> sprints = sprintRepository.findAll();
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
 
     // get Sprints By Id
-    @GetMapping("/sprints/{id}")
+    @GetMapping("/sprints/sprints/{id}")
     public ResponseEntity<Sprint> getSprintsById(@PathVariable(value = "id") Long id) {
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Sprint with id = " + id));
@@ -75,7 +75,7 @@ public class SprintController {
     }
 
     // create Sprint
-    @PostMapping("/projects/{projet_id}/sprints")
+    @PostMapping("/sprints/projects/{projet_id}/sprints")
     public ResponseEntity<Sprint> createSprint(@PathVariable(value = "projet_id") Long projet_id,
             @RequestBody Sprint sprintRequest) {
         Sprint sprint = projetRepository.findById(projet_id).map(project -> {
@@ -87,8 +87,7 @@ public class SprintController {
     }
 
     // update Sprint
-    // @PutMapping("/projects/{projet_id}/sprints/{id}")
-    @RequestMapping(value = "/sprints/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/sprints/sprints/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Sprint> updateSprint(@PathVariable("id") Long id, @RequestBody Sprint sprintRequest) {
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));
@@ -104,14 +103,14 @@ public class SprintController {
     }
 
     // delete Sprint By id
-    @DeleteMapping("/sprints/{id}")
+    @DeleteMapping("/sprints/sprints/{id}")
     public ResponseEntity<HttpStatus> deleteSprint(@PathVariable("id") long id) {
         sprintRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // delete All Sprints Of Project
-    @DeleteMapping("/projects/{projet_id}/sprints")
+    @DeleteMapping("/sprints/projects/{projet_id}/sprints")
     public ResponseEntity<List<Sprint>> deleteAllSprintsOfProject(@PathVariable(value = "projet_id") Long projet_id) {
         if (!projetRepository.existsById(projet_id)) {
             throw new ResourceNotFoundException("Not found Project with id = " + projet_id);

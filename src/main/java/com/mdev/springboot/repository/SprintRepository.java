@@ -15,9 +15,7 @@ public interface SprintRepository extends JpaRepository<Sprint, Long>{
     
     List<Sprint> findByProjetId(Long projetId);
     
-    
-   
-   //Optional<Sprint> findByIdAndProjetId(Long id, Long projetId);
+    Optional<Sprint> findBysReference(String sReference);
    
    @Transactional
    void deleteByProjetId(Long projetId);

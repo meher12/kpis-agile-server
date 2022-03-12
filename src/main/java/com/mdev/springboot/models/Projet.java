@@ -24,9 +24,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "projets", uniqueConstraints = { @UniqueConstraint(columnNames = "pReference") })
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 /* ----- dealing with bi-directional relationships  */
 //@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,   property = "id")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Projet implements Serializable{
 
     /**

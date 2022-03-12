@@ -28,7 +28,7 @@ import com.mdev.springboot.repository.ProjetRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("api/projects")
+@RequestMapping("/api")
 public class ProjetController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class ProjetController {
 
     // get all project by Title or All
     //@PreAuthorize("hasRole('PRODUCTOWNER')")
-    @GetMapping()
+    @GetMapping("/projects")
     public ResponseEntity<List<Projet>> getAllProjects(@RequestParam(required = false) String titre) {
         List<Projet> projets = new ArrayList<Projet>();
 
@@ -53,7 +53,8 @@ public class ProjetController {
     }
 
     // get project by Id
-    @GetMapping("/{id}")
+    //@PreAuthorize("hasRole('PRODUCTOWNER')")
+    @GetMapping("/projects/{id}")
     public ResponseEntity<Projet> getProjectById(@PathVariable("id") Long id) {
         Projet projet = projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with id = " + id));
@@ -61,7 +62,7 @@ public class ProjetController {
     }
     
     //// get project by reference
-    @RequestMapping(value= "/{pReference}/", method = RequestMethod.GET)
+    @RequestMapping(value= "/projects/{pReference}/", method = RequestMethod.GET)
     public ResponseEntity<Projet> getProjectBypReference(@PathVariable("pReference") String pReference){
         
         Projet projet = projetRepository.findBypReference(pReference)
@@ -72,14 +73,14 @@ public class ProjetController {
 
     // create project
     @PreAuthorize("hasRole('PRODUCTOWNER')")
-    @PostMapping()
+    @PostMapping("/projects/")
     public ResponseEntity<Projet> createProjet(@RequestBody Projet projet) {
         Projet _projet = projetRepository.save(projet);
         return new ResponseEntity<>(_projet, HttpStatus.CREATED);
     }
 
     // update project by id
-    @PutMapping("/{id}")
+    @PutMapping("/projects/{id}")
     public ResponseEntity<Projet> updateProjet(@PathVariable("id") Long id, @RequestBody Projet projetDetails) {
         Projet _projet = projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
@@ -99,7 +100,7 @@ public class ProjetController {
 //        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 //    }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/projects/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteProjectById(@PathVariable Long id) {
 
         Projet projet = this.projetRepository.findById(id)
@@ -112,7 +113,7 @@ public class ProjetController {
 
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/projects/")
     public ResponseEntity<Map<String, Boolean>> deleteAllProjects() throws ApiResourceNotFoundException {
 
         List<Projet> deletedProject = projetRepository.findAll();

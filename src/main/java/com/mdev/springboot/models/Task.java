@@ -46,7 +46,6 @@ public class Task implements Serializable {
     private String tReference;
 
     @NotNull
-    @Lob
     @Column(length = 1000)
     private String tdescription;
 

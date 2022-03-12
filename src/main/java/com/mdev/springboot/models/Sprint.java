@@ -24,12 +24,13 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "sprint", uniqueConstraints = { @UniqueConstraint(columnNames = "sReference") })
 /* ----- dealing with bi-directional relationships  */
-//@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Sprint implements Serializable{
 
     /**
@@ -50,7 +51,7 @@ public class Sprint implements Serializable{
     private String stitre;
 
     @NotNull
-    @Lob
+    //@Lob
     @Column(length = 500)
     private String sdescription;
 

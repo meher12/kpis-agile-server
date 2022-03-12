@@ -21,12 +21,9 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
-public class User implements Serializable{
+public class User{
     
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")

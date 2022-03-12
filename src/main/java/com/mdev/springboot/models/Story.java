@@ -43,7 +43,6 @@ public class Story implements Serializable{
     @Column(length = 100)
     private String stname;
 
-    @Lob
     @Column(length = 1000)
     private String stdescription;
 
