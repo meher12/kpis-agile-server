@@ -18,6 +18,6 @@ public interface SprintRepository extends JpaRepository<Sprint, Long>{
     Optional<Sprint> findBysReference(String sReference);
    
    @Transactional
-   void deleteByProjetId(Long projetId);
+   void deleteAllByProjetId(Long projetId);
 
 }

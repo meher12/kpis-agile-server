@@ -18,6 +18,6 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
     Optional<Story> findBystReference(String stReference);
 
     @Transactional
-    void deleteBySprintId(Long sprintId);
+    void deleteAllBySprintId(Long sprintId);
 
 }

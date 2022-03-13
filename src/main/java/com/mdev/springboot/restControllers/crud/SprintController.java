@@ -116,7 +116,7 @@ public class SprintController {
             throw new ResourceNotFoundException("Not found Project with id = " + projet_id);
         }
 
-        sprintRepository.deleteByProjetId(projet_id);
+        sprintRepository.deleteAllByProjetId(projet_id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

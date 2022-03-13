@@ -18,5 +18,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Optional<Task> findBytReference(String tReference);
 
     @Transactional
-    void deleteByStoryId(Long storyId);
+    void deleteAllByStoryId(Long storyId);
 }
