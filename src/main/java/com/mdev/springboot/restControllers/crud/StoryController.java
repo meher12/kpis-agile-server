@@ -67,6 +67,16 @@ public class StoryController {
                 .orElseThrow(() -> new ApiResourceNotFoundException("Not found Story with id = " + id));
         return new ResponseEntity<>(story, HttpStatus.OK);
     }
+    
+    //// get story by reference
+    @RequestMapping(value= "/story/{stReference}", method = RequestMethod.GET)
+    public ResponseEntity<Story> getSprintBysReference(@PathVariable("stReference") String stReference){
+        
+        Story story = storyRepository.findBystReference(stReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Story with Reference : " + stReference));
+        
+        return new ResponseEntity<>(story, HttpStatus.OK);
+    }
 
     // create Story
     @PostMapping("/sprints/{sprint_id}/story")
@@ -102,7 +112,7 @@ public class StoryController {
     }
 
     // delete All Story Of Sprint
-    @DeleteMapping("/sprints/{sprint_id}/story")
+    @DeleteMapping("/sprints/{sprint_id}/stories")
     public ResponseEntity<List<Story>> deleteAllStoryOfSprint(@PathVariable(value = "sprint_id") Long sprint_id) {
         if (!sprintRepository.existsById(sprint_id)) {
             throw new ResourceNotFoundException("Not found Sprint with id = " + sprint_id);

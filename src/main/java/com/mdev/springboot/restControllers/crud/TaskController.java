@@ -35,8 +35,8 @@ public class TaskController {
     @Autowired
     StoryRepository storyRepository;
 
-    // get All Story By SprinttId
-    @RequestMapping(value = "/stories/{story_id}/stories")
+    // get All Task By StoryId
+    @RequestMapping(value = "/stories/{story_id}/tasks")
     ResponseEntity<List<Task>> getAllTaskByStoryId(@PathVariable("story_id") Long story_id) {
         if (!storyRepository.existsById(story_id)) {
             throw new ResourceNotFoundException("Not found Story with id = " + story_id);
@@ -70,6 +70,16 @@ public class TaskController {
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
+    //// get task by reference
+    @RequestMapping(value = "/task/{tReference}", method = RequestMethod.GET)
+    public ResponseEntity<Task> getSprintBysReference(@PathVariable("tReference") String tReference) {
+
+        Task task = taskRepository.findBytReference(tReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Story with Reference : " + tReference));
+
+        return new ResponseEntity<>(task, HttpStatus.OK);
+    }
+
     // create Task
     @PostMapping("/story/{story_id}/task")
     public ResponseEntity<Task> createTask(@PathVariable(value = "story_id") Long story_id,
@@ -89,7 +99,6 @@ public class TaskController {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task Id " + id + "not found"));
 
-
         task.setTname(taskRequest.getTname());
         task.setTdescription(taskRequest.getTdescription());
         task.setTestimation(taskRequest.getTestimation());
@@ -102,7 +111,7 @@ public class TaskController {
 
     // delete Task By id
     @RequestMapping(value = "/task/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Map<String, Boolean>> deleteTaskById(@PathVariable Long id){
+    public ResponseEntity<Map<String, Boolean>> deleteTaskById(@PathVariable Long id) {
 
         Task task = this.taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found task with id: " + id));
@@ -111,12 +120,10 @@ public class TaskController {
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
-
     }
-    
-    
+
     // delete All Task Of Story
-    @DeleteMapping("/story/{story_id}/task")
+    @DeleteMapping("/story/{story_id}/tasks")
     public ResponseEntity<List<Task>> deleteAllTaskOfStory(@PathVariable(value = "story_id") Long story_id) {
         if (!storyRepository.existsById(story_id)) {
             throw new ResourceNotFoundException("Not found Story with id = " + story_id);
