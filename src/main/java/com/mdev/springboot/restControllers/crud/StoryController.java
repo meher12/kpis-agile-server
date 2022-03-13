@@ -98,7 +98,7 @@ public class StoryController {
 
         story.setStname(storyRequest.getStname());
         story.setStdescription(storyRequest.getStdescription());
-        story.setPriorite(storyRequest.getPriorite());
+        story.setPriority(storyRequest.getPriority());
         story.setStoryPoint(storyRequest.getStoryPoint());
 
         return new ResponseEntity<>(storyRepository.save(story), HttpStatus.OK);
