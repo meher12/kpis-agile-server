@@ -62,7 +62,7 @@ public class TaskController {
     }
 
     // get Task by id
-    @GetMapping("/task/{id}")
+    @GetMapping("/tasks/task/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable("id") Long id) {
 
         Task task = taskRepository.findById(id)
@@ -72,7 +72,7 @@ public class TaskController {
 
     //// get task by reference
     @RequestMapping(value = "/task/{tReference}", method = RequestMethod.GET)
-    public ResponseEntity<Task> getSprintBysReference(@PathVariable("tReference") String tReference) {
+    public ResponseEntity<Task> getTaskBysReference(@PathVariable("tReference") String tReference) {
 
         Task task = taskRepository.findBytReference(tReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Story with Reference : " + tReference));

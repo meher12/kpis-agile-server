@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +25,7 @@ import com.mdev.springboot.repository.StoryRepository;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/api/")
+@RequestMapping("/api")
 public class StoryController {
 
     @Autowired
@@ -60,21 +61,21 @@ public class StoryController {
     }
 
     // get Story by id
-    @GetMapping("/story/{id}")
-    public ResponseEntity<Story> getStoryById(@PathVariable("id") Long id) {
+    @GetMapping(value = "/stories/story/{id}")
+    public ResponseEntity<Story> getStoryById(@PathVariable(value = "id") Long id) {
 
         Story story = storyRepository.findById(id)
-                .orElseThrow(() -> new ApiResourceNotFoundException("Not found Story with id = " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Story with id = " + id));
         return new ResponseEntity<>(story, HttpStatus.OK);
     }
-    
+
     //// get story by reference
-    @RequestMapping(value= "/story/{stReference}", method = RequestMethod.GET)
-    public ResponseEntity<Story> getSprintBysReference(@PathVariable("stReference") String stReference){
-        
+    @RequestMapping(value = "/stories/{stReference}", method = RequestMethod.GET)
+    public ResponseEntity<Story> getStoryBystReference(@PathVariable("stReference") String stReference) {
+
         Story story = storyRepository.findBystReference(stReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Story with Reference : " + stReference));
-        
+
         return new ResponseEntity<>(story, HttpStatus.OK);
     }
 
@@ -91,17 +92,20 @@ public class StoryController {
     }
 
     // update Story
-    @RequestMapping(value = "/story/{id}", method = RequestMethod.PUT)
+    @PutMapping("/story/{id}")
     public ResponseEntity<Story> updateStory(@PathVariable("id") Long id, @RequestBody Story storyRequest) {
         Story story = storyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Story Id " + id + "not found"));
 
         story.setStname(storyRequest.getStname());
+        story.setStReference(storyRequest.getStReference());
         story.setStdescription(storyRequest.getStdescription());
         story.setPriority(storyRequest.getPriority());
         story.setStoryPoint(storyRequest.getStoryPoint());
 
-        return new ResponseEntity<>(storyRepository.save(story), HttpStatus.OK);
+        Story updatedStory = storyRepository.save(story);
+
+        return new ResponseEntity<>(updatedStory, HttpStatus.OK);
     }
 
     // delete Story By id

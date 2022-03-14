@@ -76,7 +76,7 @@ public class SprintController {
     
      //// get sprint by reference
     @RequestMapping(value= "/sprints/{sReference}", method = RequestMethod.GET)
-    public ResponseEntity<Sprint> getSprintBysReference(@PathVariable("sReference") String sReference){
+    public ResponseEntity<Sprint> getSprintBypReference(@PathVariable("sReference") String sReference){
         
         Sprint sprint = sprintRepository.findBysReference(sReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Sprint with Reference : " + sReference));

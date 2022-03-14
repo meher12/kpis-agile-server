@@ -47,17 +47,17 @@ public class Story implements Serializable{
     @Column(length = 1000)
     private String stdescription;
 
-    @NotNull
+    //@NotNull
     @Column(length = 5)
     private int storyPoint;
 
-    @NotNull
+    //@NotNull
     @Column(length = 5)
     private int priority;
 
     @OneToMany(mappedBy = "story")
     @JsonManagedReference
-    private Set<Task> task;
+    private Set<Task> tasks;
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name = "sprint_id", referencedColumnName = "id")
@@ -80,7 +80,7 @@ public class Story implements Serializable{
         this.stdescription = stdescription;
         this.storyPoint = storyPoint;
         this.priority = priorite;
-        this.task = task;
+        this.tasks = task;
         this.sprint = sprint;
     }
 
@@ -148,12 +148,12 @@ public class Story implements Serializable{
 
 
     public Set<Task> getTask() {
-        return task;
+        return tasks;
     }
 
 
     public void setTask(Set<Task> task) {
-        this.task = task;
+        this.tasks = task;
     }
 
 
@@ -170,7 +170,7 @@ public class Story implements Serializable{
     @Override
     public String toString() {
         return "Story [id=" + id + ", stReference=" + stReference + ", stname=" + stname + ", stdescription="
-                + stdescription + ", storyPoint=" + storyPoint + ", priority=" + priority + ", task=" + task
+                + stdescription + ", storyPoint=" + storyPoint + ", priority=" + priority + ", task=" + tasks
                 + ", sprint=" + sprint + "]";
     }
     

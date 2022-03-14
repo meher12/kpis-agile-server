@@ -61,6 +61,9 @@ public class Task implements Serializable {
     @Enumerated(EnumType.STRING)
     private ETask statut;
 
+    @Enumerated(EnumType.STRING)
+    private ETypeTask typeTask;
+    
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "story_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -72,7 +75,7 @@ public class Task implements Serializable {
     }
 
     public Task(@NotNull String tname, @NotNull String tReference, @NotNull String tdescription, Date tdateDebut,
-            Date tdateFin, int testimation, ETask statut, Story story) {
+            Date tdateFin, int testimation, ETask statut, ETypeTask typeTask, Story story) {
         super();
         this.tname = tname;
         this.tReference = tReference;
@@ -81,6 +84,7 @@ public class Task implements Serializable {
         this.tdateFin = tdateFin;
         this.testimation = testimation;
         this.statut = statut;
+        this.typeTask = typeTask;
         this.story = story;
     }
 
@@ -148,6 +152,14 @@ public class Task implements Serializable {
         this.statut = statut;
     }
 
+    public ETypeTask getTypeTask() {
+        return typeTask;
+    }
+
+    public void setTypeTask(ETypeTask typeTask) {
+        this.typeTask = typeTask;
+    }
+
     public Story getStory() {
         return story;
     }
@@ -156,11 +168,8 @@ public class Task implements Serializable {
         this.story = story;
     }
 
-    @Override
-    public String toString() {
-        return "Task [id=" + id + ", tname=" + tname + ", tReference=" + tReference + ", tdescription=" + tdescription
-                + ", tdateDebut=" + tdateDebut + ", tdateFin=" + tdateFin + ", testimation=" + testimation + ", statut="
-                + statut + ", story=" + story + "]";
-    }
+   
+
+    
 
 }
