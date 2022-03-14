@@ -1,7 +1,7 @@
 package com.mdev.springboot.models;
 
 public enum ETask {
-    NOT_STARTED,
+    SCHEDULED,
     IN_PROGRESS,
-    DONE;
+    COMPLETED;
 }
