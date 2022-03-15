@@ -55,11 +55,9 @@ public class Task implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date tdateFin;
 
-    @Column(length = 5)
-    private int testimation;
 
     @Enumerated(EnumType.STRING)
-    private ETask statut;
+    private ETask status;
 
     @Enumerated(EnumType.STRING)
     private ETypeTask typeTask;
@@ -75,15 +73,14 @@ public class Task implements Serializable {
     }
 
     public Task(@NotNull String tname, @NotNull String tReference, @NotNull String tdescription, Date tdateDebut,
-            Date tdateFin, int testimation, ETask statut, ETypeTask typeTask, Story story) {
+            Date tdateFin, ETask status, ETypeTask typeTask, Story story) {
         super();
         this.tname = tname;
         this.tReference = tReference;
         this.tdescription = tdescription;
         this.tdateDebut = tdateDebut;
         this.tdateFin = tdateFin;
-        this.testimation = testimation;
-        this.statut = statut;
+        this.status = status;
         this.typeTask = typeTask;
         this.story = story;
     }
@@ -136,20 +133,12 @@ public class Task implements Serializable {
         this.tdateFin = tdateFin;
     }
 
-    public int getTestimation() {
-        return testimation;
+    public ETask getStatus() {
+        return status;
     }
 
-    public void setTestimation(int testimation) {
-        this.testimation = testimation;
-    }
-
-    public ETask getStatut() {
-        return statut;
-    }
-
-    public void setStatut(ETask statut) {
-        this.statut = statut;
+    public void setStatus(ETask status) {
+        this.status = status;
     }
 
     public ETypeTask getTypeTask() {
@@ -168,7 +157,12 @@ public class Task implements Serializable {
         this.story = story;
     }
 
-   
+    @Override
+    public String toString() {
+        return "Task [id=" + id + ", tname=" + tname + ", tReference=" + tReference + ", tdescription=" + tdescription
+                + ", tdateDebut=" + tdateDebut + ", tdateFin=" + tdateFin + ", status=" + status + ", typeTask="
+                + typeTask + ", story=" + story + "]";
+    }
 
     
 

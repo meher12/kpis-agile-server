@@ -101,10 +101,10 @@ public class TaskController {
 
         task.setTname(taskRequest.getTname());
         task.setTdescription(taskRequest.getTdescription());
-        task.setTestimation(taskRequest.getTestimation());
         task.setTdateDebut(taskRequest.getTdateDebut());
         task.setTdateFin(taskRequest.getTdateFin());
-        task.setStatut(taskRequest.getStatut());
+        task.setStatus(taskRequest.getStatus());
+        task.setTypeTask(taskRequest.getTypeTask());
 
         return new ResponseEntity<>(taskRepository.save(task), HttpStatus.OK);
     }
