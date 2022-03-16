@@ -1,7 +1,7 @@
 package com.mdev.springboot.models;
 
 public enum ETypeTask {
-  TODO, 
+   New, 
   BUG,
   MORE;
 }

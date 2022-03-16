@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -28,10 +27,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "sprint", uniqueConstraints = { @UniqueConstraint(columnNames = "sReference") })
-/* ----- dealing with bi-directional relationships  */
+@Table(name = "sprints", uniqueConstraints = { @UniqueConstraint(columnNames = "sReference") })
+/* ----- dealing with bi-directional relationships */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Sprint implements Serializable{
+public class Sprint implements Serializable {
 
     /**
      * 
@@ -51,10 +50,15 @@ public class Sprint implements Serializable{
     private String stitre;
 
     @NotNull
-    //@Lob
     @Column(length = 500)
     private String sdescription;
 
+    @Column(length = 5)
+    private int workCommitment;
+    
+
+    @Column(length = 5)
+    private int workCompleted;
     @Temporal(TemporalType.DATE)
     private Date sdateDebut;
 
@@ -65,7 +69,6 @@ public class Sprint implements Serializable{
     @JsonManagedReference
     private Set<Story> stories;
 
-    
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "projet_id", nullable = false)
@@ -77,12 +80,14 @@ public class Sprint implements Serializable{
         super();
     }
 
-    public Sprint(@NotNull String sReference, @NotNull String stitre, @NotNull String sdescription, Date sdateDebut,
-            Date sdateFin, Set<Story> stories, @NotNull Projet projet) {
+    public Sprint(@NotNull String sReference, @NotNull String stitre, @NotNull String sdescription, int workCommitment,
+            int workCompleted, Date sdateDebut, Date sdateFin, Set<Story> stories, @NotNull Projet projet) {
         super();
         this.sReference = sReference;
         this.stitre = stitre;
         this.sdescription = sdescription;
+        this.workCommitment = workCommitment;
+        this.workCompleted = workCompleted;
         this.sdateDebut = sdateDebut;
         this.sdateFin = sdateFin;
         this.stories = stories;
@@ -121,6 +126,22 @@ public class Sprint implements Serializable{
         this.sdescription = sdescription;
     }
 
+    public int getWorkCommitment() {
+        return workCommitment;
+    }
+
+    public void setWorkCommitment(int workCommitment) {
+        this.workCommitment = workCommitment;
+    }
+
+    public int getWorkCompleted() {
+        return workCompleted;
+    }
+
+    public void setWorkCompleted(int workCompleted) {
+        this.workCompleted = workCompleted;
+    }
+
     public Date getSdateDebut() {
         return sdateDebut;
     }
@@ -153,15 +174,4 @@ public class Sprint implements Serializable{
         this.projet = projet;
     }
 
-    @Override
-    public String toString() {
-        return "Sprint [id=" + id + ", sReference=" + sReference + ", stitre=" + stitre + ", sdescription="
-                + sdescription + ", sdateDebut=" + sdateDebut + ", sdateFin=" + sdateFin + ", stories=" + stories
-                + ", projet=" + projet + "]";
-    }
-
-  
-   
-    
-    
 }

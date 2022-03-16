@@ -50,6 +50,9 @@ public class Story implements Serializable{
     //@NotNull
     @Column(length = 5)
     private int storyPoint;
+    
+    @Column(length = 5)
+    private int spCompleted;
 
     //@NotNull
     @Column(length = 5)
@@ -72,17 +75,20 @@ public class Story implements Serializable{
     }
 
 
-    public Story(@NotNull String stReference, @NotNull String stname, String stdescription, int storyPoint,
-            int priorite, Set<Task> task, Sprint sprint) {
+
+    public Story(@NotNull String stReference, @NotNull String stname, @NotNull String stdescription, int storyPoint,
+            int spCompleted, int priority, Set<Task> tasks, Sprint sprint) {
         super();
         this.stReference = stReference;
         this.stname = stname;
         this.stdescription = stdescription;
         this.storyPoint = storyPoint;
-        this.priority = priorite;
-        this.tasks = task;
+        this.spCompleted = spCompleted;
+        this.priority = priority;
+        this.tasks = tasks;
         this.sprint = sprint;
     }
+
 
 
     public Long getId() {
@@ -90,9 +96,11 @@ public class Story implements Serializable{
     }
 
 
+
     public void setId(Long id) {
         this.id = id;
     }
+
 
 
     public String getStReference() {
@@ -100,9 +108,11 @@ public class Story implements Serializable{
     }
 
 
+
     public void setStReference(String stReference) {
         this.stReference = stReference;
     }
+
 
 
     public String getStname() {
@@ -110,9 +120,11 @@ public class Story implements Serializable{
     }
 
 
+
     public void setStname(String stname) {
         this.stname = stname;
     }
+
 
 
     public String getStdescription() {
@@ -120,9 +132,11 @@ public class Story implements Serializable{
     }
 
 
+
     public void setStdescription(String stdescription) {
         this.stdescription = stdescription;
     }
+
 
 
     public int getStoryPoint() {
@@ -130,16 +144,29 @@ public class Story implements Serializable{
     }
 
 
+
     public void setStoryPoint(int storyPoint) {
         this.storyPoint = storyPoint;
     }
 
 
-   
+
+    public int getSpCompleted() {
+        return spCompleted;
+    }
+
+
+
+    public void setSpCompleted(int spCompleted) {
+        this.spCompleted = spCompleted;
+    }
+
+
 
     public int getPriority() {
         return priority;
     }
+
 
 
     public void setPriority(int priority) {
@@ -147,14 +174,17 @@ public class Story implements Serializable{
     }
 
 
-    public Set<Task> getTask() {
+
+    public Set<Task> getTasks() {
         return tasks;
     }
 
 
-    public void setTask(Set<Task> task) {
-        this.tasks = task;
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
     }
+
 
 
     public Sprint getSprint() {
@@ -162,21 +192,18 @@ public class Story implements Serializable{
     }
 
 
+
     public void setSprint(Sprint sprint) {
         this.sprint = sprint;
     }
 
 
+
     @Override
     public String toString() {
         return "Story [id=" + id + ", stReference=" + stReference + ", stname=" + stname + ", stdescription="
-                + stdescription + ", storyPoint=" + storyPoint + ", priority=" + priority + ", task=" + tasks
-                + ", sprint=" + sprint + "]";
+                + stdescription + ", storyPoint=" + storyPoint + ", spCompleted=" + spCompleted + ", priority="
+                + priority + ", tasks=" + tasks + ", sprint=" + sprint + "]";
     }
-    
-    
-
-
-   
 
 }
