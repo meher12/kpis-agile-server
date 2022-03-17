@@ -2,7 +2,9 @@ package com.mdev.springboot.restControllers.crud;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -137,13 +139,15 @@ public class SprintController {
         sprintRepository.deleteAllByProjetId(projet_id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    // update work Commitment and work Completed in sprint
+    @GetMapping("/sprints/updatesp")
+    public ResponseEntity<Map<String, Boolean>> updateStoryPointInSprint(){  
+        
+        this.sprintRepository.sprintStoryPointUpdate();
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Updated", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
 
-    // get All Sprints
-//    @GetMapping("/sprints/sprints/workcomm")
-//    public ResponseEntity<List<Sprint>> getSprintWorkCommitment(){
-//        List <Sprint> sprints = sprintRepository.sprintWorkCommitment();
-//        
-//        return new ResponseEntity<>(sprints, HttpStatus.OK);
-//    }
-
+    
 }

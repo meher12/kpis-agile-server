@@ -28,10 +28,6 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
             + ", work_completed = (SELECT SUM(st.sp_completed) FROM story st WHERE sprints.id = st.sprint_id)", nativeQuery = true)
     void  sprintStoryPointUpdate();
     
-//    @Transactional
-//    @Modifying
-//    @Query(value = "UPDATE sprints SET work_completed = (SELECT SUM(st.sp_completed) FROM story st WHERE sprints.id = st.sprint_id)", nativeQuery = true)
-//    void  sprintWorkCompleted();
     
     @Query(value = "select count(*) FROM sprints", nativeQuery = true)
     int sizeofSprintTable();

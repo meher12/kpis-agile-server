@@ -52,13 +52,15 @@ public class Sprint implements Serializable {
     @NotNull
     @Column(length = 500)
     private String sdescription;
-
+    
+    @NotNull
     @Column(length = 5)
     private int workCommitment;
     
-
+    @NotNull
     @Column(length = 5)
     private int workCompleted;
+    
     @Temporal(TemporalType.DATE)
     private Date sdateDebut;
 

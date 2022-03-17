@@ -56,7 +56,7 @@ public class Story implements Serializable{
 
     //@NotNull
     @Column(length = 5)
-    private int priority;
+    private Long priority;
 
     @OneToMany(mappedBy = "story")
     @JsonManagedReference
@@ -77,7 +77,7 @@ public class Story implements Serializable{
 
 
     public Story(@NotNull String stReference, @NotNull String stname, @NotNull String stdescription, int storyPoint,
-            int spCompleted, int priority, Set<Task> tasks, Sprint sprint) {
+            int spCompleted, long priority, Set<Task> tasks, Sprint sprint) {
         super();
         this.stReference = stReference;
         this.stname = stname;
@@ -163,13 +163,13 @@ public class Story implements Serializable{
 
 
 
-    public int getPriority() {
+    public Long getPriority() {
         return priority;
     }
 
 
 
-    public void setPriority(int priority) {
+    public void setPriority(Long priority) {
         this.priority = priority;
     }
 

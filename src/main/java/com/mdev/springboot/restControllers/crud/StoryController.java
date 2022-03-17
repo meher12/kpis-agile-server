@@ -1,5 +1,7 @@
 package com.mdev.springboot.restControllers.crud;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +43,29 @@ public class StoryController {
             throw new ResourceNotFoundException("Not found Sprint with id = " + sprint_id);
         }
         List<Story> stories = storyRepository.findBySprintId(sprint_id);
+        
+        Comparator<Story> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getPriority()).compareTo(c2.getPriority());
+        };
+
+        Collections.sort(stories, comparator);
+
         return new ResponseEntity<>(stories, HttpStatus.OK);
     }
 
     // get all story
     @RequestMapping(value = "/stories", method = RequestMethod.GET)
     public ResponseEntity<List<Story>> getAllStory() {
-        return new ResponseEntity<>(storyRepository.findAll(), HttpStatus.OK);
+        
+        List<Story> stories = storyRepository.findAll();
+        
+        Comparator<Story> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getPriority()).compareTo(c2.getPriority());
+        };
+        
+        Collections.sort(stories, comparator);
+        
+        return new ResponseEntity<>(stories, HttpStatus.OK);
     }
 
     // get All Story By Sprint Reference
@@ -57,6 +75,12 @@ public class StoryController {
         Sprint sprint = sprintRepository.findBysReference(sReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Sprint with Reference : " + sReference));
         List<Story> stories = storyRepository.findBySprintId(sprint.getId());
+        
+        Comparator<Story> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getPriority()).compareTo(c2.getPriority());
+        };
+
+        Collections.sort(stories, comparator);
         return new ResponseEntity<>(stories, HttpStatus.OK);
     }
 
@@ -100,8 +124,9 @@ public class StoryController {
         story.setStname(storyRequest.getStname());
         story.setStReference(storyRequest.getStReference());
         story.setStdescription(storyRequest.getStdescription());
-        story.setPriority(storyRequest.getPriority());
+        story.setSpCompleted(storyRequest.getSpCompleted());
         story.setStoryPoint(storyRequest.getStoryPoint());
+        story.setPriority(storyRequest.getPriority());
 
         Story updatedStory = storyRepository.save(story);
 
