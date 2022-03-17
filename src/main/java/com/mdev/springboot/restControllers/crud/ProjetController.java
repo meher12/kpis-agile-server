@@ -1,6 +1,8 @@
 package com.mdev.springboot.restControllers.crud;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mdev.springboot.exception.ApiResourceNotFoundException;
 import com.mdev.springboot.exception.ResourceNotFoundException;
 import com.mdev.springboot.models.Projet;
+import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -49,6 +52,11 @@ public class ProjetController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
+        Comparator<Projet> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getDateDebut().getTime()).compareTo(c2.getDateDebut().getTime());
+        };
+
+        Collections.sort(projets, comparator);
         return new ResponseEntity<>(projets, HttpStatus.OK);
     }
 

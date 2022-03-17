@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.mdev.springboot.models.Story;
@@ -19,5 +20,7 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
 
     @Transactional
     void deleteAllBySprintId(Long sprintId);
+    
+    
 
 }

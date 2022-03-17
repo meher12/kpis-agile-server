@@ -1,7 +1,7 @@
 package com.mdev.springboot.restControllers.crud;
 
-
-
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,12 +48,20 @@ public class SprintController {
 
     // get All Sprint By Projet Reference
     @RequestMapping(value = "/sprints/{pReference}/sprints", method = RequestMethod.GET)
-    public ResponseEntity<List<Sprint>> getAllSprintByProjetReference(@PathVariable( value ="pReference") String pReference) {
+    public ResponseEntity<List<Sprint>> getAllSprintByProjetReference(
+            @PathVariable(value = "pReference") String pReference) {
 
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         List<Sprint> sprints = sprintRepository.findByProjetId(projet.getId());
+
+        Comparator<Sprint> comparatorSprint = (c1, c2) -> {
+            return Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
+        };
+
+        Collections.sort(sprints, comparatorSprint);
+
         return new ResponseEntity<>(sprints, HttpStatus.OK);
 
     }
@@ -73,14 +81,14 @@ public class SprintController {
 
         return new ResponseEntity<>(sprint, HttpStatus.OK);
     }
-    
-     //// get sprint by reference
-    @RequestMapping(value= "/sprints/{sReference}", method = RequestMethod.GET)
-    public ResponseEntity<Sprint> getSprintBypReference(@PathVariable("sReference") String sReference){
-        
+
+    //// get sprint by reference
+    @RequestMapping(value = "/sprints/{sReference}", method = RequestMethod.GET)
+    public ResponseEntity<Sprint> getSprintBypReference(@PathVariable("sReference") String sReference) {
+
         Sprint sprint = sprintRepository.findBysReference(sReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Sprint with Reference : " + sReference));
-        
+
         return new ResponseEntity<>(sprint, HttpStatus.OK);
     }
 
@@ -130,14 +138,12 @@ public class SprintController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    @DeleteMapping("/instructors/{instructorId}/courses/{courseId}")
-//    public ResponseEntity < ? > deleteCourse(@PathVariable(value = "instructorId") Long instructorId,
-//        @PathVariable(value = "courseId") Long courseId) throws ResourceNotFoundException {
-//        return courseRepository.findByIdAndInstructorId(courseId, instructorId).map(course - > {
-//            courseRepository.delete(course);
-//            return ResponseEntity.ok().build();
-//        }).orElseThrow(() -> new ResourceNotFoundException(
-//            "Course not found with id " + courseId + " and instructorId " + instructorId));
+    // get All Sprints
+//    @GetMapping("/sprints/sprints/workcomm")
+//    public ResponseEntity<List<Sprint>> getSprintWorkCommitment(){
+//        List <Sprint> sprints = sprintRepository.sprintWorkCommitment();
+//        
+//        return new ResponseEntity<>(sprints, HttpStatus.OK);
 //    }
 
 }
