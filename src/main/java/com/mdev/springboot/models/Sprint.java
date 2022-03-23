@@ -2,9 +2,12 @@ package com.mdev.springboot.models;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -52,20 +56,23 @@ public class Sprint implements Serializable {
     @NotNull
     @Column(length = 500)
     private String sdescription;
-    
+
     @NotNull
     @Column(length = 5)
     private int workCommitment;
-    
+
     @NotNull
     @Column(length = 5)
     private int workCompleted;
-    
+
     @Temporal(TemporalType.DATE)
     private Date sdateDebut;
 
     @Temporal(TemporalType.DATE)
     private Date sdateFin;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date supdatedDate;
 
     @OneToMany(mappedBy = "sprint")
     @JsonManagedReference
@@ -78,12 +85,28 @@ public class Sprint implements Serializable {
     @JsonBackReference
     private Projet projet;
 
+    @ElementCollection
+    @CollectionTable(name = "days_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
+    @Column(name = "days_array", length = 1000)
+  
+    private List<String> daysarray;
+    
+    @ElementCollection
+    @CollectionTable(name = "ideall_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
+    @Column(name = "il_array", length = 1000)
+    private List<String> idealLinearray;
+    
+    
+
     public Sprint() {
         super();
     }
 
-    public Sprint(@NotNull String sReference, @NotNull String stitre, @NotNull String sdescription, int workCommitment,
-            int workCompleted, Date sdateDebut, Date sdateFin, Set<Story> stories, @NotNull Projet projet) {
+
+
+    public Sprint(@NotNull String sReference, @NotNull String stitre, @NotNull String sdescription,
+            @NotNull int workCommitment, @NotNull int workCompleted, Date sdateDebut, Date sdateFin, Date supdatedDate,
+            Set<Story> stories, @NotNull Projet projet, List<String> daysarray, List<String> idealLinearray) {
         super();
         this.sReference = sReference;
         this.stitre = stitre;
@@ -92,88 +115,180 @@ public class Sprint implements Serializable {
         this.workCompleted = workCompleted;
         this.sdateDebut = sdateDebut;
         this.sdateFin = sdateFin;
+        this.supdatedDate = supdatedDate;
         this.stories = stories;
         this.projet = projet;
+        this.daysarray = daysarray;
+        this.idealLinearray = idealLinearray;
     }
+
+
 
     public Long getId() {
         return id;
     }
 
+
+
     public void setId(Long id) {
         this.id = id;
     }
+
+
 
     public String getsReference() {
         return sReference;
     }
 
+
+
     public void setsReference(String sReference) {
         this.sReference = sReference;
     }
+
+
 
     public String getStitre() {
         return stitre;
     }
 
+
+
     public void setStitre(String stitre) {
         this.stitre = stitre;
     }
+
+
 
     public String getSdescription() {
         return sdescription;
     }
 
+
+
     public void setSdescription(String sdescription) {
         this.sdescription = sdescription;
     }
+
+
 
     public int getWorkCommitment() {
         return workCommitment;
     }
 
+
+
     public void setWorkCommitment(int workCommitment) {
         this.workCommitment = workCommitment;
     }
+
+
 
     public int getWorkCompleted() {
         return workCompleted;
     }
 
+
+
     public void setWorkCompleted(int workCompleted) {
         this.workCompleted = workCompleted;
     }
+
+
 
     public Date getSdateDebut() {
         return sdateDebut;
     }
 
+
+
     public void setSdateDebut(Date sdateDebut) {
         this.sdateDebut = sdateDebut;
     }
+
+
 
     public Date getSdateFin() {
         return sdateFin;
     }
 
+
+
     public void setSdateFin(Date sdateFin) {
         this.sdateFin = sdateFin;
     }
+
+
+
+    public Date getSupdatedDate() {
+        return supdatedDate;
+    }
+
+
+
+    public void setSupdatedDate(Date supdatedDate) {
+        this.supdatedDate = supdatedDate;
+    }
+
+
 
     public Set<Story> getStories() {
         return stories;
     }
 
+
+
     public void setStories(Set<Story> stories) {
         this.stories = stories;
     }
+
+
 
     public Projet getProjet() {
         return projet;
     }
 
+
+
     public void setProjet(Projet projet) {
         this.projet = projet;
     }
+
+
+
+    public List<String> getDaysarray() {
+        return daysarray;
+    }
+
+
+
+    public void setDaysarray(List<String> daysarray) {
+        this.daysarray = daysarray;
+    }
+
+
+
+    public List<String> getIdealLinearray() {
+        return idealLinearray;
+    }
+
+
+
+    public void setIdealLinearray(List<String> idealLinearray) {
+        this.idealLinearray = idealLinearray;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Sprint [id=" + id + ", sReference=" + sReference + ", stitre=" + stitre + ", sdescription="
+                + sdescription + ", workCommitment=" + workCommitment + ", workCompleted=" + workCompleted
+                + ", sdateDebut=" + sdateDebut + ", sdateFin=" + sdateFin + ", supdatedDate=" + supdatedDate
+                + ", stories=" + stories + ", projet=" + projet + ", daysarray=" + daysarray + ", idealLinearray="
+                + idealLinearray + "]";
+    }
+
+    
 
 }
