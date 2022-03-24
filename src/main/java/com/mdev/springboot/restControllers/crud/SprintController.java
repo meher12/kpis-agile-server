@@ -1,5 +1,6 @@
 package com.mdev.springboot.restControllers.crud;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import com.mdev.springboot.models.Projet;
 import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
+import com.mdev.springboot.services.SprintServiceImp;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -32,6 +34,9 @@ public class SprintController {
 
     @Autowired
     SprintRepository sprintRepository;
+
+    @Autowired
+    SprintServiceImp sprintServiceImp;
 
     @Autowired
     ProjetRepository projetRepository;
@@ -72,6 +77,12 @@ public class SprintController {
     @GetMapping("/sprints/sprints")
     public ResponseEntity<List<Sprint>> getAllSprints() {
         List<Sprint> sprints = sprintRepository.findAll();
+
+        Comparator<Sprint> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateFin().getTime());
+        };
+
+        Collections.sort(sprints, comparator);
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
 
@@ -139,15 +150,48 @@ public class SprintController {
         sprintRepository.deleteAllByProjetId(projet_id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
     // update work Commitment and work Completed in sprint
     @GetMapping("/sprints/updatesp")
-    public ResponseEntity<Map<String, Boolean>> updateStoryPointInSprint(){  
-        
+    public ResponseEntity<Map<String, Boolean>> updateStoryPointInSprint() {
+
         this.sprintRepository.sprintStoryPointUpdate();
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Updated", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
 
+    // put array value for ideal line story points in sprint
+    @RequestMapping(value = "/sprints/daysbrundownChart", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Boolean>> arrayOfDaysInSprint() throws Exception {
+
+        List<Sprint> sprints = sprintRepository.findAll();
+        for (Sprint sprint : sprints) {
+            sprint.setDaysarray(sprintServiceImp.numberOfDaysInSprint(sprint.getSdateDebut(), sprint.getSdateFin()));
+            List<String> resultArray = sprint.getDaysarray();
+           sprintRepository.sprintArrayDays(sprint.getId(), resultArray);
+        }
+
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Inserted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
     
+    // get array of iealLine for sprint story poins
+    @RequestMapping(value = "/sprints/ideallbrundownChart", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Boolean>> arrayOfIdealLine(){
+        
+        List<Sprint> sprints = sprintRepository.findAll();
+        for (Sprint sprint : sprints) {
+            sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(), sprint.getWorkCommitment()));
+            List<String>  arrayLine = sprint.getIdealLinearray();
+             sprintRepository.sprintArrayOfIdealLine(sprint.getId(),arrayLine);
+              System.out.println(arrayLine);
+        }
+        
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Inserted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
+
 }

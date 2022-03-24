@@ -9,6 +9,8 @@ public class KpisAgileServerApplication {
     
     public static void main(String[] args) {
         SpringApplication.run(KpisAgileServerApplication.class, args);
+        
+
     }
 
 //    @Bean

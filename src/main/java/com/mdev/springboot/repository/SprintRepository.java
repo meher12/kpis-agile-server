@@ -1,13 +1,18 @@
 package com.mdev.springboot.repository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.LockModeType;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mdev.springboot.models.Sprint;
@@ -24,13 +29,26 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     
     @Transactional
     @Modifying
-    @Query(value = "UPDATE sprints SET work_commitment = (SELECT SUM(st.story_point) FROM story st WHERE sprints.id = st.sprint_id) "
+    @Query(value = "UPDATE sprints SET supdated_date = (SELECT now()), work_commitment = (SELECT SUM(st.story_point) FROM story st WHERE sprints.id = st.sprint_id) "
             + ", work_completed = (SELECT SUM(st.sp_completed) FROM story st WHERE sprints.id = st.sprint_id)", nativeQuery = true)
     void  sprintStoryPointUpdate();
     
     
-    @Query(value = "select count(*) FROM sprints", nativeQuery = true)
-    int sizeofSprintTable();
+    //"update author set last_name= :lastName where first_name = :firstName"
+    //"INSERT INTO days_sprints(sprints_id, array_of_days) VALUES(?1, ?2);"
+    //INSERT INTO array_of_days (id, daysarray) VALUES (53, '{20-02-2022}') ON CONFLICT (id, daysarray) DO UPDATE SET id = 53, daysarray = '{20-02-2022}'
+    @Transactional
+    @Modifying
+    @Query(value="INSERT INTO days_sprints (sprint_id, days_array) VALUES (:sprint_id, ARRAY[:daysarray])", nativeQuery = true)
+    void  sprintArrayDays(Long sprint_id,  List<String>  daysarray);
+    
+    @Transactional
+    @Modifying
+    @Query(value="INSERT INTO ideall_sprints (sprint_id, il_array) VALUES (?1, ARRAY[?2])", nativeQuery = true)
+    void  sprintArrayOfIdealLine(Long sprint_id,  List<String>  idealLinearray);
+    
+    
+
     
 //    @Transactional
 //    @Modifying
