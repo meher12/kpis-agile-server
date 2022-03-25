@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -161,36 +163,69 @@ public class SprintController {
         return ResponseEntity.ok(response);
     }
 
-    // put array value for ideal line story points in sprint
+    // get number of days in sprint
     @RequestMapping(value = "/sprints/daysbrundownChart", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, Boolean>> arrayOfDaysInSprint() throws Exception {
+    public ResponseEntity<Map<String, Boolean>> daysInSprint() throws Exception {
 
         List<Sprint> sprints = sprintRepository.findAll();
         for (Sprint sprint : sprints) {
             sprint.setDaysarray(sprintServiceImp.numberOfDaysInSprint(sprint.getSdateDebut(), sprint.getSdateFin()));
             List<String> resultArray = sprint.getDaysarray();
-           sprintRepository.sprintArrayDays(sprint.getId(), resultArray);
+            sprintRepository.sprintArrayDays(sprint.getId(), resultArray);
         }
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("Inserted", Boolean.TRUE);
+        response.put("Days Inserted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
-    
-    // get array of iealLine for sprint story poins
+
+    // get iealLine for sprint story points
     @RequestMapping(value = "/sprints/ideallbrundownChart", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, Boolean>> arrayOfIdealLine(){
-        
+    public ResponseEntity<Map<String, Boolean>> idealLineOfSprint() {
+
         List<Sprint> sprints = sprintRepository.findAll();
         for (Sprint sprint : sprints) {
-            sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(), sprint.getWorkCommitment()));
-            List<String>  arrayLine = sprint.getIdealLinearray();
-             sprintRepository.sprintArrayOfIdealLine(sprint.getId(),arrayLine);
-              System.out.println(arrayLine);
+            sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(),
+                    sprint.getWorkCommitment()));
+            List<String> arrayLine = sprint.getIdealLinearray();
+            sprintRepository.sprintArrayOfIdealLine(sprint.getId(), arrayLine);
+            System.out.println(arrayLine);
         }
-        
+
         Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("Inserted", Boolean.TRUE);
+        response.put("Inserted ideal line", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
+
+    // update sprint work completed
+    @RequestMapping(value = "/sprints/addspCompleted/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Map<String, Boolean>> updateSprintWorkCompleted(@PathVariable("id") Long id, @RequestBody ArrayList<Object> storiesRequest) {
+
+        Sprint sprint = sprintRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));
+
+        System.out.println("---"+ storiesRequest);
+        
+        ArrayList<String>  arrayJson = new ArrayList<String>();
+        ArrayList<String>  arrayFiltred = new ArrayList<String>();
+        
+        storiesRequest.forEach(name -> {
+            arrayJson.add(name.toString());
+        });
+        
+        for(String item : arrayJson){
+            String number = item.replaceAll("[^0-9]", "");
+            arrayFiltred.add(number);
+        }
+        System.out.println("*****"+arrayFiltred);
+
+
+        sprint.setWorkedlarray(arrayFiltred);
+      //  List<String> arraysp = sprintRequest.getWorkedlarray();
+        sprintRepository.sprintArrayOfWorkedLine(sprint.getId(), arrayFiltred);
+
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("worked sp Inserted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
 

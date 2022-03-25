@@ -37,15 +37,23 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     //"update author set last_name= :lastName where first_name = :firstName"
     //"INSERT INTO days_sprints(sprints_id, array_of_days) VALUES(?1, ?2);"
     //INSERT INTO array_of_days (id, daysarray) VALUES (53, '{20-02-2022}') ON CONFLICT (id, daysarray) DO UPDATE SET id = 53, daysarray = '{20-02-2022}'
+    // insert number of days
     @Transactional
     @Modifying
     @Query(value="INSERT INTO days_sprints (sprint_id, days_array) VALUES (:sprint_id, ARRAY[:daysarray])", nativeQuery = true)
     void  sprintArrayDays(Long sprint_id,  List<String>  daysarray);
     
+    // insert ideal line
     @Transactional
     @Modifying
     @Query(value="INSERT INTO ideall_sprints (sprint_id, il_array) VALUES (?1, ARRAY[?2])", nativeQuery = true)
     void  sprintArrayOfIdealLine(Long sprint_id,  List<String>  idealLinearray);
+    
+    // insert worked line
+    @Transactional
+    @Modifying
+    @Query(value="INSERT INTO workedl_sprints (sprint_id, workedl_array) VALUES (?1, ARRAY[?2])", nativeQuery = true)
+    void  sprintArrayOfWorkedLine(Long sprint_id,  List<String>  workedl_array);
     
     
 
