@@ -1,48 +1,56 @@
 package com.mdev.springboot.components;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.ArrayList;
 
-import javax.transaction.Transactional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.mdev.springboot.exception.ResourceNotFoundException;
-import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.SprintRepository;
 import com.mdev.springboot.services.SprintServiceImp;
-//
-//@Order(value = 2)
-//@Component
-//public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 
-   // private static final Logger logger = LoggerFactory.getLogger(ApplicationStartupRunnerTwo.class);
+@Order(value = 2)
+@Component
+public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 
-//    @Autowired
-//    SprintRepository sprintRepository;
-//    @Autowired
-//    SprintServiceImp sprintServiceImp;
-//    
-//
-//
-//    @Override
-//    public void run(String... args) throws Exception {
-//       
-//       //Long id = 55;
-//        Sprint sprints = sprintRepository.findById((long) 53)
-//             .orElseThrow(() -> new ResourceNotFoundException("Not found Sprint with id = " ));
-//        
-//
-//          sprints.setDaysarray(sprintServiceImp.numberOfDaysInSprint(sprints.getSdateDebut(), sprints.getSdateFin()));
-//        List<String> result =  sprints.getDaysarray();
-//       System.out.println("************************"+ result);
-//        
-//       
-//        sprintRepository.sprintArrayDays(58, result);
+   private static final Logger logger = LoggerFactory.getLogger(ApplicationStartupRunnerTwo.class);
+
+    @Autowired
+    SprintRepository sprintRepository;
+    @Autowired
+    SprintServiceImp sprintServiceImp;
+    
+
+
+    @Override
+    public void run(String... args) throws Exception {
+       
+        ArrayList<Integer> sptb = new ArrayList<Integer>();
+        int spwrked[] = {10, 10, 10, 10, 10, 10, 10};
+        int newtable[] =   {0, 0, 0, 3, 0, 0, 0};
+        
+        int SP = 100;
+        int newtask = 0;
+        sptb.add(SP);
+              for (int j = 0; j <spwrked.length; j++) {
+                  if(newtable[j] == 0){
+                   newtask =   SP -   spwrked[j];
+                   SP =  newtask;
+                  }
+                  else{
+                       newtask =   (SP+newtable[j]) -   spwrked[j];
+                       SP =  newtask;
+                       System.out.println(newtask);
+                  }
+                 sptb.add(SP);
+              }
+               System.out.println(sptb);
+        
+       
+       
         
        
         
@@ -74,5 +82,5 @@ import com.mdev.springboot.services.SprintServiceImp;
 //
 //        logger.info("{}", sprintTab);
 
-//    }
-//}
+   }
+}

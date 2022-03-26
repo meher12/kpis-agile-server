@@ -62,9 +62,12 @@ public class Projet implements Serializable{
     @OneToMany(mappedBy = "projet")
     @JsonManagedReference
     private Set<Sprint> sprints;
-
-//    @Column(length = 20, nullable = false)
-//    private String nomPO;
+    
+    @NotNull
+    @Column(name="totalsps")
+    private int totalsps;
+    
+   
 //
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinTable(name = "users_projets", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "projets_id", referencedColumnName = "id"))
@@ -76,8 +79,9 @@ public class Projet implements Serializable{
         super();
     }
 
+
     public Projet(@NotNull String pReference, @NotNull String titre, @NotNull String descriptionProject, Date dateDebut,
-            Date dateFin, Set<Sprint> sprints) {
+            Date dateFin, Set<Sprint> sprints, @NotNull int totalsps) {
         super();
         this.pReference = pReference;
         this.titre = titre;
@@ -85,69 +89,97 @@ public class Projet implements Serializable{
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.sprints = sprints;
+        this.totalsps = totalsps;
     }
+
 
     public Long getId() {
         return id;
     }
 
+
     public void setId(Long id) {
         this.id = id;
     }
 
-   
+
     public String getpReference() {
         return pReference;
     }
+
 
     public void setpReference(String pReference) {
         this.pReference = pReference;
     }
 
+
     public String getTitre() {
         return titre;
     }
+
 
     public void setTitre(String titre) {
         this.titre = titre;
     }
 
+
     public String getDescriptionProject() {
         return descriptionProject;
     }
+
 
     public void setDescriptionProject(String descriptionProject) {
         this.descriptionProject = descriptionProject;
     }
 
+
     public Date getDateDebut() {
         return dateDebut;
     }
+
 
     public void setDateDebut(Date dateDebut) {
         this.dateDebut = dateDebut;
     }
 
+
     public Date getDateFin() {
         return dateFin;
     }
+
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
     }
 
+
     public Set<Sprint> getSprints() {
         return sprints;
     }
+
 
     public void setSprints(Set<Sprint> sprints) {
         this.sprints = sprints;
     }
 
+
+    public int getTotalsps() {
+        return totalsps;
+    }
+
+
+    public void setTotalsps(int totalsps) {
+        this.totalsps = totalsps;
+    }
+
+
     @Override
     public String toString() {
         return "Projet [id=" + id + ", pReference=" + pReference + ", titre=" + titre + ", descriptionProject="
-                + descriptionProject + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + "]";
+                + descriptionProject + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", sprints=" + sprints
+                + ", totalsps=" + totalsps + "]";
     }
+
+   
 
 }

@@ -75,7 +75,6 @@ public class SprintServiceImp implements SprintService {
         // Calling find() method for getting difference bwtween dates  
        long nbrDays = calculDaysDiff(str_date, end_date);   
 
-         System.out.println("Incre DD: \n " +nbrDays);
          
         List<String> negative = new ArrayList<>();
         List<String> positive = new ArrayList<>();
@@ -86,7 +85,7 @@ public class SprintServiceImp implements SprintService {
          int SP = workCommitment;
 
          int inc = Math.round(SP/nbrOfDay);
-         System.out.println("Incre Number: \n " +inc);
+        
          for (int i = 0; i <nbrOfDay; i++) {
              idealLine[i] = SP;
             SP =  idealLine[i] -inc;
