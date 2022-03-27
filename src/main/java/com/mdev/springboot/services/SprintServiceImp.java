@@ -91,7 +91,7 @@ public class SprintServiceImp implements SprintService {
             SP =  idealLine[i] -inc;
         }
         
-        System.out.println(Arrays.toString(idealLine));
+       // System.out.println(Arrays.toString(idealLine));
         for (int i = 0; i <idealLine.length; i++) {
             if(idealLine[i] < 0){
                 negative.add(String.valueOf(idealLine[i]));            }
@@ -99,7 +99,7 @@ public class SprintServiceImp implements SprintService {
                 positive.add(String.valueOf(idealLine[i]));  
             }
         }
-         System.out.println(positive);
+       //  System.out.println(positive);
         return positive;
     }
 

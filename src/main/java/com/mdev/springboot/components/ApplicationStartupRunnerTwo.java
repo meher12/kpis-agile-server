@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
 import com.mdev.springboot.services.SprintServiceImp;
 
@@ -23,31 +24,34 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
     @Autowired
     SprintServiceImp sprintServiceImp;
     
+    @Autowired
+    ProjetRepository projetRepository;
+    
 
 
     @Override
     public void run(String... args) throws Exception {
-       
-        ArrayList<Integer> sptb = new ArrayList<Integer>();
+       // projetRepository.totalSpInProject();
+        ArrayList<Integer> totalspCommitment = new ArrayList<Integer>();
         int spwrked[] = {10, 10, 10, 10, 10, 10, 10};
-        int newtable[] =   {0, 0, 0, 3, 0, 0, 0};
+        int morework[] =   {0, 0, 0, 3, 0, 0, 0};
         
         int SP = 100;
         int newtask = 0;
-        sptb.add(SP);
+        totalspCommitment.add(SP);
               for (int j = 0; j <spwrked.length; j++) {
-                  if(newtable[j] == 0){
+                  if(morework[j] == 0){
                    newtask =   SP -   spwrked[j];
                    SP =  newtask;
                   }
                   else{
-                       newtask =   (SP+newtable[j]) -   spwrked[j];
+                       newtask =   (SP+morework[j]) -   spwrked[j];
                        SP =  newtask;
-                       System.out.println(newtask);
+                      // System.out.println(newtask);
                   }
-                 sptb.add(SP);
+                  totalspCommitment.add(SP);
               }
-               System.out.println(sptb);
+              // System.out.println(sptb);
         
        
        

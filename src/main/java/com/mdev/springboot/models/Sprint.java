@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,7 +27,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -50,11 +50,12 @@ public class Sprint implements Serializable {
     private String sReference;
 
     @NotNull
-    @Column(length = 100)
+    @Column(name = "title",columnDefinition="TEXT")
     private String stitre;
 
     @NotNull
-    @Column(length = 500)
+  //@Lob
+    @Column(name = "description", columnDefinition="TEXT")
     private String sdescription;
 
     @NotNull
@@ -85,19 +86,18 @@ public class Sprint implements Serializable {
     @JsonBackReference
     private Projet projet;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "days_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
     @Column(name = "days_array", length = 1000)
-  
     private List<String> daysarray;
     
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "ideall_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
     @Column(name = "il_array", length = 1000)
     private List<String> idealLinearray;
     
-    @NotNull
-    @ElementCollection
+
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "workedl_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
     @Column(name = "workedl_array", length = 1000)
     private List<String> workedlarray;
@@ -230,7 +230,6 @@ public class Sprint implements Serializable {
         this.idealLinearray = idealLinearray;
     }
 
-
     public List<String> getWorkedlarray() {
         return workedlarray;
     }
@@ -248,7 +247,7 @@ public class Sprint implements Serializable {
                 + idealLinearray + ", workedlarray=" + workedlarray + "]";
     }
 
-
+  
 
     
 

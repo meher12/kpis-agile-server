@@ -40,11 +40,12 @@ public class Story implements Serializable{
     private String stReference;
 
     @NotNull
-    @Column(length = 100)
+    @Column(name = "title",columnDefinition="TEXT")
     private String stname;
 
     @NotNull
-    @Column(length = 1000)
+  //@Lob
+    @Column(name = "description", columnDefinition="TEXT")
     private String stdescription;
 
     //@NotNull

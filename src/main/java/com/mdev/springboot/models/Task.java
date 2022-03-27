@@ -38,7 +38,7 @@ public class Task implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(length = 100)
+    @Column(name = "title",columnDefinition="TEXT")
     private String tname;
 
     @NotNull
@@ -46,7 +46,8 @@ public class Task implements Serializable {
     private String tReference;
 
     @NotNull
-    @Column(length = 1000)
+  //@Lob
+    @Column(name = "description", columnDefinition="TEXT")
     private String tdescription;
 
     @Temporal(TemporalType.DATE)
