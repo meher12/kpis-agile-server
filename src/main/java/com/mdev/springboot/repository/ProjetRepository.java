@@ -22,8 +22,8 @@ public interface ProjetRepository extends JpaRepository<Projet, Long>{
     
     @Transactional
     @Modifying
-    @Query(value = "UPDATE projets SET pupdated_date = (SELECT now()), totalsp_commitment = (SELECT SUM(sp.work_commitment) FROM sprints sp WHERE projets.id = sp.projet_id),"
-            + "totalsp_completed = (SELECT SUM(sp.work_completed) FROM sprints sp WHERE projets.id = sp.projet_id)", nativeQuery = true)
+    @Query(value = "UPDATE projets SET pupdated_date = (SELECT now()), totalsp_commitment = (SELECT COALESCE(SUM(sp.work_commitment),0) FROM sprints sp WHERE projets.id = sp.projet_id),"
+            + "totalsp_completed = (SELECT COALESCE(SUM(sp.work_completed),0) FROM sprints sp WHERE projets.id = sp.projet_id)", nativeQuery = true)
     void  totalSpInProject();
 
 }

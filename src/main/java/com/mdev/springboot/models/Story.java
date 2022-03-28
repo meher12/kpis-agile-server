@@ -1,6 +1,7 @@
 package com.mdev.springboot.models;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -14,6 +15,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -49,11 +52,16 @@ public class Story implements Serializable{
     private String stdescription;
 
     //@NotNull
-    @Column(length = 5)
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
     private int storyPoint;
     
-    @Column(length = 5)
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
     private int spCompleted;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date stupdatedDate;
 
     //@NotNull
     @Column(length = 5)

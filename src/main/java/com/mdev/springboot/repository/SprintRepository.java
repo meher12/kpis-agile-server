@@ -29,8 +29,8 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     
     @Transactional
     @Modifying
-    @Query(value = "UPDATE sprints SET supdated_date = (SELECT now()), work_commitment = (SELECT SUM(st.story_point) FROM story st WHERE sprints.id = st.sprint_id) "
-            + ", work_completed = (SELECT SUM(st.sp_completed) FROM story st WHERE sprints.id = st.sprint_id)", nativeQuery = true)
+    @Query(value = "UPDATE sprints SET supdated_date = (SELECT now()), work_commitment = (SELECT COALESCE(SUM(st.story_point),0) FROM story st WHERE sprints.id = st.sprint_id) "
+            + ", work_completed = (SELECT COALESCE(SUM(st.sp_completed),0) FROM story st WHERE sprints.id = st.sprint_id)", nativeQuery = true)
     void  sprintStoryPointUpdate();
     
     
@@ -55,7 +55,9 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     @Query(value="INSERT INTO workedl_sprints (sprint_id, workedl_array) VALUES (?1, ARRAY[?2])", nativeQuery = true)
     void  sprintArrayOfWorkedLine(Long sprint_id,  List<String>  workedl_array);
     
-    
+    // select stroy points completed in project
+    @Query(value = "select sp.work_completed as sp_worked from sprints sp INNER JOIN projets ON sp.projet_id=projets.id;", nativeQuery = true)
+    List<String>  getLisSpCompleted();
 
     
 //    @Transactional

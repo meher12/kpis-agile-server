@@ -1,5 +1,7 @@
 package com.mdev.springboot.restControllers.crud;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,14 +43,29 @@ public class TaskController {
         if (!storyRepository.existsById(story_id)) {
             throw new ResourceNotFoundException("Not found Story with id = " + story_id);
         }
+        
         List<Task> tasks = taskRepository.findByStoryId(story_id);
+        
+        Comparator<Task> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
+        };
+
+        Collections.sort(tasks, comparator);
+        
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     // get all tasks
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
     public ResponseEntity<List<Task>> getAllTask() {
-        return new ResponseEntity<>(taskRepository.findAll(), HttpStatus.OK);
+        
+        List<Task> tasks = taskRepository.findAll();
+        Comparator<Task> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
+        };
+
+        Collections.sort(tasks, comparator);
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     // get All Tasks By Story Reference
@@ -103,6 +120,7 @@ public class TaskController {
         task.setTdescription(taskRequest.getTdescription());
         task.setTdateDebut(taskRequest.getTdateDebut());
         task.setTdateFin(taskRequest.getTdateFin());
+        task.setEstimation(taskRequest.getEstimation());
         task.setStatus(taskRequest.getStatus());
         task.setTypeTask(taskRequest.getTypeTask());
 
@@ -131,6 +149,16 @@ public class TaskController {
 
         taskRepository.deleteAllByStoryId(story_id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    
+    // update tasks table
+    @GetMapping("/task/tasktimeUpdate")
+    public ResponseEntity<Map<String, Boolean>> updateTasktable() {
+
+        this.taskRepository.tasktimeUpdate();
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Updated table task", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 
 }

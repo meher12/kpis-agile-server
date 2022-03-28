@@ -50,7 +50,6 @@ public class Projet implements Serializable {
     private String titre;
 
     @NotNull
-    //@Lob
     @Column(name = "description", columnDefinition="TEXT")
     private String descriptionProject;
 
@@ -65,11 +64,12 @@ public class Projet implements Serializable {
     private Set<Sprint> sprints;
 
     @NotNull
-    @Column(name = "totalspCommitment")
+    @Column(name = "totalspCommitment", columnDefinition = "integer default 0")
     private int totalspCommitment;
 
     @NotNull
-    @Column(length = 5)
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
     private int totalspCompleted;
 
     @Temporal(TemporalType.TIMESTAMP)

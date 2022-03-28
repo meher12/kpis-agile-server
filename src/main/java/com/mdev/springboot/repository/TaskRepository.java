@@ -6,6 +6,8 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.mdev.springboot.models.Task;
@@ -19,4 +21,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Transactional
     void deleteAllByStoryId(Long storyId);
+    
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE tasks SET tsupdated_date = (SELECT now()) FROM tasks ts WHERE TRUE", nativeQuery = true)
+    void  tasktimeUpdate();
+    
+    @Query(value = "select ts.estimation from tasks ts where ts.type_task='MORE';", nativeQuery = true)
+    List<String>  getspMoretasks();
 }

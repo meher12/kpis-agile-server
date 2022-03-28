@@ -46,7 +46,6 @@ public class Task implements Serializable {
     private String tReference;
 
     @NotNull
-  //@Lob
     @Column(name = "description", columnDefinition="TEXT")
     private String tdescription;
 
@@ -63,6 +62,13 @@ public class Task implements Serializable {
     @Enumerated(EnumType.STRING)
     private ETypeTask typeTask;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date tsupdatedDate;
+    
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
+    private int estimation; 
+    
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "story_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -74,7 +80,7 @@ public class Task implements Serializable {
     }
 
     public Task(@NotNull String tname, @NotNull String tReference, @NotNull String tdescription, Date tdateDebut,
-            Date tdateFin, ETask status, ETypeTask typeTask, Story story) {
+            Date tdateFin, ETask status, ETypeTask typeTask, @NotNull int estimation, Story story) {
         super();
         this.tname = tname;
         this.tReference = tReference;
@@ -83,6 +89,7 @@ public class Task implements Serializable {
         this.tdateFin = tdateFin;
         this.status = status;
         this.typeTask = typeTask;
+        this.estimation = estimation;
         this.story = story;
     }
 
@@ -150,6 +157,14 @@ public class Task implements Serializable {
         this.typeTask = typeTask;
     }
 
+    public int getEstimation() {
+        return estimation;
+    }
+
+    public void setEstimation(int estimation) {
+        this.estimation = estimation;
+    }
+
     public Story getStory() {
         return story;
     }
@@ -158,13 +173,7 @@ public class Task implements Serializable {
         this.story = story;
     }
 
-    @Override
-    public String toString() {
-        return "Task [id=" + id + ", tname=" + tname + ", tReference=" + tReference + ", tdescription=" + tdescription
-                + ", tdateDebut=" + tdateDebut + ", tdateFin=" + tdateFin + ", status=" + status + ", typeTask="
-                + typeTask + ", story=" + story + "]";
-    }
-
+   
     
 
 }

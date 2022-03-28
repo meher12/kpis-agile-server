@@ -54,16 +54,17 @@ public class Sprint implements Serializable {
     private String stitre;
 
     @NotNull
-  //@Lob
     @Column(name = "description", columnDefinition="TEXT")
     private String sdescription;
 
     @NotNull
-    @Column(length = 5)
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
     private int workCommitment;
 
     @NotNull
-    @Column(length = 5)
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
     private int workCompleted;
 
     @Temporal(TemporalType.DATE)

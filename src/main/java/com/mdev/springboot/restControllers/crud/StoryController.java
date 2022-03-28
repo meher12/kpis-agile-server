@@ -2,7 +2,9 @@ package com.mdev.springboot.restControllers.crud;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -149,6 +151,16 @@ public class StoryController {
 
         storyRepository.deleteAllBySprintId(sprint_id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    
+    // update story points in sprint
+    @GetMapping("/storie/updatestorypoints")
+    public ResponseEntity<Map<String, Boolean>> updateStoryPoint() {
+
+        this. storyRepository.StoryPointUpdate();
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Updated story points", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 
 }

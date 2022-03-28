@@ -1,6 +1,7 @@
 package com.mdev.springboot.components;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
+import com.mdev.springboot.repository.StoryRepository;
+import com.mdev.springboot.repository.TaskRepository;
 import com.mdev.springboot.services.SprintServiceImp;
 
 @Order(value = 2)
@@ -27,11 +30,30 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
     @Autowired
     ProjetRepository projetRepository;
     
+    @Autowired
+    StoryRepository storyRepository;
+    
+    @Autowired
+    TaskRepository taskRepository;
+    
 
 
     @Override
     public void run(String... args) throws Exception {
-       // projetRepository.totalSpInProject();
+      
+//        storyRepository.StoryPointUpdate();
+//        sprintRepository.sprintStoryPointUpdate();
+//        projetRepository.totalSpInProject();
+//        taskRepository.tasktimeUpdate();
+        
+        //More table for  brundown relases
+        List<String> moresp = taskRepository.getspMoretasks();
+        System.out.println(moresp);
+        
+        //Story points completed in project
+        List<String> spDone = sprintRepository.getLisSpCompleted();
+        System.out.println(spDone);
+        
         ArrayList<Integer> totalspCommitment = new ArrayList<Integer>();
         int spwrked[] = {10, 10, 10, 10, 10, 10, 10};
         int morework[] =   {0, 0, 0, 3, 0, 0, 0};

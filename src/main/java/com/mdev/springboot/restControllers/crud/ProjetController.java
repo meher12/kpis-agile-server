@@ -139,6 +139,16 @@ public class ProjetController {
         }
 
     }
+    
+    // update projects Sum SP
+    @GetMapping("/projects/sumspbyproject")
+    public ResponseEntity<Map<String, Boolean>> updateTasktable() {
+
+        this.projetRepository.totalSpInProject();
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Updated sum story points by project task", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
 
 }
 
