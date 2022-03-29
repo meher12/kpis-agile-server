@@ -51,7 +51,6 @@ public class Story implements Serializable{
     @Column(name = "description", columnDefinition="TEXT")
     private String stdescription;
 
-    //@NotNull
     @NotNull
     @Column(columnDefinition = "integer default 0")
     private int storyPoint;
@@ -59,6 +58,10 @@ public class Story implements Serializable{
     @NotNull
     @Column(columnDefinition = "integer default 0")
     private int spCompleted;
+    
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
+    private int plusSp;
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date stupdatedDate;
@@ -85,14 +88,17 @@ public class Story implements Serializable{
 
 
 
-    public Story(@NotNull String stReference, @NotNull String stname, @NotNull String stdescription, int storyPoint,
-            int spCompleted, long priority, Set<Task> tasks, Sprint sprint) {
+    public Story(@NotNull String stReference, @NotNull String stname, @NotNull String stdescription,
+            @NotNull int storyPoint, @NotNull int spCompleted, @NotNull int plusSp, Date stupdatedDate, Long priority,
+            Set<Task> tasks, Sprint sprint) {
         super();
         this.stReference = stReference;
         this.stname = stname;
         this.stdescription = stdescription;
         this.storyPoint = storyPoint;
         this.spCompleted = spCompleted;
+        this.plusSp = plusSp;
+        this.stupdatedDate = stupdatedDate;
         this.priority = priority;
         this.tasks = tasks;
         this.sprint = sprint;
@@ -172,6 +178,30 @@ public class Story implements Serializable{
 
 
 
+    public int getPlusSp() {
+        return plusSp;
+    }
+
+
+
+    public void setPlusSp(int plusSp) {
+        this.plusSp = plusSp;
+    }
+
+
+
+    public Date getStupdatedDate() {
+        return stupdatedDate;
+    }
+
+
+
+    public void setStupdatedDate(Date stupdatedDate) {
+        this.stupdatedDate = stupdatedDate;
+    }
+
+
+
     public Long getPriority() {
         return priority;
     }
@@ -211,8 +241,13 @@ public class Story implements Serializable{
     @Override
     public String toString() {
         return "Story [id=" + id + ", stReference=" + stReference + ", stname=" + stname + ", stdescription="
-                + stdescription + ", storyPoint=" + storyPoint + ", spCompleted=" + spCompleted + ", priority="
-                + priority + ", tasks=" + tasks + ", sprint=" + sprint + "]";
+                + stdescription + ", storyPoint=" + storyPoint + ", spCompleted=" + spCompleted + ", plusSp=" + plusSp
+                + ", stupdatedDate=" + stupdatedDate + ", priority=" + priority + ", tasks=" + tasks + ", sprint="
+                + sprint + "]";
     }
+    
+    
 
 }
+
+    

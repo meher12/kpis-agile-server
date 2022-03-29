@@ -162,5 +162,17 @@ public class StoryController {
         response.put("Updated story points", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
+    
+ // update Plus story points 
+    @GetMapping("/storie/updatePlussp")
+    public ResponseEntity<Map<String, Boolean>> updatePlusSp() {
+
+        this. storyRepository.updatePlusSp();
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Updated story points", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
+    
+    
 
 }

@@ -1,18 +1,14 @@
 package com.mdev.springboot.repository;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import javax.persistence.LockModeType;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mdev.springboot.models.Sprint;
@@ -56,8 +52,17 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     void  sprintArrayOfWorkedLine(Long sprint_id,  List<String>  workedl_array);
     
     // select stroy points completed in project
-    @Query(value = "select sp.work_completed as sp_worked from sprints sp INNER JOIN projets ON sp.projet_id=projets.id;", nativeQuery = true)
-    List<String>  getLisSpCompleted();
+    @Query(value = "select sp.work_completed as sp_worked from sprints sp INNER JOIN projets ON sp.projet_id=projets.id ORDER BY sdate_debut ASC", nativeQuery = true)
+    ArrayList<String>  getListSpCompleted();
+    
+    @Transactional
+    @Modifying
+    @Query(value = "update sprints SET more_sp = (SELECT COALESCE(SUM(s.plus_sp),0) FROM story s WHERE sprints.id = s.sprint_id)", nativeQuery = true)
+    void  updateMoreSp();
+    
+    // select stroy points More in project
+    @Query(value = "select sp.more_sp from sprints sp INNER JOIN projets ON sp.projet_id=projets.id ORDER BY sdate_debut ASC", nativeQuery = true)
+    ArrayList<String>  getListMoreSp();
 
     
 //    @Transactional

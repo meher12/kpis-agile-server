@@ -43,22 +43,22 @@ public class TaskController {
         if (!storyRepository.existsById(story_id)) {
             throw new ResourceNotFoundException("Not found Story with id = " + story_id);
         }
-        
+
         List<Task> tasks = taskRepository.findByStoryId(story_id);
-        
+
         Comparator<Task> comparator = (c1, c2) -> {
             return Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
         };
 
         Collections.sort(tasks, comparator);
-        
+
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     // get all tasks
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
     public ResponseEntity<List<Task>> getAllTask() {
-        
+
         List<Task> tasks = taskRepository.findAll();
         Comparator<Task> comparator = (c1, c2) -> {
             return Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
@@ -150,11 +150,10 @@ public class TaskController {
         taskRepository.deleteAllByStoryId(story_id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
     // update tasks table
     @GetMapping("/task/tasktimeUpdate")
     public ResponseEntity<Map<String, Boolean>> updateTasktable() {
-
         this.taskRepository.tasktimeUpdate();
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Updated table task", Boolean.TRUE);

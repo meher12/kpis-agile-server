@@ -29,5 +29,11 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
     void  StoryPointUpdate();
     
     
+    @Transactional
+    @Modifying
+    @Query(value = "update story SET plus_sp = (SELECT COALESCE(SUM(ts.estimation),0) FROM tasks ts WHERE story.id = ts.story_id AND ts.type_task='MORE')", nativeQuery = true)
+    void  updatePlusSp();
+    
+    
 
 }

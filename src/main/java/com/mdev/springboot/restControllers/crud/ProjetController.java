@@ -28,6 +28,8 @@ import com.mdev.springboot.exception.ResourceNotFoundException;
 import com.mdev.springboot.models.Projet;
 import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
+import com.mdev.springboot.repository.SprintRepository;
+import com.mdev.springboot.services.ProjectServiceImp;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -36,6 +38,12 @@ public class ProjetController {
 
     @Autowired
     ProjetRepository projetRepository;
+    
+    @Autowired
+    ProjectServiceImp projectServiceImp;
+    
+    @Autowired
+    SprintRepository sprintRepository;
 
     // get all project by Title or All
     //@PreAuthorize("hasRole('PRODUCTOWNER')")
@@ -101,12 +109,6 @@ public class ProjetController {
         return new ResponseEntity<>(projetRepository.save(_projet), HttpStatus.OK);
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<HttpStatus> deleteProjet(@PathVariable("id") Long id) {
-//        projetRepository.deleteById(id);
-//
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
 
     @DeleteMapping("/projects/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteProjectById(@PathVariable Long id) {
@@ -146,8 +148,32 @@ public class ProjetController {
 
         this.projetRepository.totalSpInProject();
         Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("Updated sum story points by project task", Boolean.TRUE);
+        response.put("Updated sum story points by project", Boolean.TRUE);
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/projects/releasebdchart")
+    public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(){
+        
+        int sumSp;
+        List<Projet> projets = this.projetRepository.findAll();
+        // Story points completed in project
+        ArrayList<String> spDone = sprintRepository.getListSpCompleted();
+
+        // More table for brundown relases
+        ArrayList<String> moresp = sprintRepository.getListMoreSp();
+               
+        for (Projet projet : projets) {
+            sumSp = projet.getTotalspCommitment();
+            projet.setpSpwrked(spDone);
+            projet.setpMoresp(moresp);
+            this.projectServiceImp.releaseBurndownChart(sumSp, spDone, moresp);
+        }
+        
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("release Burndown Chart", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+        
     }
 
 }

@@ -1,5 +1,6 @@
 package com.mdev.springboot.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,12 +22,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Transactional
     void deleteAllByStoryId(Long storyId);
-    
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE tasks SET tsupdated_date = (SELECT now()) FROM tasks ts WHERE TRUE", nativeQuery = true)
-    void  tasktimeUpdate();
-    
-    @Query(value = "select ts.estimation from tasks ts where ts.type_task='MORE';", nativeQuery = true)
-    List<String>  getspMoretasks();
+    void tasktimeUpdate();
+
+//    @Query(value = "select ts.estimation from tasks ts where ts.type_task='MORE'", nativeQuery = true)
+//    ArrayList<String> getspMoretasks();
 }

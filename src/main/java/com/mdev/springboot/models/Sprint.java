@@ -50,22 +50,24 @@ public class Sprint implements Serializable {
     private String sReference;
 
     @NotNull
-    @Column(name = "title",columnDefinition="TEXT")
+    @Column(name = "title", columnDefinition = "TEXT")
     private String stitre;
 
     @NotNull
-    @Column(name = "description", columnDefinition="TEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String sdescription;
 
-    @NotNull
     @NotNull
     @Column(columnDefinition = "integer default 0")
     private int workCommitment;
 
     @NotNull
-    @NotNull
     @Column(columnDefinition = "integer default 0")
     private int workCompleted;
+
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
+    private int moreSp;
 
     @Temporal(TemporalType.DATE)
     private Date sdateDebut;
@@ -91,12 +93,11 @@ public class Sprint implements Serializable {
     @CollectionTable(name = "days_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
     @Column(name = "days_array", length = 1000)
     private List<String> daysarray;
-    
+
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "ideall_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
     @Column(name = "il_array", length = 1000)
     private List<String> idealLinearray;
-    
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "workedl_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
@@ -108,15 +109,16 @@ public class Sprint implements Serializable {
     }
 
     public Sprint(@NotNull String sReference, @NotNull String stitre, @NotNull String sdescription,
-            @NotNull int workCommitment, @NotNull int workCompleted, Date sdateDebut, Date sdateFin, Date supdatedDate,
-            Set<Story> stories, @NotNull Projet projet, List<String> daysarray, List<String> idealLinearray,
-            List<String> workedlarray) {
+            @NotNull int workCommitment, @NotNull int workCompleted, @NotNull int moreSp, Date sdateDebut,
+            Date sdateFin, Date supdatedDate, Set<Story> stories, @NotNull Projet projet, List<String> daysarray,
+            List<String> idealLinearray, List<String> workedlarray) {
         super();
         this.sReference = sReference;
         this.stitre = stitre;
         this.sdescription = sdescription;
         this.workCommitment = workCommitment;
         this.workCompleted = workCompleted;
+        this.moreSp = moreSp;
         this.sdateDebut = sdateDebut;
         this.sdateFin = sdateFin;
         this.supdatedDate = supdatedDate;
@@ -173,6 +175,14 @@ public class Sprint implements Serializable {
 
     public void setWorkCompleted(int workCompleted) {
         this.workCompleted = workCompleted;
+    }
+
+    public int getMoreSp() {
+        return moreSp;
+    }
+
+    public void setMoreSp(int moreSp) {
+        this.moreSp = moreSp;
     }
 
     public Date getSdateDebut() {
@@ -242,14 +252,10 @@ public class Sprint implements Serializable {
     @Override
     public String toString() {
         return "Sprint [id=" + id + ", sReference=" + sReference + ", stitre=" + stitre + ", sdescription="
-                + sdescription + ", workCommitment=" + workCommitment + ", workCompleted=" + workCompleted
-                + ", sdateDebut=" + sdateDebut + ", sdateFin=" + sdateFin + ", supdatedDate=" + supdatedDate
+                + sdescription + ", workCommitment=" + workCommitment + ", workCompleted=" + workCompleted + ", moreSp="
+                + moreSp + ", sdateDebut=" + sdateDebut + ", sdateFin=" + sdateFin + ", supdatedDate=" + supdatedDate
                 + ", stories=" + stories + ", projet=" + projet + ", daysarray=" + daysarray + ", idealLinearray="
                 + idealLinearray + ", workedlarray=" + workedlarray + "]";
     }
-
-  
-
-    
 
 }
