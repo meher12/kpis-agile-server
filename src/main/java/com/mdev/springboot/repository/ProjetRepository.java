@@ -13,17 +13,24 @@ import org.springframework.stereotype.Repository;
 import com.mdev.springboot.models.Projet;
 
 @Repository
-public interface ProjetRepository extends JpaRepository<Projet, Long>{
-    
+public interface ProjetRepository extends JpaRepository<Projet, Long> {
 
     List<Projet> findByTitre(String titre);
-    
+
     Optional<Projet> findBypReference(String pReference);
-    
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE projets SET pupdated_date = (SELECT now()), totalsp_commitment = (SELECT COALESCE(SUM(sp.work_commitment),0) FROM sprints sp WHERE projets.id = sp.projet_id),"
             + "totalsp_completed = (SELECT COALESCE(SUM(sp.work_completed),0) FROM sprints sp WHERE projets.id = sp.projet_id)", nativeQuery = true)
-    void  totalSpInProject();
+    void totalSpInProject();
+    
+    
+    @Transactional
+    @Modifying
+    @Query(value="INSERT INTO projet_sp_commitment (projet_id, project_sp_commitment) VALUES (:projet_id, ARRAY[:project_sp_commitment])", nativeQuery = true)
+    void  spCommitmentArray(Long projet_id,  List<String>  project_sp_commitment);
 
 }
+
+   

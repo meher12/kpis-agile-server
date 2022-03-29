@@ -157,6 +157,7 @@ public class ProjetController {
         
         int sumSp;
         List<Projet> projets = this.projetRepository.findAll();
+        
         // Story points completed in project
         ArrayList<String> spDone = sprintRepository.getListSpCompleted();
 
@@ -164,10 +165,15 @@ public class ProjetController {
         ArrayList<String> moresp = sprintRepository.getListMoreSp();
                
         for (Projet projet : projets) {
+            
             sumSp = projet.getTotalspCommitment();
             projet.setpSpwrked(spDone);
             projet.setpMoresp(moresp);
-            this.projectServiceImp.releaseBurndownChart(sumSp, spDone, moresp);
+           
+           projet.setpSpCommitment(this.projectServiceImp.releaseBurndownChart(sumSp, spDone, moresp));
+         
+           
+           projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
         }
         
         Map<String, Boolean> response = new HashMap<String, Boolean>();
