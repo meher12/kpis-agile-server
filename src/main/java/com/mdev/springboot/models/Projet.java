@@ -90,18 +90,20 @@ public class Projet implements Serializable {
     @Column(name = "project_more_sp", length = 1000)
     private List<String> pMoresp;
 
-//
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinTable(name = "users_projets", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "projets_id", referencedColumnName = "id"))
-//    private Set<User> team_membres;
+   
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "projet_percentage_spc", joinColumns = @JoinColumn(name = "projet_id"))
+    @Column(name = "percentage_spc", length = 1000)
+    private List<String> percentage_spc;
 
     public Projet() {
         super();
     }
 
     public Projet(@NotNull String pReference, @NotNull String titre, @NotNull String descriptionProject, Date dateDebut,
-            Date dateFin, Set<Sprint> sprints, @NotNull int totalspCommitment, @NotNull int totalspCompleted,
-            Date pupdatedDate, List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp) {
+            Date dateFin, Set<Sprint> sprints, @NotNull int totalspCommitment, @NotNull @NotNull int totalspCompleted,
+            Date pupdatedDate, List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp,
+            List<String> percentage_spc) {
         super();
         this.pReference = pReference;
         this.titre = titre;
@@ -115,6 +117,7 @@ public class Projet implements Serializable {
         this.pSpCommitment = pSpCommitment;
         this.pSpwrked = pSpwrked;
         this.pMoresp = pMoresp;
+        this.percentage_spc = percentage_spc;
     }
 
     public Long getId() {
@@ -221,13 +224,23 @@ public class Projet implements Serializable {
         this.pMoresp = pMoresp;
     }
 
+    public List<String> getPercentage_spc() {
+        return percentage_spc;
+    }
+
+    public void setPercentage_spc(List<String> percentage_spc) {
+        this.percentage_spc = percentage_spc;
+    }
+
     @Override
     public String toString() {
         return "Projet [id=" + id + ", pReference=" + pReference + ", titre=" + titre + ", descriptionProject="
                 + descriptionProject + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", sprints=" + sprints
                 + ", totalspCommitment=" + totalspCommitment + ", totalspCompleted=" + totalspCompleted
                 + ", pupdatedDate=" + pupdatedDate + ", pSpCommitment=" + pSpCommitment + ", pSpwrked=" + pSpwrked
-                + ", pMoresp=" + pMoresp + "]";
+                + ", pMoresp=" + pMoresp + ", percentage_spc=" + percentage_spc + "]";
     }
+
+   
 
 }

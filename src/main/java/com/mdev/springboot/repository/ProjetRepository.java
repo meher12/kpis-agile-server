@@ -30,6 +30,11 @@ public interface ProjetRepository extends JpaRepository<Projet, Long> {
     @Modifying
     @Query(value="INSERT INTO projet_sp_commitment (projet_id, project_sp_commitment) VALUES (:projet_id, ARRAY[:project_sp_commitment])", nativeQuery = true)
     void  spCommitmentArray(Long projet_id,  List<String>  project_sp_commitment);
+    
+    @Transactional
+    @Modifying
+    @Query(value="INSERT INTO projet_percentage_spc (projet_id, percentage_spc) VALUES (:projet_id, ARRAY[:percentage_spc])", nativeQuery = true)
+    void  percentageSpcArray(Long projet_id,  List<String>  percentage_spc);
 
 }
 

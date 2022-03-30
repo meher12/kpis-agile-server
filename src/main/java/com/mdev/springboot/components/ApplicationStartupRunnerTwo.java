@@ -1,8 +1,8 @@
 package com.mdev.springboot.components;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +43,27 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        
+
+        
+//        ArrayList<String> tabFromdb = sprintRepository.getListSpCompleted();
+//        
+//        ArrayList<String> percentageTab = new ArrayList<>();
+//        
+//        double sum = 209;
+//        float percentage;
+//        List<Double> numbers = new ArrayList<>();
+//        
+//       for (String item : tabFromdb) {
+//           numbers.add(Double.valueOf(item));
+//       }
+// 
+//        for (int i = 0; i < numbers.size(); i++) {
+//            percentage = (float) ((numbers.get(i) * 100) / sum);
+//           
+//            percentageTab.add(String.format("%.2f", percentage));
+//        }
+//        System.out.println(percentageTab); 
         
        // projectServiceImp.releaseBurndownChart(231);
 

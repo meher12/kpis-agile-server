@@ -181,6 +181,26 @@ public class ProjetController {
         return ResponseEntity.ok(response);
         
     }
+    
+    @GetMapping("/projects/percentageSpcChart")
+    public ResponseEntity<Map<String, Boolean>> percentageSpcChart(){
+        
+        List<Projet> projets = this.projetRepository.findAll();
+        
+        for (Projet projet : projets) {
+            
+           projet.setPercentage_spc(projectServiceImp.pourcentageStoryPointsCompleted(projet.getTotalspCommitment()));
+
+            
+            projetRepository.percentageSpcArray(projet.getId(), projet.getPercentage_spc());
+        }
+        
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+        response.put("Percentage radio Chart", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+        
+    }
+
 
 }
 
