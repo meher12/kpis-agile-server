@@ -28,6 +28,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query(value = "UPDATE tasks SET tsupdated_date = (SELECT now()) FROM tasks ts WHERE TRUE", nativeQuery = true)
     void tasktimeUpdate();
 
-//    @Query(value = "select ts.estimation from tasks ts where ts.type_task='MORE'", nativeQuery = true)
+//    @Query(value = "select ts.estimation from tasks ts where ts.type_task='More_task'", nativeQuery = true)
 //    ArrayList<String> getspMoretasks();
 }

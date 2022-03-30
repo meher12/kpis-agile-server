@@ -38,8 +38,6 @@ public class ProjectServiceImp implements ProjectService{
 
 
         ArrayList<String> totalspCommitment = new ArrayList<String>();
-//        int spwrked[] = {10, 10, 10, 10, 10, 10, 10};
-//        int morework[] =   {0, 0, 0, 3, 0, 0, 0};
 
         int spwrked[] = new int[spDone.size()];
         int morework[] = new int[moresp.size()];
@@ -49,18 +47,14 @@ public class ProjectServiceImp implements ProjectService{
             spwrked[index] = Integer.parseInt(spDone.get(index));
         }
 
-        System.out.println("**Done**" + Arrays.toString(spwrked));
 
         for (int index = 0; index < morework.length; index++) {
 
             morework[index] = Integer.parseInt(moresp.get(index));
         }
 
-        System.out.println("*MORE***" + Arrays.toString(morework));
 
-        // System.out.println(z));
-
-        int SP = 231;
+        int SP = sumStorypoints;
         int newtask = 0;
         totalspCommitment.add(String.valueOf(SP));
         for (int j = 0; j < spwrked.length; j++) {
@@ -70,13 +64,10 @@ public class ProjectServiceImp implements ProjectService{
             } else {
                 newtask = (SP + morework[j]) - spwrked[j];
                 SP = newtask;
-                // System.out.println(newtask);
             }
             totalspCommitment.add(String.valueOf(SP));
         }
 
-        // System.out.println("completed"+spDone);
-        // System.out.println("more"+moresp);
         System.out.println("Commitement" + totalspCommitment);
         return totalspCommitment;
         

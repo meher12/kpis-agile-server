@@ -1,7 +1,6 @@
 package com.mdev.springboot.models;
 
 public enum ETypeTask {
-   New, 
-  BUG,
-  MORE;
+  Default_task, 
+  More_task;
 }
