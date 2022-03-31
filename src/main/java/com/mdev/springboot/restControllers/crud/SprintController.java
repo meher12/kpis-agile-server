@@ -1,6 +1,7 @@
 package com.mdev.springboot.restControllers.crud;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -239,6 +240,29 @@ public class SprintController {
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("worked sp Inserted", Boolean.TRUE);
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping(value = "/sprints/nbrSprintByVelocity")
+    public ResponseEntity<List<Integer>> getNumberOfSprintByVelocity(){
+        
+        List<Sprint> sprints = sprintRepository.findAll();
+        
+        List<Integer> diffSprintTab = new ArrayList<Integer>();
+        
+        List<Integer> commitmentSprintTab = new ArrayList<Integer>();
+        
+        for (Sprint sprint : sprints) {
+            
+          int  element = Math.abs(sprint.getWorkCommitment() - sprint.getWorkCompleted());
+            diffSprintTab.add(element);
+        }
+        
+        for (Sprint sprint : sprints) {
+            commitmentSprintTab.add(sprint.getWorkCommitment());
+        }
+        
+        List<Integer> towresl = this.sprintServiceImp.nbrSprintByvelocity(diffSprintTab, commitmentSprintTab);
+        return new ResponseEntity<>(towresl, HttpStatus.OK);
     }
 
 }
