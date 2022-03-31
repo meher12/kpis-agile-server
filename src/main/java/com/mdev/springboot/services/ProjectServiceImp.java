@@ -31,13 +31,6 @@ public class ProjectServiceImp implements ProjectService {
     public ArrayList<String> releaseBurndownChart(int sumStorypoints, ArrayList<String> spDone,
             ArrayList<String> moresp) {
 
-        storyRepository.StoryPointUpdate();
-        sprintRepository.sprintStoryPointUpdate();
-        projetRepository.totalSpInProject();
-        taskRepository.tasktimeUpdate();
-        sprintRepository.updateMoreSp();
-        storyRepository.updatePlusSp();
-
         ArrayList<String> totalspCommitment = new ArrayList<String>();
 
         int spwrked[] = new int[spDone.size()];
@@ -58,10 +51,10 @@ public class ProjectServiceImp implements ProjectService {
         totalspCommitment.add(String.valueOf(SP));
         for (int j = 0; j < spwrked.length; j++) {
             if (morework[j] == 0) {
-                newtask = SP - spwrked[j];
+                newtask = Math.abs(SP - spwrked[j]);
                 SP = newtask;
             } else {
-                newtask = (SP + morework[j]) - spwrked[j];
+                newtask = Math.abs(SP + morework[j] - spwrked[j]);
                 SP = newtask;
             }
             totalspCommitment.add(String.valueOf(SP));
@@ -74,6 +67,9 @@ public class ProjectServiceImp implements ProjectService {
 
     @Override
     public ArrayList<String> pourcentageStoryPointsCompleted(int sumStorypoints) {
+        
+       
+       
         
         ArrayList<String> tabFromdb = sprintRepository.getListSpCompleted();
 
@@ -92,7 +88,7 @@ public class ProjectServiceImp implements ProjectService {
 
             percentageTab.add(String.format("%.2f", percentage));
         }
-        System.out.println(percentageTab);
+       // System.out.println(percentageTab);
         return percentageTab;
     }
 

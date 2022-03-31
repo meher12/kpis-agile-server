@@ -154,25 +154,25 @@ public class StoryController {
     }
     
     // update story points in sprint
-    @GetMapping("/storie/updatestorypoints")
-    public ResponseEntity<Map<String, Boolean>> updateStoryPoint() {
-
-        this. storyRepository.StoryPointUpdate();
-        Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("Updated story points", Boolean.TRUE);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/storie/updatestorypoints")
+//    public ResponseEntity<Map<String, Boolean>> updateStoryPoint() {
+//
+//        this. storyRepository.StoryPointUpdate();
+//        Map<String, Boolean> response = new HashMap<String, Boolean>();
+//        response.put("Updated story points", Boolean.TRUE);
+//        return ResponseEntity.ok(response);
+//    }
     
  // update Plus story points 
-    @GetMapping("/storie/updatePlussp")
-    public ResponseEntity<Map<String, Boolean>> updatePlusSp() {
-
-        this. storyRepository.updatePlusSp();
-        Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("Updated story points", Boolean.TRUE);
-        return ResponseEntity.ok(response);
-    }
-    
+//    @GetMapping("/storie/updatePlussp")
+//    public ResponseEntity<Map<String, Boolean>> updatePlusSp() {
+//
+//        this. storyRepository.updatePlusSp();
+//        Map<String, Boolean> response = new HashMap<String, Boolean>();
+//        response.put("Updated story points", Boolean.TRUE);
+//        return ResponseEntity.ok(response);
+//    }
+   
     
 
 }

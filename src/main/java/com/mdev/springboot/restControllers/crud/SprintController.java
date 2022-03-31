@@ -27,6 +27,7 @@ import com.mdev.springboot.models.Projet;
 import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
+import com.mdev.springboot.repository.StoryRepository;
 import com.mdev.springboot.services.SprintServiceImp;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -42,6 +43,9 @@ public class SprintController {
 
     @Autowired
     ProjetRepository projetRepository;
+    
+    @Autowired
+    StoryRepository storyRepository;
 
     // get All Sprints By ProjectId
     @GetMapping("/sprints/projects/{projet_id}/sprints")
@@ -52,6 +56,12 @@ public class SprintController {
         }
 
         List<Sprint> sprints = sprintRepository.findByProjetId(projet_id);
+        
+        Comparator<Sprint> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
+        };
+
+        Collections.sort(sprints, comparator);
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
 
@@ -72,9 +82,9 @@ public class SprintController {
         Collections.sort(sprints, comparatorSprint);
 
         return new ResponseEntity<>(sprints, HttpStatus.OK);
-
     }
 
+    
     // get All Sprints
     @GetMapping("/sprints/sprints")
     public ResponseEntity<List<Sprint>> getAllSprints() {
@@ -88,6 +98,7 @@ public class SprintController {
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
 
+    
     // get Sprints By Id
     @GetMapping("/sprints/sprints/{id}")
     public ResponseEntity<Sprint> getSprintsById(@PathVariable(value = "id") Long id) {
@@ -97,7 +108,7 @@ public class SprintController {
         return new ResponseEntity<>(sprint, HttpStatus.OK);
     }
 
-    //// get sprint by reference
+    // get sprint by reference
     @RequestMapping(value = "/sprints/{sReference}", method = RequestMethod.GET)
     public ResponseEntity<Sprint> getSprintBypReference(@PathVariable("sReference") String sReference) {
 
@@ -157,6 +168,7 @@ public class SprintController {
     @GetMapping("/sprints/updatesp")
     public ResponseEntity<Map<String, Boolean>> updateStoryPointInSprint() {
 
+        this.storyRepository.StoryPointUpdate();
         this.sprintRepository.sprintStoryPointUpdate();
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Updated", Boolean.TRUE);
@@ -199,29 +211,29 @@ public class SprintController {
 
     // update sprint work completed
     @RequestMapping(value = "/sprints/addspCompleted/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Map<String, Boolean>> updateSprintWorkCompleted(@PathVariable("id") Long id, @RequestBody ArrayList<Object> storiesRequest) {
+    public ResponseEntity<Map<String, Boolean>> updateSprintWorkCompleted(@PathVariable("id") Long id,
+            @RequestBody ArrayList<Object> storiesRequest) {
 
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));
 
-        System.out.println("---"+ storiesRequest);
-        
-        ArrayList<String>  arrayJson = new ArrayList<String>();
-        ArrayList<String>  arrayFiltred = new ArrayList<String>();
-        
+       // System.out.println("---" + storiesRequest);
+
+        ArrayList<String> arrayJson = new ArrayList<String>();
+        ArrayList<String> arrayFiltred = new ArrayList<String>();
+
         storiesRequest.forEach(name -> {
             arrayJson.add(name.toString());
         });
-        
-        for(String item : arrayJson){
+
+        for (String item : arrayJson) {
             String number = item.replaceAll("[^0-9]", "");
             arrayFiltred.add(number);
         }
-        System.out.println("*****"+arrayFiltred);
-
+        System.out.println("*****" + arrayFiltred);
 
         sprint.setWorkedlarray(arrayFiltred);
-      //  List<String> arraysp = sprintRequest.getWorkedlarray();
+        // List<String> arraysp = sprintRequest.getWorkedlarray();
         sprintRepository.sprintArrayOfWorkedLine(sprint.getId(), arrayFiltred);
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();

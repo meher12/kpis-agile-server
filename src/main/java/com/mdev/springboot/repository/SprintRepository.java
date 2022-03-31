@@ -29,10 +29,6 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
             + ", work_completed = (SELECT COALESCE(SUM(st.sp_completed),0) FROM story st WHERE sprints.id = st.sprint_id)", nativeQuery = true)
     void  sprintStoryPointUpdate();
     
-    
-    //"update author set last_name= :lastName where first_name = :firstName"
-    //"INSERT INTO days_sprints(sprints_id, array_of_days) VALUES(?1, ?2);"
-    //INSERT INTO array_of_days (id, daysarray) VALUES (53, '{20-02-2022}') ON CONFLICT (id, daysarray) DO UPDATE SET id = 53, daysarray = '{20-02-2022}'
     // insert number of days
     @Transactional
     @Modifying
@@ -51,14 +47,19 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     @Query(value="INSERT INTO workedl_sprints (sprint_id, workedl_array) VALUES (?1, ARRAY[?2])", nativeQuery = true)
     void  sprintArrayOfWorkedLine(Long sprint_id,  List<String>  workedl_array);
     
-    // select stroy points completed in project
-    @Query(value = "select sp.work_completed as sp_worked from sprints sp INNER JOIN projets ON sp.projet_id=projets.id ORDER BY sdate_debut ASC", nativeQuery = true)
-    ArrayList<String>  getListSpCompleted();
-    
+//    @Transactional
+//    @Modifying
+//    @Query(value = "update sprints SET work_completed = (SELECT COALESCE(SUM(s.sp_completed),0) FROM story s WHERE sprints.id = s.sprint_id)", nativeQuery = true)
+//    void  updateWorkedSpInSprint();
+//    
     @Transactional
     @Modifying
     @Query(value = "update sprints SET more_sp = (SELECT COALESCE(SUM(s.plus_sp),0) FROM story s WHERE sprints.id = s.sprint_id)", nativeQuery = true)
     void  updateMoreSp();
+    
+    // select stroy points completed in project
+    @Query(value = "select sp.work_completed from sprints sp INNER JOIN projets ON sp.projet_id=projets.id ORDER BY sdate_debut ASC", nativeQuery = true)
+    ArrayList<String>  getListSpCompleted();
     
     // select stroy points More in project
     @Query(value = "select sp.more_sp from sprints sp INNER JOIN projets ON sp.projet_id=projets.id ORDER BY sdate_debut ASC", nativeQuery = true)

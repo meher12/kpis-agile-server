@@ -29,6 +29,8 @@ import com.mdev.springboot.models.Projet;
 import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
+import com.mdev.springboot.repository.StoryRepository;
+import com.mdev.springboot.repository.TaskRepository;
 import com.mdev.springboot.services.ProjectServiceImp;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -44,6 +46,14 @@ public class ProjetController {
     
     @Autowired
     SprintRepository sprintRepository;
+    
+    @Autowired
+    StoryRepository storyRepository;
+
+    @Autowired
+    TaskRepository taskRepository;
+
+
 
     // get all project by Title or All
     //@PreAuthorize("hasRole('PRODUCTOWNER')")
@@ -83,7 +93,8 @@ public class ProjetController {
         
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
-        
+
+       
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
 
@@ -143,36 +154,57 @@ public class ProjetController {
     }
     
     // update projects Sum SP
-    @GetMapping("/projects/sumspbyproject")
-    public ResponseEntity<Map<String, Boolean>> updateTasktable() {
-
-        this.projetRepository.totalSpInProject();
-        Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("Updated sum story points by project", Boolean.TRUE);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/projects/sumspbyproject")
+//    public ResponseEntity<Map<String, Boolean>> updateTasktable() {
+//
+//        this.projetRepository.totalSpInProject();
+//        Map<String, Boolean> response = new HashMap<String, Boolean>();
+//        response.put("Updated sum story points by project", Boolean.TRUE);
+//        return ResponseEntity.ok(response);
+//    }
     
+    
+    //  projects by release brundown chart
     @GetMapping("/projects/releasebdchart")
     public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(){
+        
+        storyRepository.StoryPointUpdate();
+        sprintRepository.sprintStoryPointUpdate();
+        
+        storyRepository.updatePlusSp();
+        sprintRepository.updateMoreSp();
+        
+       
+        taskRepository.tasktimeUpdate();
+        projetRepository.totalSpInProject();
         
         int sumSp;
         List<Projet> projets = this.projetRepository.findAll();
         
-        // Story points completed in project
-        ArrayList<String> spDone = sprintRepository.getListSpCompleted();
+        // Completed table in project for brundown release
+        ArrayList<String> spDoneFromSprint = sprintRepository.getListSpCompleted();
+        
+        System.out.println("******************"+ spDoneFromSprint);
 
-        // More table for brundown relases
-        ArrayList<String> moresp = sprintRepository.getListMoreSp();
+        // More table in project for brundown release
+        ArrayList<String> morespFromSprint = sprintRepository.getListMoreSp();
+        
+        System.out.println("******************"+ morespFromSprint);
                
         for (Projet projet : projets) {
             
             sumSp = projet.getTotalspCommitment();
-            projet.setpSpwrked(spDone);
-            projet.setpMoresp(moresp);
-           
-           projet.setpSpCommitment(this.projectServiceImp.releaseBurndownChart(sumSp, spDone, moresp));
-         
-           
+            
+            projet.setpSpwrked(spDoneFromSprint);
+            ArrayList<String> arrayspworked = (ArrayList<String>) projet.getpSpwrked();
+            projetRepository.projectSpCompletedArray(projet.getId(), arrayspworked);
+            
+            projet.setpMoresp(morespFromSprint);
+            ArrayList<String> arrayspmore = (ArrayList<String>) projet.getpMoresp();
+            projetRepository.projectMoreSpArray(projet.getId(), arrayspmore);
+            
+            
+           projet.setpSpCommitment(this.projectServiceImp.releaseBurndownChart(sumSp, spDoneFromSprint, morespFromSprint));
            projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
         }
         
@@ -182,6 +214,8 @@ public class ProjetController {
         
     }
     
+    
+    // percentage 
     @GetMapping("/projects/percentageSpcChart")
     public ResponseEntity<Map<String, Boolean>> percentageSpcChart(){
         

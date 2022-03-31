@@ -1,5 +1,6 @@
 package com.mdev.springboot.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,16 @@ public interface ProjetRepository extends JpaRepository<Projet, Long> {
     @Modifying
     @Query(value="INSERT INTO projet_sp_commitment (projet_id, project_sp_commitment) VALUES (:projet_id, ARRAY[:project_sp_commitment])", nativeQuery = true)
     void  spCommitmentArray(Long projet_id,  List<String>  project_sp_commitment);
+    
+    @Transactional
+    @Modifying
+    @Query(value="INSERT INTO projet_sp_completed (projet_id, project_sp_completed) VALUES (:projet_id, ARRAY[:project_sp_completed])", nativeQuery = true)
+    void  projectSpCompletedArray(Long projet_id,  ArrayList<String>  project_sp_completed);
+    
+    @Transactional
+    @Modifying
+    @Query(value="INSERT INTO projet_more_sp (projet_id, project_more_sp) VALUES (:projet_id, ARRAY[:project_more_sp])", nativeQuery = true)
+    void  projectMoreSpArray(Long projet_id,  ArrayList<String>  project_more_sp);
     
     @Transactional
     @Modifying
