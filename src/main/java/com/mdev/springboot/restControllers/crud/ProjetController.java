@@ -178,7 +178,7 @@ public class ProjetController {
         taskRepository.tasktimeUpdate();
         projetRepository.totalSpInProject();
         
-        int sumSp;
+         //sumSp;
         List<Projet> projets = this.projetRepository.findAll();
         
         // Completed table in project for brundown release
@@ -193,7 +193,7 @@ public class ProjetController {
                
         for (Projet projet : projets) {
             
-            sumSp = projet.getTotalspCommitment();
+            int   sumSp =  projet.getTotalstorypointsinitiallycounts();
             
             projet.setpSpwrked(spDoneFromSprint);
             ArrayList<String> arrayspworked = (ArrayList<String>) projet.getpSpwrked();

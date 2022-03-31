@@ -46,6 +46,7 @@ public class ProjectServiceImp implements ProjectService {
             morework[index] = Integer.parseInt(moresp.get(index));
         }
 
+      
         int SP = sumStorypoints;
         int newtask = 0;
         totalspCommitment.add(String.valueOf(SP));
@@ -60,7 +61,7 @@ public class ProjectServiceImp implements ProjectService {
             totalspCommitment.add(String.valueOf(SP));
         }
 
-        // System.out.println("Commitement" + totalspCommitment);
+        System.out.println("Commitement" + totalspCommitment);
         return totalspCommitment;
 
     }

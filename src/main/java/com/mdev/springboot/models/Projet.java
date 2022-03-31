@@ -48,6 +48,10 @@ public class Projet implements Serializable {
     @NotNull
     @Column(name = "title",columnDefinition="TEXT")
     private String titre;
+    
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
+    private int Totalstorypointsinitiallycounts;
 
     @NotNull
     @Column(name = "description", columnDefinition="TEXT")
@@ -100,13 +104,14 @@ public class Projet implements Serializable {
         super();
     }
 
-    public Projet(@NotNull String pReference, @NotNull String titre, @NotNull String descriptionProject, Date dateDebut,
-            Date dateFin, Set<Sprint> sprints, @NotNull int totalspCommitment, @NotNull @NotNull int totalspCompleted,
-            Date pupdatedDate, List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp,
-            List<String> percentage_spc) {
+    public Projet(@NotNull String pReference, @NotNull String titre, @NotNull int totalstorypointsinitiallycounts,
+            @NotNull String descriptionProject, Date dateDebut, Date dateFin, Set<Sprint> sprints,
+            @NotNull int totalspCommitment, @NotNull @NotNull int totalspCompleted, Date pupdatedDate,
+            List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp, List<String> percentage_spc) {
         super();
         this.pReference = pReference;
         this.titre = titre;
+        Totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
         this.descriptionProject = descriptionProject;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -142,6 +147,14 @@ public class Projet implements Serializable {
 
     public void setTitre(String titre) {
         this.titre = titre;
+    }
+
+    public int getTotalstorypointsinitiallycounts() {
+        return Totalstorypointsinitiallycounts;
+    }
+
+    public void setTotalstorypointsinitiallycounts(int totalstorypointsinitiallycounts) {
+        Totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
     }
 
     public String getDescriptionProject() {
@@ -234,13 +247,15 @@ public class Projet implements Serializable {
 
     @Override
     public String toString() {
-        return "Projet [id=" + id + ", pReference=" + pReference + ", titre=" + titre + ", descriptionProject="
+        return "Projet [id=" + id + ", pReference=" + pReference + ", titre=" + titre
+                + ", Totalstorypointsinitiallycounts=" + Totalstorypointsinitiallycounts + ", descriptionProject="
                 + descriptionProject + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", sprints=" + sprints
                 + ", totalspCommitment=" + totalspCommitment + ", totalspCompleted=" + totalspCompleted
                 + ", pupdatedDate=" + pupdatedDate + ", pSpCommitment=" + pSpCommitment + ", pSpwrked=" + pSpwrked
                 + ", pMoresp=" + pMoresp + ", percentage_spc=" + percentage_spc + "]";
     }
 
+   
    
 
 }
