@@ -69,8 +69,8 @@ public class ProjectServiceImp implements ProjectService {
     @Override
     public ArrayList<String> pourcentageStoryPointsCompleted(int sumStorypoints) {
         
-       
-       
+        storyRepository.StoryPointUpdate();
+        sprintRepository.sprintStoryPointUpdate();
         
         ArrayList<String> tabFromdb = sprintRepository.getListSpCompleted();
 
@@ -89,7 +89,7 @@ public class ProjectServiceImp implements ProjectService {
 
             percentageTab.add(String.format("%.2f", percentage));
         }
-       // System.out.println(percentageTab);
+        System.out.println(percentageTab);
         return percentageTab;
     }
 
