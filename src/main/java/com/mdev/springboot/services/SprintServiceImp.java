@@ -130,10 +130,9 @@ public class SprintServiceImp implements SprintService {
         }
 
         int nbr_sprint = Math.round(sumCommit / avgVelocity);
-        // System.out.printf("Nomber de sprint est : %d ", nbr_sprint);
+
 
         // Capacity story points in sprint par rapport au velocity:
-
         ArrayList<Integer> nbrDayArray = new ArrayList<Integer>();
 
         List<Sprint> sprints = this.sprintRepository.findAll();
@@ -142,7 +141,7 @@ public class SprintServiceImp implements SprintService {
             int nbrOfDay = (int) nbrDays;
             nbrDayArray.add(nbrOfDay);
         }
-        // System.out.println("------"+ nbrDayArray);
+
         int sumCapacity = 0;
         int sumDaysSprint = 0;
         int jourSprint = 21;
@@ -155,12 +154,8 @@ public class SprintServiceImp implements SprintService {
             sumDaysSprint += day;
         }
 
-        // System.out.printf("La somme de story points : %d \n ",sumCapacity);
-        // System.out.printf("La somme de days : %d \n ",sumDaysSprint);
-        int total_jours = sumDaysSprint;
-        int capacity_story_points_in_next_sprint = Math.round(sumCapacity / total_jours) * jourSprint;
-        // System.out.printf(" Capacity de story points dans la sprint suivant est: %d
-        // \n", capacity_story_points_in_next_sprint);
+        int capacity_story_points_in_next_sprint = Math.round(sumCapacity / sumDaysSprint) * jourSprint;
+
 
         // create List of variables:
         Map<String, Integer> resultSprint = new HashMap<>();
