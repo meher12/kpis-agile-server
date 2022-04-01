@@ -238,10 +238,15 @@ public class SprintController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/sprints/nbrSprintByVelocity")
-    public ResponseEntity<List<Map.Entry<String, Integer>>> getNumberOfSprintByVelocity() {
+    // Number of sprint By velocity average
+    @GetMapping(value = "/sprints/{pReference}/nbrSprintByVelocity")
+    public ResponseEntity<List<Map.Entry<String, Integer>>> getNumberOfSprintByVelocity(
+            @PathVariable(value = "pReference") String pReference) {
 
-        List<Sprint> sprints = sprintRepository.findAll();
+        Projet projet = projetRepository.findBypReference(pReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+
+        List<Sprint> sprints = sprintRepository.findByProjetId(projet.getId());
 
         List<Integer> diffSprintTab = new ArrayList<Integer>();
 

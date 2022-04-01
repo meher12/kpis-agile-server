@@ -7,10 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.mdev.springboot.models.Sprint;
+import com.mdev.springboot.repository.SprintRepository;
 
 @Service
 public class SprintServiceImp implements SprintService {
+
+    @Autowired
+    SprintRepository sprintRepository;
 
     @Override
     public List<String> numberOfDaysInSprint(Date str_date, Date end_date) throws Exception {
@@ -104,6 +111,7 @@ public class SprintServiceImp implements SprintService {
     @Override
     public Map<String, Integer> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab) {
 
+        // Nbr of sprint in project par rapport au velocity:
         int sumDiff = 0;
         int sumCommit = 0;
 
@@ -124,9 +132,41 @@ public class SprintServiceImp implements SprintService {
         int nbr_sprint = Math.round(sumCommit / avgVelocity);
         // System.out.printf("Nomber de sprint est : %d ", nbr_sprint);
 
+        // Capacity story points in sprint par rapport au velocity:
+
+        ArrayList<Integer> nbrDayArray = new ArrayList<Integer>();
+
+        List<Sprint> sprints = this.sprintRepository.findAll();
+        for (Sprint sprint : sprints) {
+            long nbrDays = calculDaysDiff(sprint.getSdateDebut(), sprint.getSdateFin());
+            int nbrOfDay = (int) nbrDays;
+            nbrDayArray.add(nbrOfDay);
+        }
+        // System.out.println("------"+ nbrDayArray);
+        int sumCapacity = 0;
+        int sumDaysSprint = 0;
+        int jourSprint = 21;
+
+        for (int numberCapacity : commitmentSprintTab) {
+            sumCapacity += numberCapacity;
+        }
+
+        for (Integer day : nbrDayArray) {
+            sumDaysSprint += day;
+        }
+
+        // System.out.printf("La somme de story points : %d \n ",sumCapacity);
+        // System.out.printf("La somme de days : %d \n ",sumDaysSprint);
+        int total_jours = sumDaysSprint;
+        int capacity_story_points_in_next_sprint = Math.round(sumCapacity / total_jours) * jourSprint;
+        // System.out.printf(" Capacity de story points dans la sprint suivant est: %d
+        // \n", capacity_story_points_in_next_sprint);
+
+        // create List of variables:
         Map<String, Integer> resultSprint = new HashMap<>();
-        resultSprint.put("Number sprint", nbr_sprint);
-        resultSprint.put("Average velocity", avgVelocity);
+        resultSprint.put("number_sprint", nbr_sprint);
+        resultSprint.put("average_velocity", avgVelocity);
+        resultSprint.put("capacity_story_points_in_next_sprint", capacity_story_points_in_next_sprint);
         return resultSprint;
     }
 
