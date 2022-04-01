@@ -1,11 +1,11 @@
 package com.mdev.springboot.services;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -100,9 +100,9 @@ public class SprintServiceImp implements SprintService {
         return positive;
     }
 
-    // Nember sprint by velocity
+    // Number sprint by velocity
     @Override
-    public  List<Integer> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab) {
+    public Map<String, Integer> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab) {
 
         int sumDiff = 0;
         int sumCommit = 0;
@@ -113,20 +113,20 @@ public class SprintServiceImp implements SprintService {
             sumDiff += number;
         }
 
-        System.out.println(sumDiff);
+        // System.out.println(sumDiff);
         int avgVelocity = sumDiff / sizeTab;
-        System.out.printf("average Velocity: %d  \n", avgVelocity);
+        // System.out.printf("average Velocity: %d \n", avgVelocity);
 
         for (int number : commitmentSprintTab) {
             sumCommit += number;
         }
 
         int nbr_sprint = Math.round(sumCommit / avgVelocity);
-        System.out.printf("Nomber de sprint est : %d  ", nbr_sprint);
-        
-        List<Integer> resultSprint = new ArrayList<Integer>();
-        resultSprint.add(nbr_sprint);
-        resultSprint.add(avgVelocity);
+        // System.out.printf("Nomber de sprint est : %d ", nbr_sprint);
+
+        Map<String, Integer> resultSprint = new HashMap<>();
+        resultSprint.put("Number sprint", nbr_sprint);
+        resultSprint.put("Average velocity", avgVelocity);
         return resultSprint;
     }
 

@@ -1,14 +1,12 @@
 package com.mdev.springboot.restControllers.crud;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +42,7 @@ public class SprintController {
 
     @Autowired
     ProjetRepository projetRepository;
-    
+
     @Autowired
     StoryRepository storyRepository;
 
@@ -57,7 +55,7 @@ public class SprintController {
         }
 
         List<Sprint> sprints = sprintRepository.findByProjetId(projet_id);
-        
+
         Comparator<Sprint> comparator = (c1, c2) -> {
             return Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
         };
@@ -85,7 +83,6 @@ public class SprintController {
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
 
-    
     // get All Sprints
     @GetMapping("/sprints/sprints")
     public ResponseEntity<List<Sprint>> getAllSprints() {
@@ -99,7 +96,6 @@ public class SprintController {
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
 
-    
     // get Sprints By Id
     @GetMapping("/sprints/sprints/{id}")
     public ResponseEntity<Sprint> getSprintsById(@PathVariable(value = "id") Long id) {
@@ -218,7 +214,7 @@ public class SprintController {
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));
 
-       // System.out.println("---" + storiesRequest);
+        // System.out.println("---" + storiesRequest);
 
         ArrayList<String> arrayJson = new ArrayList<String>();
         ArrayList<String> arrayFiltred = new ArrayList<String>();
@@ -241,28 +237,38 @@ public class SprintController {
         response.put("worked sp Inserted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping(value = "/sprints/nbrSprintByVelocity")
-    public ResponseEntity<List<Integer>> getNumberOfSprintByVelocity(){
-        
+    public ResponseEntity<List<Map.Entry<String, Integer>>> getNumberOfSprintByVelocity() {
+
         List<Sprint> sprints = sprintRepository.findAll();
-        
+
         List<Integer> diffSprintTab = new ArrayList<Integer>();
-        
+
         List<Integer> commitmentSprintTab = new ArrayList<Integer>();
-        
+
         for (Sprint sprint : sprints) {
-            
-          int  element = Math.abs(sprint.getWorkCommitment() - sprint.getWorkCompleted());
+
+            int element = Math.abs(sprint.getWorkCommitment() - sprint.getWorkCompleted());
             diffSprintTab.add(element);
         }
-        
+
         for (Sprint sprint : sprints) {
             commitmentSprintTab.add(sprint.getWorkCommitment());
         }
-        
-        List<Integer> towresl = this.sprintServiceImp.nbrSprintByvelocity(diffSprintTab, commitmentSprintTab);
-        return new ResponseEntity<>(towresl, HttpStatus.OK);
+
+        Map<String, Integer> result = this.sprintServiceImp.nbrSprintByvelocity(diffSprintTab, commitmentSprintTab);
+
+        // Associate Array
+        Set<Map.Entry<String, Integer>> set = result.entrySet();
+
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(set);
+
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i).getKey() + ": " + list.get(i).getValue());
+        }
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 }

@@ -40,23 +40,21 @@ public class ProjetController {
 
     @Autowired
     ProjetRepository projetRepository;
-    
+
     @Autowired
     ProjectServiceImp projectServiceImp;
-    
+
     @Autowired
     SprintRepository sprintRepository;
-    
+
     @Autowired
     StoryRepository storyRepository;
 
     @Autowired
     TaskRepository taskRepository;
 
-
-
     // get all project by Title or All
-    //@PreAuthorize("hasRole('PRODUCTOWNER')")
+    // @PreAuthorize("hasRole('PRODUCTOWNER')")
     @GetMapping("/projects")
     public ResponseEntity<List<Projet>> getAllProjects(@RequestParam(required = false) String titre) {
         List<Projet> projets = new ArrayList<Projet>();
@@ -79,22 +77,21 @@ public class ProjetController {
     }
 
     // get project by Id
-    //@PreAuthorize("hasRole('PRODUCTOWNER')")
+    // @PreAuthorize("hasRole('PRODUCTOWNER')")
     @GetMapping("/projects/{id}")
     public ResponseEntity<Projet> getProjectById(@PathVariable("id") Long id) {
         Projet projet = projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with id = " + id));
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
-    
+
     //// get project by reference
-    @RequestMapping(value= "/projects/{pReference}/", method = RequestMethod.GET)
-    public ResponseEntity<Projet> getProjectBypReference(@PathVariable("pReference") String pReference){
-        
+    @RequestMapping(value = "/projects/{pReference}/", method = RequestMethod.GET)
+    public ResponseEntity<Projet> getProjectBypReference(@PathVariable("pReference") String pReference) {
+
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
-       
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
 
@@ -115,11 +112,11 @@ public class ProjetController {
         _projet.setTitre(projetDetails.getTitre());
         _projet.setDescriptionProject(projetDetails.getDescriptionProject());
         _projet.setDateDebut(projetDetails.getDateDebut());
+        _projet.setTotalstorypointsinitiallycounts(projetDetails.getTotalstorypointsinitiallycounts());
         _projet.setDateFin(projetDetails.getDateFin());
 
         return new ResponseEntity<>(projetRepository.save(_projet), HttpStatus.OK);
     }
-
 
     @DeleteMapping("/projects/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteProjectById(@PathVariable Long id) {
@@ -152,91 +149,77 @@ public class ProjetController {
         }
 
     }
-    
-    // update projects Sum SP
-//    @GetMapping("/projects/sumspbyproject")
-//    public ResponseEntity<Map<String, Boolean>> updateTasktable() {
-//
-//        this.projetRepository.totalSpInProject();
-//        Map<String, Boolean> response = new HashMap<String, Boolean>();
-//        response.put("Updated sum story points by project", Boolean.TRUE);
-//        return ResponseEntity.ok(response);
-//    }
-    
-    
-    //  projects by release brundown chart
+
+    // projects by release brundown chart
     @GetMapping("/projects/releasebdchart")
-    public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(){
-        
+    public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart() {
+
         storyRepository.StoryPointUpdate();
         sprintRepository.sprintStoryPointUpdate();
-        
+
         storyRepository.updatePlusSp();
         sprintRepository.updateMoreSp();
-        
-       
+
         taskRepository.tasktimeUpdate();
         projetRepository.totalSpInProject();
-        
-         //sumSp;
+
+        // sumSp;
         List<Projet> projets = this.projetRepository.findAll();
-        
+
         // Completed table in project for brundown release
         ArrayList<String> spDoneFromSprint = sprintRepository.getListSpCompleted();
-        
-        System.out.println("******************"+ spDoneFromSprint);
+
+        System.out.println("********spDoneFromSprint*********" + spDoneFromSprint);
 
         // More table in project for brundown release
         ArrayList<String> morespFromSprint = sprintRepository.getListMoreSp();
-        
-        System.out.println("******************"+ morespFromSprint);
-               
+
+        System.out.println("*******morespFromSprint**********" + morespFromSprint);
+
         for (Projet projet : projets) {
-            
-            int   sumSp =  projet.getTotalstorypointsinitiallycounts();
-            
+
+            int sumSp = projet.getTotalstorypointsinitiallycounts();
+
             projet.setpSpwrked(spDoneFromSprint);
             ArrayList<String> arrayspworked = (ArrayList<String>) projet.getpSpwrked();
             projetRepository.projectSpCompletedArray(projet.getId(), arrayspworked);
-            
+
             projet.setpMoresp(morespFromSprint);
             ArrayList<String> arrayspmore = (ArrayList<String>) projet.getpMoresp();
             projetRepository.projectMoreSpArray(projet.getId(), arrayspmore);
-            
-            
-           projet.setpSpCommitment(this.projectServiceImp.releaseBurndownChart(sumSp, spDoneFromSprint, morespFromSprint));
-           projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
+
+            projet.setpSpCommitment(
+                    this.projectServiceImp.releaseBurndownChart(sumSp, spDoneFromSprint, morespFromSprint));
+            projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
         }
-        
+
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("release Burndown Chart", Boolean.TRUE);
         return ResponseEntity.ok(response);
-        
-    }
-    
-    
-    // percentage 
-    @GetMapping("/projects/percentageSpcChart")
-    public ResponseEntity<Map<String, Boolean>> percentageSpcChart(){
-        
-       
-        
-        List<Projet> projets = this.projetRepository.findAll();
-        
-        for (Projet projet : projets) {
-            
-           projet.setPercentage_spc(projectServiceImp.pourcentageStoryPointsCompleted(projet.getTotalstorypointsinitiallycounts()));
 
-            
+    }
+
+    // percentage
+    @GetMapping("/projects/percentageSpcChart")
+    public ResponseEntity<Map<String, Boolean>> percentageSpcChart() {
+
+        storyRepository.StoryPointUpdate();
+        sprintRepository.sprintStoryPointUpdate();
+
+        List<Projet> projets = this.projetRepository.findAll();
+
+        for (Projet projet : projets) {
+
+            projet.setPercentage_spc(
+                    projectServiceImp.pourcentageStoryPointsCompleted(projet.getTotalstorypointsinitiallycounts()));
+
             projetRepository.percentageSpcArray(projet.getId(), projet.getPercentage_spc());
         }
-        
+
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Percentage radio Chart", Boolean.TRUE);
         return ResponseEntity.ok(response);
-        
+
     }
 
-
 }
-

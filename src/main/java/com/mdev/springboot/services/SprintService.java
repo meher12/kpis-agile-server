@@ -2,6 +2,7 @@ package com.mdev.springboot.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface SprintService {
 
@@ -11,6 +12,6 @@ public interface SprintService {
 
     List<String> getIdealLine(Date str_date, Date end_date, int workCommitment);
     
-    List<Integer> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab);
+    Map<String, Integer> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab);
 
 }
