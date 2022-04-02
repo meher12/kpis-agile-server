@@ -126,8 +126,8 @@ public class StoryController {
         story.setStname(storyRequest.getStname());
         story.setStReference(storyRequest.getStReference());
         story.setStdescription(storyRequest.getStdescription());
-        story.setSpCompleted(storyRequest.getSpCompleted());
-        story.setStoryPoint(storyRequest.getStoryPoint());
+       // story.setSpCompleted(storyRequest.getSpCompleted());
+       // story.setStoryPoint(storyRequest.getStoryPoint());
         story.setPriority(storyRequest.getPriority());
 
         Story updatedStory = storyRepository.save(story);

@@ -51,7 +51,7 @@ public class Projet implements Serializable {
     
     @NotNull
     @Column(columnDefinition = "integer default 0")
-    private int Totalstorypointsinitiallycounts;
+    private int totalstorypointsinitiallycounts;
 
     @NotNull
     @Column(name = "description", columnDefinition="TEXT")
@@ -111,7 +111,7 @@ public class Projet implements Serializable {
         super();
         this.pReference = pReference;
         this.titre = titre;
-        Totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
+        this.totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
         this.descriptionProject = descriptionProject;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -149,12 +149,14 @@ public class Projet implements Serializable {
         this.titre = titre;
     }
 
+   
+
     public int getTotalstorypointsinitiallycounts() {
-        return Totalstorypointsinitiallycounts;
+        return totalstorypointsinitiallycounts;
     }
 
     public void setTotalstorypointsinitiallycounts(int totalstorypointsinitiallycounts) {
-        Totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
+        this.totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
     }
 
     public String getDescriptionProject() {
@@ -248,7 +250,7 @@ public class Projet implements Serializable {
     @Override
     public String toString() {
         return "Projet [id=" + id + ", pReference=" + pReference + ", titre=" + titre
-                + ", Totalstorypointsinitiallycounts=" + Totalstorypointsinitiallycounts + ", descriptionProject="
+                + ", Totalstorypointsinitiallycounts=" + totalstorypointsinitiallycounts + ", descriptionProject="
                 + descriptionProject + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", sprints=" + sprints
                 + ", totalspCommitment=" + totalspCommitment + ", totalspCompleted=" + totalspCompleted
                 + ", pupdatedDate=" + pupdatedDate + ", pSpCommitment=" + pSpCommitment + ", pSpwrked=" + pSpwrked
