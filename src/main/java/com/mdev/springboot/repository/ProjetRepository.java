@@ -2,6 +2,7 @@ package com.mdev.springboot.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -46,6 +47,14 @@ public interface ProjetRepository extends JpaRepository<Projet, Long> {
     @Modifying
     @Query(value="INSERT INTO projet_percentage_spc (projet_id, percentage_spc) VALUES (:projet_id, ARRAY[:percentage_spc])", nativeQuery = true)
     void  percentageSpcArray(Long projet_id,  List<String>  percentage_spc);
+    
+    
+    // select status tasks in project
+    @Query(value = "select tasks.status as status, count(tasks.status) as count from tasks join story on story.id = tasks.story_id join sprints on sprints.id = story.sprint_id group by tasks.status "
+            + "ORDER BY tasks.status ASC", nativeQuery = true)
+    List<String[]> getListStatusTasks();
+    
+    
 
 }
 

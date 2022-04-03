@@ -58,12 +58,12 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     void  updateMoreSp();
     
     // select stroy points completed in project
-    @Query(value = "select sp.work_completed from sprints sp INNER JOIN projets ON sp.projet_id=projets.id ORDER BY sdate_debut ASC", nativeQuery = true)
-    ArrayList<String>  getListSpCompleted();
+    @Query(value = "select sp.work_completed from sprints sp INNER JOIN projets ON sp.projet_id=projets.id AND p_reference=?1 ORDER BY sdate_debut ASC", nativeQuery = true)
+    ArrayList<String>  getListSpCompleted(String p_reference);
     
     // select stroy points More in project
-    @Query(value = "select sp.more_sp from sprints sp INNER JOIN projets ON sp.projet_id=projets.id ORDER BY sdate_debut ASC", nativeQuery = true)
-    ArrayList<String>  getListMoreSp();
+    @Query(value = "select sp.more_sp from sprints sp INNER JOIN projets ON sp.projet_id=projets.id AND p_reference=?1 ORDER BY sdate_debut ASC", nativeQuery = true)
+    ArrayList<String>  getListMoreSp(String p_reference);
 
     
 //    @Transactional

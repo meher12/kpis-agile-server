@@ -175,6 +175,9 @@ public class SprintController {
     // get number of days in sprint
     @RequestMapping(value = "/sprints/daysbrundownChart", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Boolean>> daysInSprint() throws Exception {
+        
+        this.storyRepository.StoryPointUpdate();
+        this.sprintRepository.sprintStoryPointUpdate();
 
         List<Sprint> sprints = sprintRepository.findAll();
         for (Sprint sprint : sprints) {
@@ -192,6 +195,9 @@ public class SprintController {
     @RequestMapping(value = "/sprints/ideallbrundownChart", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Boolean>> idealLineOfSprint() {
 
+        this.storyRepository.StoryPointUpdate();
+        this.sprintRepository.sprintStoryPointUpdate();
+        
         List<Sprint> sprints = sprintRepository.findAll();
         for (Sprint sprint : sprints) {
             sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(),
@@ -210,6 +216,9 @@ public class SprintController {
     @RequestMapping(value = "/sprints/addspCompleted/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Map<String, Boolean>> updateSprintWorkCompleted(@PathVariable("id") Long id,
             @RequestBody ArrayList<Object> storiesRequest) {
+        
+        this.storyRepository.StoryPointUpdate();
+        this.sprintRepository.sprintStoryPointUpdate();
 
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));

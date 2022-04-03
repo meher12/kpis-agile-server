@@ -60,6 +60,7 @@ public class TaskController {
     public ResponseEntity<List<Task>> getAllTask() {
 
         List<Task> tasks = taskRepository.findAll();
+        
         Comparator<Task> comparator = (c1, c2) -> {
             return Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
         };
@@ -75,6 +76,12 @@ public class TaskController {
         Story story = storyRepository.findBystReference(stReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Story with Reference : " + stReference));
         List<Task> tasks = taskRepository.findByStoryId(story.getId());
+        
+        Comparator<Task> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
+        };
+
+        Collections.sort(tasks, comparator);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 

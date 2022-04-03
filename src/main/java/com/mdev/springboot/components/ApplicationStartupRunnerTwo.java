@@ -1,8 +1,9 @@
 package com.mdev.springboot.components;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,15 +38,26 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 
     @Autowired
     TaskRepository taskRepository;
-    
+
     @Autowired
     ProjectServiceImp projectServiceImp;
 
+   
+
     @Override
     public void run(String... args) throws Exception {
-        
 
+       
         
+//        for (String keys : map.keySet()) {
+//            System.out.println(keys + ":" + map.get(keys));
+//        }
+        
+//        for (Map.Entry<String, String> entry : map.entrySet()) {
+//            System.out.println(entry.getKey() + ":" + entry.getValue());
+//        }
+       // System.out.println(map);
+
 //        ArrayList<String> tabFromdb = sprintRepository.getListSpCompleted();
 //        
 //        ArrayList<String> percentageTab = new ArrayList<>();
@@ -64,8 +76,8 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 //            percentageTab.add(String.format("%.2f", percentage));
 //        }
 //        System.out.println(percentageTab); 
-        
-       // projectServiceImp.releaseBurndownChart(231);
+
+        // projectServiceImp.releaseBurndownChart(231);
 
 //        storyRepository.StoryPointUpdate();
 //        sprintRepository.sprintStoryPointUpdate();
@@ -78,7 +90,7 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 //        ArrayList<String> spDone = sprintRepository.getListSpCompleted();
 
         // More table for brundown relases
- //       ArrayList<String> moresp = sprintRepository.getListMoreSp();
+        // ArrayList<String> moresp = sprintRepository.getListMoreSp();
 
 //        System.out.println("completed"+spDone);
 //        System.out.println("more"+moresp);
@@ -123,7 +135,7 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 
         // System.out.println("completed"+spDone);
         // System.out.println("more"+moresp);
-        //System.out.println("Commitement" + totalspCommitment);
+        // System.out.println("Commitement" + totalspCommitment);
 
 //         sprint.setArrayOfDays(sprintServiceImp.numberOfDaysInSprint(str_date, end_date));
 //         sprint.getArrayOfDays();

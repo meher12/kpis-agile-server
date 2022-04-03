@@ -1,7 +1,9 @@
 package com.mdev.springboot.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,6 @@ public class ProjectServiceImp implements ProjectService {
             morework[index] = Integer.parseInt(moresp.get(index));
         }
 
-      
         int SP = sumStorypoints;
         int newtask = 0;
         totalspCommitment.add(String.valueOf(SP));
@@ -67,12 +68,12 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public ArrayList<String> pourcentageStoryPointsCompleted(int sumStorypoints) {
-        
+    public ArrayList<String> pourcentageStoryPointsCompleted(int sumStorypoints, ArrayList<String> tabFromdb) {
+
         storyRepository.StoryPointUpdate();
         sprintRepository.sprintStoryPointUpdate();
+
         
-        ArrayList<String> tabFromdb = sprintRepository.getListSpCompleted();
 
         ArrayList<String> percentageTab = new ArrayList<>();
 
@@ -91,6 +92,40 @@ public class ProjectServiceImp implements ProjectService {
         }
         System.out.println(percentageTab);
         return percentageTab;
+    }
+
+    @Override
+    public PairArrays listTaskByStatus() {
+        
+        List<String[]> list = projetRepository.getListStatusTasks();
+
+        ArrayList<String> tabkey = new ArrayList<>();
+        ArrayList<String> tabvalue = new ArrayList<>();
+
+        Map<String, String> map = new HashMap<String, String>();
+        for (String[] ob : list) {
+            String key = (String) ob[0];
+            String value = (String) ob[1];
+            map.put(key, value);
+        }
+
+        map.forEach((status, number) -> {
+            System.out.println("Status: " + status + ",  Number: " + number);
+            tabkey.add(status);
+            tabvalue.add(number);
+        });
+
+        System.out.println(tabkey);
+        System.out.println(tabvalue);
+       
+        PairArrays pair = new PairArrays();
+        pair.KeyArr = tabkey;
+        pair.ValueArr = tabvalue;
+        
+        System.out.println("pair.KeyArr"+ pair.KeyArr);
+        System.out.println("pair.ValueArr"+pair.ValueArr);
+
+        return pair;
     }
 
 }
