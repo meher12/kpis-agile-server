@@ -227,10 +227,13 @@ public class ProjetController {
 
     }
     
-    @GetMapping("/projects/percentTaskStatuscChart")
-    public ResponseEntity<PairArrays> getListtaskByStatus(){
+    @GetMapping("/projects/percentTaskStatuscChart/{pReference}")
+    public ResponseEntity<PairArrays> getListtaskByStatus(@PathVariable("pReference") String  pReference){
         
-     PairArrays pair =  projectServiceImp.listTaskByStatus();
+        Projet projet = projetRepository.findBypReference(pReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+        
+     PairArrays pair =  projectServiceImp.listTaskByStatus(projet.getpReference());
      return new ResponseEntity<>(pair, HttpStatus.OK);
         
         

@@ -95,9 +95,9 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public PairArrays listTaskByStatus() {
+    public PairArrays listTaskByStatus(String p_reference) {
         
-        List<String[]> list = projetRepository.getListStatusTasks();
+        List<String[]> list = projetRepository.getListStatusTasks(p_reference);
 
         ArrayList<String> tabkey = new ArrayList<>();
         ArrayList<String> tabvalue = new ArrayList<>();
@@ -110,20 +110,20 @@ public class ProjectServiceImp implements ProjectService {
         }
 
         map.forEach((status, number) -> {
-            System.out.println("Status: " + status + ",  Number: " + number);
+           // System.out.println("Status: " + status + ",  Number: " + number);
             tabkey.add(status);
             tabvalue.add(number);
         });
 
-        System.out.println(tabkey);
-        System.out.println(tabvalue);
+//        System.out.println(tabkey);
+//        System.out.println(tabvalue);
        
         PairArrays pair = new PairArrays();
         pair.KeyArr = tabkey;
         pair.ValueArr = tabvalue;
         
-        System.out.println("pair.KeyArr"+ pair.KeyArr);
-        System.out.println("pair.ValueArr"+pair.ValueArr);
+//        System.out.println("pair.KeyArr"+ pair.KeyArr);
+//        System.out.println("pair.ValueArr"+pair.ValueArr);
 
         return pair;
     }

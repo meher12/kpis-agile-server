@@ -8,6 +8,6 @@ public interface ProjectService {
 
     ArrayList<String> pourcentageStoryPointsCompleted(int sumStorypoints, ArrayList<String> tabFromdb);
     
-    PairArrays listTaskByStatus();
+    PairArrays listTaskByStatus(String projetref);
 
 }
