@@ -17,6 +17,8 @@ import com.mdev.springboot.models.Sprint;
 public interface SprintRepository extends JpaRepository<Sprint, Long> {
 
     List<Sprint> findByProjetId(Long projetId);
+    
+   
 
     Optional<Sprint> findBysReference(String sReference);
 

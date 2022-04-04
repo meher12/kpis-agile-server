@@ -12,6 +12,6 @@ public interface SprintService {
 
     List<String> getIdealLine(Date str_date, Date end_date, int workCommitment);
     
-    Map<String, Integer> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab);
+    Map<String, Float> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab, Long projectId);
 
 }

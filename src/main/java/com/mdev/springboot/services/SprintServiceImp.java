@@ -185,7 +185,7 @@ public class SprintServiceImp implements SprintService {
 
     // Number sprint by velocity
     @Override
-    public Map<String, Integer> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab) {
+    public Map<String, Float> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab, Long projectId) {
 
         // Nbr of sprint in project par rapport au velocity:
         int sumDiff = 0;
@@ -210,16 +210,16 @@ public class SprintServiceImp implements SprintService {
         // Capacity story points in sprint par rapport au velocity:
         ArrayList<Integer> nbrDayArray = new ArrayList<Integer>();
 
-        List<Sprint> sprints = this.sprintRepository.findAll();
+        List<Sprint> sprints = this.sprintRepository.findByProjetId(projectId);
         for (Sprint sprint : sprints) {
             long nbrDays = calculDaysDiff(sprint.getSdateDebut(), sprint.getSdateFin());
             int nbrOfDay = (int) nbrDays;
             nbrDayArray.add(nbrOfDay);
         }
 
-        int sumCapacity = 0;
-        int sumDaysSprint = 0;
-        int jourSprint = 16;
+        float sumCapacity = 0;
+        float sumDaysSprint = 0;
+        int jourSprint = 17;
 
         for (int numberCapacity : commitmentSprintTab) {
             sumCapacity += numberCapacity;
@@ -229,12 +229,17 @@ public class SprintServiceImp implements SprintService {
             sumDaysSprint += day;
         }
 
-        int capacity_story_points_in_next_sprint = Math.round(sumCapacity / sumDaysSprint) * jourSprint;
-
+        //System.out.printf(" average Velocity---------------------------------------------------:s %f  d %d j %d \n", sumCapacity, sumDaysSprint, jourSprint);
+        float capacity_story_points_in_next_sprint = ((sumCapacity/sumDaysSprint) * jourSprint);
+       
         // create List of variables:
-        Map<String, Integer> resultSprint = new HashMap<>();
-        resultSprint.put("number_sprint", nbr_sprint);
-        resultSprint.put("average_velocity", avgVelocity);
+        float nbr_sprintFloat = (float) nbr_sprint;
+                float avgVelocityFloat = (float) avgVelocity;  
+                
+        Map<String, Float> resultSprint = new HashMap<>();
+        
+        resultSprint.put("number_sprint", nbr_sprintFloat);
+        resultSprint.put("average_velocity", avgVelocityFloat);
         resultSprint.put("capacity_story_points_in_next_sprint", capacity_story_points_in_next_sprint);
         return resultSprint;
     }

@@ -249,7 +249,7 @@ public class SprintController {
 
     // Number of sprint By velocity average
     @GetMapping(value = "/sprints/{pReference}/nbrSprintByVelocity")
-    public ResponseEntity<List<Map.Entry<String, Integer>>> getNumberOfSprintByVelocity(
+    public ResponseEntity<List<Map.Entry<String, Float>>> getNumberOfSprintByVelocity(
             @PathVariable(value = "pReference") String pReference) {
 
         Projet projet = projetRepository.findBypReference(pReference)
@@ -271,12 +271,12 @@ public class SprintController {
             commitmentSprintTab.add(sprint.getWorkCommitment());
         }
 
-        Map<String, Integer> result = this.sprintServiceImp.nbrSprintByvelocity(diffSprintTab, commitmentSprintTab);
+        Map<String, Float> result = this.sprintServiceImp.nbrSprintByvelocity(diffSprintTab, commitmentSprintTab, projet.getId());
 
         // Associate Array
-        Set<Map.Entry<String, Integer>> set = result.entrySet();
+        Set<Map.Entry<String, Float>> set = result.entrySet();
 
-        List<Map.Entry<String, Integer>> list = new ArrayList<>(set);
+        List<Map.Entry<String, Float>> list = new ArrayList<>(set);
 
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i).getKey() + ": " + list.get(i).getValue());

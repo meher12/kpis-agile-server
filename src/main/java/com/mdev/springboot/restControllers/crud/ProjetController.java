@@ -153,7 +153,7 @@ public class ProjetController {
 
     // projects by release brundown chart
     @GetMapping("/projects/releasebdchart/{pReference}")
-    public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(@PathVariable("pReference") String  pReference) {
+    public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(@PathVariable("pReference") String pReference) {
 
         storyRepository.StoryPointUpdate();
         sprintRepository.sprintStoryPointUpdate();
@@ -164,37 +164,34 @@ public class ProjetController {
         taskRepository.tasktimeUpdate();
         projetRepository.totalSpInProject();
 
-        
-      
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         // Completed table in project for brundown release
         ArrayList<String> spDoneFromSprint = sprintRepository.getListSpCompleted(pReference);
 
-        //System.out.println("********spDoneFromSprint*********" + spDoneFromSprint);
+        // System.out.println("********spDoneFromSprint*********" + spDoneFromSprint);
 
         // More table in project for brundown release
         ArrayList<String> morespFromSprint = sprintRepository.getListMoreSp(pReference);
 
-       // System.out.println("*******morespFromSprint**********" + morespFromSprint);
+        // System.out.println("*******morespFromSprint**********" + morespFromSprint);
 
-       // for (Projet projet : projets) {
+        // for (Projet projet : projets) {
 
-            int sumSp = projet.getTotalstorypointsinitiallycounts();
+        int sumSp = projet.getTotalstorypointsinitiallycounts();
 
-            projet.setpSpwrked(spDoneFromSprint);
-            ArrayList<String> arrayspworked = (ArrayList<String>) projet.getpSpwrked();
-            projetRepository.projectSpCompletedArray(projet.getId(), arrayspworked);
+        projet.setpSpwrked(spDoneFromSprint);
+        ArrayList<String> arrayspworked = (ArrayList<String>) projet.getpSpwrked();
+        projetRepository.projectSpCompletedArray(projet.getId(), arrayspworked);
 
-            projet.setpMoresp(morespFromSprint);
-            ArrayList<String> arrayspmore = (ArrayList<String>) projet.getpMoresp();
-            projetRepository.projectMoreSpArray(projet.getId(), arrayspmore);
+        projet.setpMoresp(morespFromSprint);
+        ArrayList<String> arrayspmore = (ArrayList<String>) projet.getpMoresp();
+        projetRepository.projectMoreSpArray(projet.getId(), arrayspmore);
 
-            projet.setpSpCommitment(
-                    this.projectServiceImp.releaseBurndownChart(sumSp, spDoneFromSprint, morespFromSprint));
-            projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
-       // }
+        projet.setpSpCommitment(this.projectServiceImp.releaseBurndownChart(sumSp, spDoneFromSprint, morespFromSprint));
+        projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
+        // }
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("release Burndown Chart", Boolean.TRUE);
@@ -204,7 +201,7 @@ public class ProjetController {
 
     // percentage
     @GetMapping("/projects/percentageSpcChart/{pReference}")
-    public ResponseEntity<Map<String, Boolean>> percentageSpcChart(@PathVariable("pReference") String  pReference) {
+    public ResponseEntity<Map<String, Boolean>> percentageSpcChart(@PathVariable("pReference") String pReference) {
 
         storyRepository.StoryPointUpdate();
         sprintRepository.sprintStoryPointUpdate();
@@ -213,30 +210,27 @@ public class ProjetController {
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
-      
+        projet.setPercentage_spc(projectServiceImp
+                .pourcentageStoryPointsCompleted(projet.getTotalstorypointsinitiallycounts(), tabFromdb));
 
-            projet.setPercentage_spc(
-                    projectServiceImp.pourcentageStoryPointsCompleted(projet.getTotalstorypointsinitiallycounts(), tabFromdb));
-
-            projetRepository.percentageSpcArray(projet.getId(), projet.getPercentage_spc());
-        
+        projetRepository.percentageSpcArray(projet.getId(), projet.getPercentage_spc());
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Percentage radio Chart", Boolean.TRUE);
         return ResponseEntity.ok(response);
 
     }
-    
+
+    // task status chart by project preference
     @GetMapping("/projects/percentTaskStatuscChart/{pReference}")
-    public ResponseEntity<PairArrays> getListtaskByStatus(@PathVariable("pReference") String  pReference){
-        
+    public ResponseEntity<PairArrays> getListtaskByStatus(@PathVariable("pReference") String pReference) {
+
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
-        
-     PairArrays pair =  projectServiceImp.listTaskByStatus(projet.getpReference());
-     return new ResponseEntity<>(pair, HttpStatus.OK);
-        
-        
+
+        PairArrays pair = projectServiceImp.listTaskByStatus(projet.getpReference());
+        return new ResponseEntity<>(pair, HttpStatus.OK);
+
     }
 
 }
