@@ -62,7 +62,7 @@ public class ProjectServiceImp implements ProjectService {
             totalspCommitment.add(String.valueOf(SP));
         }
 
-        System.out.println("Commitement" + totalspCommitment);
+       // System.out.println("Commitement" + totalspCommitment);
         return totalspCommitment;
 
     }
@@ -90,7 +90,7 @@ public class ProjectServiceImp implements ProjectService {
 
             percentageTab.add(String.format("%.2f", percentage));
         }
-        System.out.println(percentageTab);
+      //  System.out.println(percentageTab);
         return percentageTab;
     }
 

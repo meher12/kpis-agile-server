@@ -74,7 +74,7 @@ public class SprintServiceImp implements SprintService {
         return days_difference;
 
     }
-    
+
     @Override
     public List<String> getIdealLine(Date str_date, Date end_date, int workCommitment) {
         // Set values for both dates
@@ -88,10 +88,10 @@ public class SprintServiceImp implements SprintService {
 
         int nbrOfDay = (int) nbrDays;
 
-        int idealLine[] = new int[nbrOfDay];
-        int SP = workCommitment;
+        float idealLine[] = new float[nbrOfDay];
+        float SP = workCommitment;
 
-        int inc = Math.round(SP / nbrOfDay);
+        float inc = SP / nbrOfDay;
 
         for (int i = 0; i < nbrOfDay; i++) {
             idealLine[i] = SP;
@@ -110,11 +110,11 @@ public class SprintServiceImp implements SprintService {
 
 //    @Override
 //    public List<String> getIdealLine(Date str_date, Date end_date, int workCommitment) {
-        // Set values for both dates
+    // Set values for both dates
 //        String join = "01-01-2022";   
 //        String leave  = "8-01-2022";   
-        // Calling find() method for getting difference bwtween dates
- //       long nbrDays = calculDaysDiff(str_date, end_date);
+    // Calling find() method for getting difference bwtween dates
+    // long nbrDays = calculDaysDiff(str_date, end_date);
 
 //        List<String> negative = new ArrayList<>();
 //        List<String> positive = new ArrayList<>();
@@ -150,8 +150,8 @@ public class SprintServiceImp implements SprintService {
 //            }
 //        }
 
-        /* ******* */
-      //  int lastNum = 10;
+    /* ******* */
+    // int lastNum = 10;
 //        for (int t= 0; t < positive.size(); t++) {
 //        if (positive.get(positive.size() - 1) != 0) {
 //            int lastNum = positive.get(positive.size() - 1);
@@ -170,22 +170,24 @@ public class SprintServiceImp implements SprintService {
 //            }
 //        }
 
-       // System.out.println("Tow tow tow: "+positive2);
+    // System.out.println("Tow tow tow: "+positive2);
 //         pure Java:
 //         List<String> sNumbers = new ArrayList<String>();
 //         for (Integer i: positive2) {
 //             sNumbers.add(String.valueOf(i));
 //         }
 
-        // Java 8 - map:
-       // List<String> sNumbers = positive2.stream().map((n) -> n.toString()).collect(Collectors.toList());
-       // System.out.println(sNumbers);
+    // Java 8 - map:
+    // List<String> sNumbers = positive2.stream().map((n) ->
+    // n.toString()).collect(Collectors.toList());
+    // System.out.println(sNumbers);
 //        return positive;
 //    }
 
     // Number sprint by velocity
     @Override
-    public Map<String, Float> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab, Long projectId) {
+    public Map<String, Float> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab,
+            Long projectId) {
 
         // Nbr of sprint in project par rapport au velocity:
         int sumDiff = 0;
@@ -198,14 +200,14 @@ public class SprintServiceImp implements SprintService {
         }
 
         // System.out.println(sumDiff);
-        int avgVelocity = sumDiff / sizeTab;
+        float avgVelocity = sumDiff / sizeTab;
         // System.out.printf("average Velocity: %d \n", avgVelocity);
 
         for (int number : commitmentSprintTab) {
             sumCommit += number;
         }
 
-        int nbr_sprint = Math.round(sumCommit / avgVelocity);
+        float nbr_sprint = (sumCommit / avgVelocity);
 
         // Capacity story points in sprint par rapport au velocity:
         ArrayList<Integer> nbrDayArray = new ArrayList<Integer>();
@@ -229,17 +231,19 @@ public class SprintServiceImp implements SprintService {
             sumDaysSprint += day;
         }
 
-        //System.out.printf(" average Velocity---------------------------------------------------:s %f  d %d j %d \n", sumCapacity, sumDaysSprint, jourSprint);
-        float capacity_story_points_in_next_sprint = ((sumCapacity/sumDaysSprint) * jourSprint);
-       
+        // System.out.printf(" average
+        // Velocity---------------------------------------------------:s %f d %d j %d
+        // \n", sumCapacity, sumDaysSprint, jourSprint);
+        float  capacity_story_points_in_next_sprint = ((sumCapacity / sumDaysSprint) * jourSprint);
+
         // create List of variables:
-        float nbr_sprintFloat = (float) nbr_sprint;
-                float avgVelocityFloat = (float) avgVelocity;  
-                
+//        float nbr_sprintFloat = (float) nbr_sprint;
+//        float avgVelocityFloat = (float) avgVelocity;
+
         Map<String, Float> resultSprint = new HashMap<>();
-        
-        resultSprint.put("number_sprint", nbr_sprintFloat);
-        resultSprint.put("average_velocity", avgVelocityFloat);
+
+        resultSprint.put("number_sprint", nbr_sprint);
+        resultSprint.put("average_velocity", avgVelocity);
         resultSprint.put("capacity_story_points_in_next_sprint", capacity_story_points_in_next_sprint);
         return resultSprint;
     }

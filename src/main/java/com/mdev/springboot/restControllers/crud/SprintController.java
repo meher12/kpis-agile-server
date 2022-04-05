@@ -204,7 +204,7 @@ public class SprintController {
                     sprint.getWorkCommitment()));
             List<String> arrayLine = sprint.getIdealLinearray();
             sprintRepository.sprintArrayOfIdealLine(sprint.getId(), arrayLine);
-            System.out.println(arrayLine);
+           System.out.println(arrayLine);
         }
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();
@@ -236,7 +236,7 @@ public class SprintController {
             String number = item.replaceAll("[^0-9]", "");
             arrayFiltred.add(number);
         }
-        System.out.println("*****" + arrayFiltred);
+       // System.out.println("*****" + arrayFiltred);
 
         sprint.setWorkedlarray(arrayFiltred);
         // List<String> arraysp = sprintRequest.getWorkedlarray();
