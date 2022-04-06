@@ -1,5 +1,6 @@
 package com.mdev.springboot.restControllers.crud;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,13 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mdev.springboot.exception.ApiResourceNotFoundException;
 import com.mdev.springboot.exception.ResourceNotFoundException;
 import com.mdev.springboot.models.Projet;
-import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
 import com.mdev.springboot.repository.StoryRepository;
 import com.mdev.springboot.repository.TaskRepository;
-import com.mdev.springboot.services.PairArrays;
 import com.mdev.springboot.services.ProjectServiceImp;
+import com.mdev.springboot.utils.PairArrays;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -231,6 +231,20 @@ public class ProjetController {
         PairArrays pair = projectServiceImp.listTaskByStatus(projet.getpReference());
         return new ResponseEntity<>(pair, HttpStatus.OK);
 
+    }
+    
+    // get efficacity by startDate of task by project ref
+//    @RequestMapping(value = "/projects/getEfficacity/{pReference}")
+//    public ResponseEntity<PairArrays> getEfficacityByStartDateTask(@PathVariable("pReference") String pReference,
+//            @RequestBody ArrayList<Object> startDateRequest) throws ParseException {
+//      PairArrays dataEffecacityChart =   this.projectServiceImp.efficacityByStartDateTask();
+//        return new ResponseEntity<>(dataEffecacityChart, HttpStatus.OK);
+//    }
+    
+    @RequestMapping(value = "/projects/getEfficacity/{pReference}")
+    public ResponseEntity<PairArrays> getEfficacityByStartDateTask(@PathVariable("pReference") String pReference ) throws ParseException {
+      PairArrays dataEffecacityChart =   this.projectServiceImp.efficacityByStartDateTask();
+        return new ResponseEntity<>(dataEffecacityChart, HttpStatus.OK);
     }
 
 }

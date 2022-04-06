@@ -1,4 +1,4 @@
-package com.mdev.springboot.services;
+package com.mdev.springboot.utils;
 
 import java.util.ArrayList;
 
@@ -6,5 +6,6 @@ public class PairArrays {
 
         public ArrayList<String> KeyArr;
         public ArrayList<String> ValueArr;
+        public ArrayList<Float> FloatArr;
    
 }
