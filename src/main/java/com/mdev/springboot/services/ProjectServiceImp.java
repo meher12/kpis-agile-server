@@ -183,6 +183,10 @@ public class ProjectServiceImp implements ProjectService {
             // System.out.printf("-------------- InprogressCount %f : \n", InprogressCount);
 
             float efficacity = InprogressCount / (scheduledcount + InprogressCount) * 100;
+            boolean res2 = Float.isNaN(efficacity);
+            if(res2) {
+                efficacity = -1;
+            }
 //            System.out.println("-------------- date : "+ dateend);
 //            System.out.printf("-------------- efficacity %f : \n", efficacity);
 
