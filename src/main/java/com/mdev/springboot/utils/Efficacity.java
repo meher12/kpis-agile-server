@@ -3,29 +3,41 @@ package com.mdev.springboot.utils;
 import java.util.Date;
 
 public class Efficacity {
-    private Date dateEnd;
+    
+    private Date startDate;
+    private Date endDate;
     private float efficacity;
     
     
     public Efficacity() {
-        super();
     }
 
 
-    public Efficacity(Date dateEnd, float efficacity) {
+    public Efficacity( Date endDate, float efficacity) {
         super();
-        this.dateEnd = dateEnd;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.efficacity = efficacity;
     }
 
 
-    public Date getDateEnd() {
-        return dateEnd;
+    public Date getStartDate() {
+        return startDate;
     }
 
 
-    public void setDateEnd(Date dateEnd) {
-        this.dateEnd = dateEnd;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
 
@@ -37,6 +49,9 @@ public class Efficacity {
     public void setEfficacity(float efficacity) {
         this.efficacity = efficacity;
     }
+
+
+  
 
 
 

@@ -73,6 +73,10 @@ public interface ProjetRepository extends JpaRepository<Projet, Long> {
             + " WHERE status='In_progress' and tdate_debut BETWEEN :start AND :end ;"
             , nativeQuery = true)
      float getCountStatusInprogress(@Param("p_reference") String p_reference, @Param("start") Date start, @Param("end") Date end);
+     
+     // select tdate_debut in task by project ref
+     @Query(value = "select tdate_debut from tasks join story on story.id = tasks.story_id join sprints on sprints.id = story.sprint_id join projets on projets.id = sprints.projet_id AND p_reference= :preference ORDER BY tdate_debut ASC", nativeQuery = true)
+     ArrayList<String>  getListTaskStartDate(String preference);
     
 
 }

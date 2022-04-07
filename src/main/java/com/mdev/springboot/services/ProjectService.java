@@ -2,6 +2,8 @@ package com.mdev.springboot.services;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 
 import com.mdev.springboot.utils.PairArrays;
 
@@ -13,7 +15,7 @@ public interface ProjectService {
     
     PairArrays listTaskByStatus(String projetref);
     
-    PairArrays efficacityByStartDateTask() throws ParseException;
+    PairArrays efficacityByStartDateTask(String referenceProject, Map<Date, Date> requestMap) throws ParseException;
     
 
 }

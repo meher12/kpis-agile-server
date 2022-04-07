@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import com.mdev.springboot.repository.SprintRepository;
 import com.mdev.springboot.repository.StoryRepository;
 import com.mdev.springboot.repository.TaskRepository;
 import com.mdev.springboot.services.ProjectServiceImp;
+import com.mdev.springboot.utils.Efficacity;
 import com.mdev.springboot.utils.PairArrays;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -233,18 +235,35 @@ public class ProjetController {
 
     }
     
-    // get efficacity by startDate of task by project ref
-//    @RequestMapping(value = "/projects/getEfficacity/{pReference}")
-//    public ResponseEntity<PairArrays> getEfficacityByStartDateTask(@PathVariable("pReference") String pReference,
-//            @RequestBody ArrayList<Object> startDateRequest) throws ParseException {
-//      PairArrays dataEffecacityChart =   this.projectServiceImp.efficacityByStartDateTask();
-//        return new ResponseEntity<>(dataEffecacityChart, HttpStatus.OK);
-//    }
+   // select date_debut in task by project reference
+    @GetMapping("/projects/listStartDateTask/{pReference}")
+    public ResponseEntity<ArrayList<String>> getListTaskStartDateBypRef(@PathVariable("pReference") String pReference) {
+
+        Projet projet = projetRepository.findBypReference(pReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+
+        ArrayList<String> listStartDate =  projetRepository.getListTaskStartDate(pReference);
+        return new ResponseEntity<>(listStartDate, HttpStatus.OK);
+
+    }
     
-    @RequestMapping(value = "/projects/getEfficacity/{pReference}")
-    public ResponseEntity<PairArrays> getEfficacityByStartDateTask(@PathVariable("pReference") String pReference ) throws ParseException {
-      PairArrays dataEffecacityChart =   this.projectServiceImp.efficacityByStartDateTask();
+    // get efficacity by startDate of task by project ref
+    @RequestMapping(value = "/projects/getEfficacity/{pReference}", method = RequestMethod.PUT)
+    public ResponseEntity<PairArrays> getEfficacityByStartDateTask(@PathVariable("pReference") String pReference,
+            @RequestBody ArrayList<Efficacity> efficacityDataRequest) throws ParseException {
+        
+       
+        
+        Map<Date, Date> mapDate = new HashMap<Date, Date>();
+        
+        for (Efficacity efficacity : efficacityDataRequest) {
+            mapDate.put(efficacity.getStartDate(), efficacity.getEndDate());
+        }
+       // System.out.println(mapDate);
+        PairArrays dataEffecacityChart =   this.projectServiceImp.efficacityByStartDateTask(pReference, mapDate);
         return new ResponseEntity<>(dataEffecacityChart, HttpStatus.OK);
     }
+    
+    
 
 }
