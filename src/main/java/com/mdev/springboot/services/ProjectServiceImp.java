@@ -3,11 +3,11 @@ package com.mdev.springboot.services;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,7 +70,7 @@ public class ProjectServiceImp implements ProjectService {
             totalspCommitment.add(String.valueOf(SP));
         }
 
-       // System.out.println("Commitement" + totalspCommitment);
+        // System.out.println("Commitement" + totalspCommitment);
         return totalspCommitment;
 
     }
@@ -80,8 +80,6 @@ public class ProjectServiceImp implements ProjectService {
 
         storyRepository.StoryPointUpdate();
         sprintRepository.sprintStoryPointUpdate();
-
-        
 
         ArrayList<String> percentageTab = new ArrayList<>();
 
@@ -98,14 +96,14 @@ public class ProjectServiceImp implements ProjectService {
 
             percentageTab.add(String.format("%.2f", percentage));
         }
-      //  System.out.println(percentageTab);
+        // System.out.println(percentageTab);
         return percentageTab;
     }
 
-    // List status task by project ref 
+    // List status task by project ref
     @Override
     public PairArrays listTaskByStatus(String p_reference) {
-        
+
         List<String[]> list = projetRepository.getListStatusTasks(p_reference);
 
         ArrayList<String> tabkey = new ArrayList<>();
@@ -119,23 +117,23 @@ public class ProjectServiceImp implements ProjectService {
         }
 
         map.forEach((status, number) -> {
-           // System.out.println("Status: " + status + ",  Number: " + number);
+            // System.out.println("Status: " + status + ", Number: " + number);
             tabkey.add(status);
             tabvalue.add(number);
         });
-       
+
         PairArrays pair = new PairArrays();
         pair.KeyArr = tabkey;
         pair.ValueArr = tabvalue;
-        
+
         return pair;
     }
-    
+
     @Override
-    public PairArrays efficacityByStartDateTask(String referenceProject, Map<Date, Date> requestMap) throws ParseException {
-        
-        
-          SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
+    public PairArrays efficacityByStartDateTask(String referenceProject, Map<Date, Date> requestMap)
+            throws ParseException {
+
+        SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
 //        Date date1 = obj.parse("15-03-2022"); // 2022-03-15 01-03-2022
 //        Date date2 = obj.parse("28-05-2022"); // 2022-05-28 03-05-2022
 //
@@ -183,17 +181,20 @@ public class ProjectServiceImp implements ProjectService {
             // System.out.printf("-------------- InprogressCount %f : \n", InprogressCount);
 
             float efficacity = InprogressCount / (scheduledcount + InprogressCount) * 100;
-            boolean res2 = Float.isNaN(efficacity);
-            if(res2) {
-                efficacity = -1;
-            }
+//            boolean res2 = Float.isNaN(efficacity);
+//            if(res2) {
+//                efficacity = -1;
+//            }
 //            System.out.println("-------------- date : "+ dateend);
-//            System.out.printf("-------------- efficacity %f : \n", efficacity);
+//           System.out.printf("-------------- efficacity %f : \n", efficacity);
 
             efficacityObj.setEndDate(dateend);
             efficacityObj.setEfficacity(efficacity);
 
             efficacityList.add(new Efficacity(efficacityObj.getEndDate(), efficacityObj.getEfficacity()));
+
+            // Remove NaN efficacity value:
+            efficacityList.removeIf(item -> Float.isNaN(item.getEfficacity()));
 
             // Sort in assending order
             Collections.sort(efficacityList, new Comparator<Efficacity>() {
@@ -218,13 +219,13 @@ public class ProjectServiceImp implements ProjectService {
             // System.out.println(eff.getEfficacity());
             efficacityArray.add(eff.getEfficacity());
         }
-       // System.out.println(dateArray);
-       // System.out.println(efficacityArray);
-        
+        // System.out.println(dateArray);
+        // System.out.println(efficacityArray);
+
         PairArrays pairArrays = new PairArrays();
         pairArrays.KeyArr = dateArray;
         pairArrays.FloatArr = efficacityArray;
-        
+
         return pairArrays;
     }
 

@@ -252,8 +252,6 @@ public class ProjetController {
     public ResponseEntity<PairArrays> getEfficacityByStartDateTask(@PathVariable("pReference") String pReference,
             @RequestBody ArrayList<Efficacity> efficacityDataRequest) throws ParseException {
         
-       
-        
         Map<Date, Date> mapDate = new HashMap<Date, Date>();
         
         for (Efficacity efficacity : efficacityDataRequest) {

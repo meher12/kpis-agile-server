@@ -15,7 +15,6 @@ public class Efficacity {
 
     public Efficacity( Date endDate, float efficacity) {
         super();
-        this.startDate = startDate;
         this.endDate = endDate;
         this.efficacity = efficacity;
     }
