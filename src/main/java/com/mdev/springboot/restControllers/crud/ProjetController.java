@@ -1,5 +1,6 @@
 package com.mdev.springboot.restControllers.crud;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -234,34 +235,73 @@ public class ProjetController {
         return new ResponseEntity<>(pair, HttpStatus.OK);
 
     }
-    
-   // select date_debut in task by project reference
+
+    // select date_debut in task by project reference
     @GetMapping("/projects/listStartDateTask/{pReference}")
     public ResponseEntity<ArrayList<String>> getListTaskStartDateBypRef(@PathVariable("pReference") String pReference) {
 
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
-        ArrayList<String> listStartDate =  projetRepository.getListTaskStartDate(pReference);
+        ArrayList<String> listStartDate = projetRepository.getListTaskStartDate(pReference);
         return new ResponseEntity<>(listStartDate, HttpStatus.OK);
 
     }
-    
+
     // get efficacity by startDate of task by project ref
     @RequestMapping(value = "/projects/getEfficacity/{pReference}", method = RequestMethod.PUT)
     public ResponseEntity<PairArrays> getEfficacityByStartDateTask(@PathVariable("pReference") String pReference,
             @RequestBody ArrayList<Efficacity> efficacityDataRequest) throws ParseException {
-        
+
         Map<Date, Date> mapDate = new HashMap<Date, Date>();
-        
+
         for (Efficacity efficacity : efficacityDataRequest) {
             mapDate.put(efficacity.getStartDate(), efficacity.getEndDate());
         }
-       // System.out.println(mapDate);
-        PairArrays dataEffecacityChart =   this.projectServiceImp.efficacityByStartDateTask(pReference, mapDate);
+        // System.out.println(mapDate);
+        PairArrays dataEffecacityChart = this.projectServiceImp.efficacityByStartDateTask(pReference, mapDate);
         return new ResponseEntity<>(dataEffecacityChart, HttpStatus.OK);
     }
-    
-    
+
+    // select work completed in task by project reference
+    @GetMapping("/projects/percentageStoryPointsInProject/{pReference}")
+    public ResponseEntity<Map<String, String>> getpercentageStoryPointsInProject(
+            @PathVariable("pReference") String pReference) {
+
+        Projet projet = projetRepository.findBypReference(pReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+        // calcul % completed sp
+        float percentageSpCompletedByProject = ((float) projet.getTotalspCompleted() * 100)
+                / (float) projet.getTotalstorypointsinitiallycounts();
+
+        // calcul % commitment sp
+        float percentageSpCommitmentByProject = ((float) projet.getTotalspCommitment() * 100)
+                / (float) projet.getTotalstorypointsinitiallycounts();
+
+        String percentageSpCompletedByProjectString = String.format("%.2f", percentageSpCompletedByProject);
+        String percentageSpCommitmentByProjectString = String.format("%.2f", percentageSpCommitmentByProject);
+        
+        Map<String, String> data = new HashMap<String, String>();
+        
+        data.put("SpCompleted", percentageSpCompletedByProjectString);
+        data.put("SpCommitment", percentageSpCommitmentByProjectString);
+        //System.out.println(data);
+        return new ResponseEntity<>(data, HttpStatus.OK);
+
+    }
+
+//    // select work_commitment in task by project reference
+//    @GetMapping("/projects/listStatusTask/{pReference}")
+//    public ResponseEntity<PairArrays> getListTaBypRef(@PathVariable("pReference") String pReference) {
+//
+//        Projet projet = projetRepository.findBypReference(pReference)
+//                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+//
+//        PairArrays pair = projectServiceImp.listTaskByStatus(projet.getpReference());
+//        return new ResponseEntity<>(pair, HttpStatus.OK);
+//
+//    }
+//    
+//    
 
 }

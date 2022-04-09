@@ -117,7 +117,7 @@ public class ProjectServiceImp implements ProjectService {
         }
 
         map.forEach((status, number) -> {
-            // System.out.println("Status: " + status + ", Number: " + number);
+             System.out.println("Status: " + status + ", Number: " + number);
             tabkey.add(status);
             tabvalue.add(number);
         });
