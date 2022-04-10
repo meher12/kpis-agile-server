@@ -297,18 +297,8 @@ public class ProjetController {
 
     }
 
-//    // select work_commitment in task by project reference
-//    @GetMapping("/projects/listStatusTask/{pReference}")
-//    public ResponseEntity<PairArrays> getListTaBypRef(@PathVariable("pReference") String pReference) {
-//
-//        Projet projet = projetRepository.findBypReference(pReference)
-//                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
-//
-//        PairArrays pair = projectServiceImp.listTaskByStatus(projet.getpReference());
-//        return new ResponseEntity<>(pair, HttpStatus.OK);
-//
-//    }
-//    
-//    
+   
+    
+    
 
 }
