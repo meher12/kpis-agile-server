@@ -265,8 +265,7 @@ public class ProjetController {
 
     // select work completed in task by project reference
     @GetMapping("/projects/percentageStoryPointsInProject/{pReference}")
-    public ResponseEntity<Map<String, String>> getpercentageStoryPointsInProject(
-            @PathVariable("pReference") String pReference) {
+    public ResponseEntity<Map<String, String>> getpercentageStoryPointsInProject( @PathVariable("pReference") String pReference) {
 
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
@@ -281,10 +280,18 @@ public class ProjetController {
         String percentageSpCompletedByProjectString = String.format("%.2f", percentageSpCompletedByProject);
         String percentageSpCommitmentByProjectString = String.format("%.2f", percentageSpCommitmentByProject);
         
+        // total sp completed
+        String totalspcompleted =  String.valueOf(projet.getTotalspCompleted());
+        
+        // total sp initialized
+        String totalstorypointsinitiallycounts =  String.valueOf(projet.getTotalstorypointsinitiallycounts());
+        
         Map<String, String> data = new HashMap<String, String>();
         
         data.put("SpCompleted", percentageSpCompletedByProjectString);
         data.put("SpCommitment", percentageSpCommitmentByProjectString);
+        data.put("totalspcompleted", totalspcompleted);
+        data.put("totalstorypointsinitiallycounts", totalstorypointsinitiallycounts);
         //System.out.println(data);
         return new ResponseEntity<>(data, HttpStatus.OK);
 
