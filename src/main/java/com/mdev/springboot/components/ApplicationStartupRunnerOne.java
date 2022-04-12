@@ -1,5 +1,7 @@
 package com.mdev.springboot.components;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.mdev.springboot.models.ERole;
 import com.mdev.springboot.models.Role;
 import com.mdev.springboot.repository.RoleRepository;
+import com.mdev.springboot.services.FilesStorageService;
 
 @Order(value=1)
 @Component
@@ -20,6 +23,9 @@ public class ApplicationStartupRunnerOne implements CommandLineRunner{
     
     @Autowired
     RoleRepository roleRepository;
+    
+    @Resource
+    FilesStorageService storageService;
     
     @Override
     public void run(String... args) throws Exception {
@@ -41,6 +47,10 @@ public class ApplicationStartupRunnerOne implements CommandLineRunner{
         roleRepository.findAll().forEach((roles) -> {
             logger.info("{}", roles.getName());
         });
+        
+        // Upload file Config
+        storageService.deleteAll();
+        storageService.init();
         
     }
 
