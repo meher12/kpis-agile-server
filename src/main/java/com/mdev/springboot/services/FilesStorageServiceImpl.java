@@ -30,16 +30,16 @@ public class FilesStorageServiceImpl implements FilesStorageService {
   @Override
   public void save(MultipartFile file) {
       
-      try {
-          boolean result = Files.deleteIfExists(Paths.get("upload/"+file));
-          if (result) {
-              System.out.println("File is deleted!");
-          } else {
-              System.out.println("Sorry, unable to delete the file.");
-          }
-      } catch (IOException e) {
-          e.printStackTrace();
-      }
+//      try {
+//          boolean result = Files.deleteIfExists(Paths.get("upload/"+file));
+//          if (result) {
+//              System.out.println("File is deleted!");
+//          } else {
+//              System.out.println("Sorry, unable to delete the file.");
+//          }
+//      } catch (IOException e) {
+//          e.printStackTrace();
+//      }
       
 //      try {
 //          Files.deleteIfExists(Paths.get("upload/"+file));
