@@ -13,6 +13,7 @@ import com.mdev.springboot.models.ERole;
 import com.mdev.springboot.models.Role;
 import com.mdev.springboot.repository.RoleRepository;
 import com.mdev.springboot.services.FilesStorageService;
+import com.mdev.springboot.services.FilesStorageServiceImpl;
 
 @Order(value=1)
 @Component
@@ -25,7 +26,7 @@ public class ApplicationStartupRunnerOne implements CommandLineRunner{
     RoleRepository roleRepository;
     
     @Resource
-    FilesStorageService storageService;
+    FilesStorageServiceImpl storageService;
     
     @Override
     public void run(String... args) throws Exception {
