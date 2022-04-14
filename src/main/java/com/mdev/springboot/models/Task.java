@@ -12,8 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -69,6 +69,10 @@ public class Task implements Serializable {
     @Column(columnDefinition = "integer default 0")
     private int estimation; 
     
+    @NotNull
+    @Column(columnDefinition = "integer default 0")
+    private int bugs; 
+    
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "story_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -80,7 +84,8 @@ public class Task implements Serializable {
     }
 
     public Task(@NotNull String tname, @NotNull String tReference, @NotNull String tdescription, Date tdateDebut,
-            Date tdateFin, ETask status, ETypeTask typeTask, @NotNull int estimation, Story story) {
+            Date tdateFin, ETask status, ETypeTask typeTask, Date tsupdatedDate, @NotNull int estimation,
+            @NotNull int bugs, Story story) {
         super();
         this.tname = tname;
         this.tReference = tReference;
@@ -89,7 +94,9 @@ public class Task implements Serializable {
         this.tdateFin = tdateFin;
         this.status = status;
         this.typeTask = typeTask;
+        this.tsupdatedDate = tsupdatedDate;
         this.estimation = estimation;
+        this.bugs = bugs;
         this.story = story;
     }
 
@@ -157,12 +164,28 @@ public class Task implements Serializable {
         this.typeTask = typeTask;
     }
 
+    public Date getTsupdatedDate() {
+        return tsupdatedDate;
+    }
+
+    public void setTsupdatedDate(Date tsupdatedDate) {
+        this.tsupdatedDate = tsupdatedDate;
+    }
+
     public int getEstimation() {
         return estimation;
     }
 
     public void setEstimation(int estimation) {
         this.estimation = estimation;
+    }
+
+    public int getBugs() {
+        return bugs;
+    }
+
+    public void setBugs(int bugs) {
+        this.bugs = bugs;
     }
 
     public Story getStory() {
@@ -173,7 +196,15 @@ public class Task implements Serializable {
         this.story = story;
     }
 
-   
+    @Override
+    public String toString() {
+        return "Task [id=" + id + ", tname=" + tname + ", tReference=" + tReference + ", tdescription=" + tdescription
+                + ", tdateDebut=" + tdateDebut + ", tdateFin=" + tdateFin + ", status=" + status + ", typeTask="
+                + typeTask + ", tsupdatedDate=" + tsupdatedDate + ", estimation=" + estimation + ", bugs=" + bugs
+                + ", story=" + story + "]";
+    }
+
+    
     
 
 }

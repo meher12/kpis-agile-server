@@ -128,6 +128,7 @@ public class TaskController {
         task.setTdateDebut(taskRequest.getTdateDebut());
         task.setTdateFin(taskRequest.getTdateFin());
         task.setEstimation(taskRequest.getEstimation());
+        task.setBugs(taskRequest.getBugs());
         task.setStatus(taskRequest.getStatus());
         task.setTypeTask(taskRequest.getTypeTask());
 

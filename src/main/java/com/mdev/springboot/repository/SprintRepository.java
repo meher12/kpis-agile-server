@@ -68,13 +68,6 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     ArrayList<String>  getListMoreSp(String p_reference);
 
     
-//    @Transactional
-//    @Modifying
-//    @Query(value="CREATE or REPLACE VIEW velocity AS SELECT stitre, work_commitment, work_completed FROM sprints", nativeQuery = true)
-//    void  createViewVelocity();
-//    
-//    
-//    @Query(value = "SELECT * FROM velocity", nativeQuery = true)
-//    List<Sprint> findAll();
+
 
 }
