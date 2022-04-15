@@ -12,6 +12,8 @@ import com.mdev.springboot.models.FileDB;
 public interface FilesStorageService {
     
   public void init();
+  
+  public FileDB  getFile(String id);
 
  // public void save(MultipartFile file);
   

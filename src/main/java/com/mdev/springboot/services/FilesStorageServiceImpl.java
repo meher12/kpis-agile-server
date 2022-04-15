@@ -15,6 +15,7 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mdev.springboot.exception.ApiResourceNotFoundException;
 import com.mdev.springboot.models.FileDB;
 import com.mdev.springboot.repository.FileDBRepository;
 
@@ -46,6 +47,12 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         FileDB FileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
+        
+        if(fileDBRepository.existsByName(fileName)) {
+            System.out.println("This file exists alradey");
+            throw new RuntimeException("This file exists alradey:");
+            
+        }
 
         return fileDBRepository.save(FileDB);
     }
