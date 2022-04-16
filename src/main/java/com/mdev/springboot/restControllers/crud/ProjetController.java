@@ -1,6 +1,5 @@
 package com.mdev.springboot.restControllers.crud;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,8 +33,10 @@ import com.mdev.springboot.repository.SprintRepository;
 import com.mdev.springboot.repository.StoryRepository;
 import com.mdev.springboot.repository.TaskRepository;
 import com.mdev.springboot.services.ProjectServiceImp;
+import com.mdev.springboot.utils.DataTaskBugChart;
 import com.mdev.springboot.utils.Efficacity;
 import com.mdev.springboot.utils.PairArrays;
+import com.mdev.springboot.utils.TasksBugs;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -313,7 +314,22 @@ public class ProjetController {
         data.put("totalstorypointsinitiallycounts", totalstorypointsinitiallycounts);
         //System.out.println(data);
         return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+    
+    
+    // get taskBugs by startDate of task by project ref
+    @RequestMapping(value = "/projects/gettaskbugs/{pReference}", method = RequestMethod.PUT)
+    public ResponseEntity<DataTaskBugChart> getTaskBugByStartDateTask(@PathVariable("pReference") String pReference,
+            @RequestBody ArrayList<TasksBugs> dataRequest)  {
 
+        Map<Date, Date> mapDate = new HashMap<Date, Date>();
+
+        for (TasksBugs tasksBugs : dataRequest) {
+            mapDate.put(tasksBugs.getStartDate(), tasksBugs.getEndDate());
+        }
+        // System.out.println(mapDate);
+        DataTaskBugChart dataChart = this.projectServiceImp.getTasksBugs(pReference, mapDate);
+        return new ResponseEntity<>(dataChart, HttpStatus.OK);
     }
 
    

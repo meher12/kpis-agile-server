@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import com.mdev.springboot.utils.DataTaskBugChart;
 import com.mdev.springboot.utils.PairArrays;
 
 public interface ProjectService {
@@ -16,6 +17,8 @@ public interface ProjectService {
     PairArrays listTaskByStatus(String projetref);
     
     PairArrays efficacityByStartDateTask(String referenceProject, Map<Date, Date> requestMap) throws ParseException;
+    
+    DataTaskBugChart getTasksBugs(String referenceProject, Map<Date, Date> requestMap);
     
 
 }

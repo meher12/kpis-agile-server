@@ -51,49 +51,8 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        
-      SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
-      Date date1 = obj.parse("15-03-2022"); // 2022-03-15 01-03-2022
-      Date date2 = obj.parse("28-05-2022"); // 2022-05-28 03-05-2022
 
-      Date date3 = obj.parse("06-04-2022"); // 2022-04-06 01-03-2022
-      Date date4 = obj.parse("17-06-2022"); // 2022-06-17 03-05-2022
-
-      Date date5 = obj.parse("12-04-2022"); // 2022-04-12 01-03-2022
-      Date date6 = obj.parse("11-05-2022"); // 2022-05-11 03-05-2022
-
-      Date date7 = obj.parse("01-05-2022"); // 2022-04-12 01-03-2022
-      Date date8 = obj.parse("10-05-2022"); // 2022-05-11 03-05-2022 2022-05-10
-
-     
-
-      Map<Date, Date> mapDate = new HashMap<Date, Date>();
-
-      mapDate.put(date1, date2);
-      mapDate.put(date3, date4);
-      mapDate.put(date5, date6);
-      mapDate.put(date7, date8);
-
-      Set<Date> listDates = mapDate.keySet();
-      ArrayList<Integer> bugsInTask = new ArrayList<>();
-      ArrayList<Integer> taskwithoutBug = new ArrayList<>();
-      
-    for (Date datestart : listDates) {
-
-        Date dateend = mapDate.get(datestart);
-
-         //System.out.println("datekey1: " + datestart + " ==> dateend: " + dateend);
-         int bugstask = projetRepository.getSumBugsTask("PUID17B44", datestart, dateend);
-         System.out.printf("-------------- scheduledcount %d : \n", bugstask);
-         bugsInTask.add(bugstask);
-
-           int taskwithoutbugs = projetRepository.getSumNotBugsTask("PUID17B44", datestart, dateend);
-           System.out.printf("-------------- taskwithoutbugs %d : \n", taskwithoutbugs);
-           taskwithoutBug.add(taskwithoutbugs);
-    }
-    
-   // System.out.println("-------------- bugsInTask : \n"+ bugsInTask);
-   // System.out.printf("-------------- taskwithoutbugs : \n"+ taskwithoutBug);
+   
 // **************************************
 //        SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
 //        Date date1 = obj.parse("15-03-2022"); // 2022-03-15 01-03-2022
@@ -135,14 +94,16 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 //
 //            Date dateend = mapDate.get(datestart);
 
-            // System.out.println("datekey1: " + datestart + " ==> dateend: " + dateend);
+        // System.out.println("datekey1: " + datestart + " ==> dateend: " + dateend);
 //            float scheduledcount = projetRepository.getCountStatusScheduled("PUID17B44", datestart, dateend);
-            // System.out.printf("-------------- scheduledcount %f : \n", scheduledcount);
+        // System.out.printf("-------------- scheduledcount %f : \n", scheduledcount);
 
- //           float InprogressCount = projetRepository.getCountStatusInprogress("PUID17B44", datestart, dateend);
-            // System.out.printf("-------------- InprogressCount %f : \n", InprogressCount);
+        // float InprogressCount =
+        // projetRepository.getCountStatusInprogress("PUID17B44", datestart, dateend);
+        // System.out.printf("-------------- InprogressCount %f : \n", InprogressCount);
 
- //           float efficacity = InprogressCount / (scheduledcount + InprogressCount) * 100;
+        // float efficacity = InprogressCount / (scheduledcount + InprogressCount) *
+        // 100;
 //            System.out.println("-------------- date : "+ dateend);
 //            System.out.printf("-------------- efficacity %f : \n", efficacity);
 
@@ -151,20 +112,20 @@ public class ApplicationStartupRunnerTwo implements CommandLineRunner {
 //
 //            efficacityList.add(new Efficacity(efficacityObj.getDateEnd(), efficacityObj.getEfficacity()));
 
-            // Sort in assending order
+        // Sort in assending order
 //            Collections.sort(efficacityList, new Comparator<Efficacity>() {
 //                public int compare(Efficacity e1, Efficacity e2) {
 //                    return Long.valueOf(e1.getDateEnd().getTime()).compareTo(e2.getDateEnd().getTime());
 //                }
 //            });
 
-            // Sort in dessending order
+        // Sort in dessending order
 //            Collections.sort(efficacityList, new Comparator<Efficacity>() {
 //                public int compare(Efficacity e1, Efficacity e2) {
 //                    return Long.valueOf(e2.getDateEnd().getTime()).compareTo(e1.getDateEnd().getTime());
 //                }
 //            });
- //       }
+        // }
 
 //        for (Efficacity eff : efficacityList) {
 //            // System.out.println("Efficacity list: ");

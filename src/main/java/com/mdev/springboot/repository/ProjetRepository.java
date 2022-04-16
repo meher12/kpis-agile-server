@@ -78,19 +78,19 @@ public interface ProjetRepository extends JpaRepository<Projet, Long> {
      @Query(value = "select tdate_debut from tasks"
              + " join story on story.id = tasks.story_id"
              + " join sprints on sprints.id = story.sprint_id"
-             + " join projets on projets.id = sprints.projet_id AND p_reference= :preference ORDER BY tdate_debut ASC", nativeQuery = true)
+             + " join projets on projets.id = sprints.projet_id AND p_reference=:preference ORDER BY tdate_debut ASC", nativeQuery = true)
      ArrayList<String>  getListTaskStartDate(String preference);
      
      // sum tasks has bugs
      @Query(value = "select COALESCE(SUM(bugs),0) from tasks join story on story.id = tasks.story_id join sprints on sprints.id = story.sprint_id"
              + " join projets on projets.id = sprints.projet_id AND p_reference =:p_reference"
-             + " where bugs!=0 AND (tdate_debut BETWEEN :start AND :end )", nativeQuery = true)
+             + " where bugs!=0 AND (tdate_debut BETWEEN :start AND :end ) ", nativeQuery = true)
      int  getSumBugsTask(@Param("p_reference") String p_reference, @Param("start") Date start, @Param("end") Date end);
      
   // sum tasks not has bugs
      @Query(value = "select count(bugs) from tasks join story on story.id = tasks.story_id join sprints on sprints.id = story.sprint_id"
              + " join projets on projets.id = sprints.projet_id AND p_reference =:p_reference"
-             + " where bugs=0 AND (tdate_debut BETWEEN :start AND :end )", nativeQuery = true)
+             + " where bugs=0 AND (tdate_debut BETWEEN :start AND :end ) ", nativeQuery = true)
      int  getSumNotBugsTask(@Param("p_reference") String p_reference, @Param("start") Date start, @Param("end") Date end);
     
 

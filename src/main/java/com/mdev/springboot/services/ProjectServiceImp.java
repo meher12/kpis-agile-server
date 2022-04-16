@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,8 +18,10 @@ import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
 import com.mdev.springboot.repository.StoryRepository;
 import com.mdev.springboot.repository.TaskRepository;
+import com.mdev.springboot.utils.DataTaskBugChart;
 import com.mdev.springboot.utils.Efficacity;
 import com.mdev.springboot.utils.PairArrays;
+import com.mdev.springboot.utils.TasksBugs;
 
 @Service
 public class ProjectServiceImp implements ProjectService {
@@ -227,6 +228,59 @@ public class ProjectServiceImp implements ProjectService {
         pairArrays.FloatArr = efficacityArray;
 
         return pairArrays;
+    }
+
+    public DataTaskBugChart getTasksBugs(String referenceProject, Map<Date, Date> requestMap) {
+
+        SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
+
+        Set<Date> listDates = requestMap.keySet();
+        
+        ArrayList<String> endDateArray = new ArrayList<String>();
+        ArrayList<Integer> bugsInTask = new ArrayList<>();
+        ArrayList<Integer> taskwithoutBug = new ArrayList<>();
+
+        TasksBugs tasksBugs = new TasksBugs();
+        ArrayList<TasksBugs> tasksBugsList = new ArrayList<TasksBugs>();
+
+        for (Date datestart : listDates) {
+
+            Date dateend = requestMap.get(datestart);
+
+            int bugstask = projetRepository.getSumBugsTask(referenceProject, datestart, dateend);
+            // bugsInTask.add(bugstask);
+
+            int taskwithoutbugs = projetRepository.getSumNotBugsTask(referenceProject, datestart, dateend);
+            // taskwithoutBug.add(taskwithoutbugs);
+
+            tasksBugs.setEndDate(dateend);
+            tasksBugs.setBugstask(bugstask);
+            tasksBugs.setTaskwithoutBug(taskwithoutbugs);
+            tasksBugsList.add(new TasksBugs(tasksBugs.getEndDate(), tasksBugs.getBugstask(), tasksBugs.getTaskwithoutBug()));
+
+            // Sort in assending order
+            Collections.sort(tasksBugsList, new Comparator<TasksBugs>() {
+                public int compare(TasksBugs tb1, TasksBugs tb2) {
+                    return Long.valueOf(tb1.getEndDate().getTime()).compareTo(tb2.getEndDate().getTime());
+                }
+            });
+        }
+        
+        for (TasksBugs data : tasksBugsList) {
+            String dateString = obj.format(data.getEndDate());
+            endDateArray.add(dateString);
+            bugsInTask.add(data.getBugstask());
+            taskwithoutBug.add(data.getTaskwithoutBug());
+        }
+
+//        System.out.println("-------------- bugsInTask : \n" + endDateArray);
+//        System.out.println("-------------- bugsInTask : \n" + bugsInTask);
+//        System.out.printf("-------------- taskwithoutbugs : \n" + taskwithoutBug);
+        DataTaskBugChart dataArrays = new DataTaskBugChart();
+        dataArrays.endDateArray = endDateArray;
+        dataArrays.taskBugsArray  = bugsInTask;
+        dataArrays.taskSafe = taskwithoutBug;
+        return dataArrays;
     }
 
 }
