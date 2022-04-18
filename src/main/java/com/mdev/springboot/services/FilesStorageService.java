@@ -7,21 +7,17 @@ import java.util.stream.Stream;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mdev.springboot.models.FileDB;
+import com.mdev.springboot.models.FileInfo;
 
 public interface FilesStorageService {
     
-  public void init();
-  
-  public FileDB  getFile(String id);
+    public void init();
 
- // public void save(MultipartFile file);
-  
-  public FileDB store(MultipartFile file) throws IOException;
+    public void save(MultipartFile file);
 
-  public Resource load(String filename);
+    public Resource load(String filename);
 
-  public void deleteAll();
+   public void deleteAll();
 
-  public Stream<Path> loadAll();
+    public Stream<Path> loadAll();
 }

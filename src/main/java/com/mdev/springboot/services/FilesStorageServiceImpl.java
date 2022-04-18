@@ -7,74 +7,45 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.mdev.springboot.exception.ApiResourceNotFoundException;
-import com.mdev.springboot.models.FileDB;
-import com.mdev.springboot.repository.FileDBRepository;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
 
     private final Path root = Paths.get("uploads");
 
-    @Autowired
-    private FileDBRepository fileDBRepository;
-
-    
     @Override
     public void init() {
+
         try {
-            Files.createDirectory(root);
+            // Files.createDirectory(root);
+
+            if (!Files.exists(root)) {
+
+                Files.createDirectory(root);
+                System.out.println("Directory created");
+            } else {
+
+                System.out.println("Directory already exists");
+            }
+
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
     }
-    
-    public FileDB store(MultipartFile file) throws IOException {
-        
+
+    @Override
+    public void save(MultipartFile file) {
         try {
-          Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {
-          throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+            throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
-        
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        FileDB FileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
-        
-        if(fileDBRepository.existsByName(fileName)) {
-            System.out.println("This file exists alradey");
-            throw new RuntimeException("This file exists alradey:");
-            
-        }
-
-        return fileDBRepository.save(FileDB);
     }
-
-    public FileDB getFile(String id) {
-        return fileDBRepository.findById(id).get();
-    }
-
-    public Stream<FileDB> getAllFiles() {
-        return fileDBRepository.findAll().stream();
-    }
-
- 
-
-//  @Override
-//  public void save(MultipartFile file) {
-//    try {
-//      Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
-//    } catch (Exception e) {
-//      throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
-//    }
-//  }
 
     @Override
     public Resource load(String filename) {
