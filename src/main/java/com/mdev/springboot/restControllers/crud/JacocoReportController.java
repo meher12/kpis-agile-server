@@ -73,5 +73,14 @@ public class JacocoReportController {
 
         return new ResponseEntity<>(jacocoReportList, HttpStatus.CREATED);
     }
+    
+    // get total jacoco coverage 
+    @GetMapping("/reports/projectcoverage/{projectname}")
+    public ResponseEntity<Float> getTotalJacocoCoverage(@PathVariable("projectname") String projectname){
+        float result = jacocoReportRepository.getTotalcoverage(projectname);
+        
+        return new ResponseEntity<>(result, HttpStatus.OK);
+        
+    }
 
 }
