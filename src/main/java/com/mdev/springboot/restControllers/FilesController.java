@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import com.mdev.springboot.exception.ApiResourceNotFoundException;
 import com.mdev.springboot.models.FileInfo;
+import com.mdev.springboot.repository.JacocoReportRepository;
 import com.mdev.springboot.services.FilesStorageServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -36,6 +37,9 @@ public class FilesController {
 
     @Autowired
     private FilesStorageServiceImpl storageService;
+    
+    @Autowired
+    JacocoReportRepository reportRepository;
 
 
     @PostMapping("/upload")
@@ -73,8 +77,8 @@ public class FilesController {
     }
     
     // delete file both from directory and db
-    @DeleteMapping("/files/upload/{filename}")
-    public ResponseEntity<Map<String, Boolean>> deleteFileByName(@PathVariable String filename) throws IOException {
+    @DeleteMapping("/files/upload/{filename}/{reportName}")
+    public ResponseEntity<Map<String, Boolean>> deleteFileByName(@PathVariable("filename") String filename, @PathVariable("reportName") String reportName) throws IOException {
 
        
         Path root = Paths.get("uploads/" + filename);
@@ -84,6 +88,7 @@ public class FilesController {
 
         if (fileDeleted) {
 
+            reportRepository.deleteAllByProjectname(reportName);
             response.put("File Deleted", Boolean.TRUE);
         } else {
             response.put("File does not exist", Boolean.TRUE);

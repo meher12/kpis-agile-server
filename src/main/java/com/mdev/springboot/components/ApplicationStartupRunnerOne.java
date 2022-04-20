@@ -50,7 +50,7 @@ public class ApplicationStartupRunnerOne implements CommandLineRunner{
         });
         
         // Upload file Config
-        storageService.deleteAll();
+        //storageService.deleteAll();
         storageService.init();
         
     }
