@@ -1,5 +1,6 @@
 package com.mdev.springboot.restControllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -96,4 +99,19 @@ public class FilesController {
         return ResponseEntity.ok(response);
 
     } 
+    
+    @PutMapping("/files/rename/{filename}")
+    public ResponseEntity<?> renameFile(@PathVariable("filename") String filename, @RequestBody String newfilename){
+        //Path file = Paths.get("uploads/" + filename);
+        File file = new File("uploads/" + filename);
+        boolean fileRename = file.renameTo(new File("uploads/" + newfilename));
+        if (fileRename) {
+         //System.out.println("File rename successful");
+            return ResponseEntity.ok("File rename successful");
+        } else {
+           // System.out.println("File reanme failed");
+            return ResponseEntity.badRequest().body("File reanme failed");
+        }
+       // return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
   }
