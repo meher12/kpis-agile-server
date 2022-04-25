@@ -1,14 +1,14 @@
 version: '3.8'
-
 services:
 
-  app:
-      image: 'kpis-auth-model:latest'
+#Back-end spring-boot Application
+  kpis-backend:
+      image: 'kpis-agiles-backend:latest'
       ports:
-         - "8080:8080"
+         - "8081:8081"
       build:
          context: .
-      container_name: app
+      container_name: kpis-agile-server
       restart: on-failure
       depends_on:
          - db
@@ -19,15 +19,40 @@ services:
             - SPRING_DATASOURCE_PASSWORD=mypass
             - SPRING_JPA_HIBERNATE_DDL_AUTO=update
             - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+      networks: # Networks to join (Services on the same network can communicate with each other using their name)
+        - backend
+        - frontend
+
+#Postgres db
   db:
      image: 'postgres:13.1-alpine'
      restart: always
      container_name: db
      volumes:
-      - postgres-datakpi:/var/lib/postgresql/data
+      - postgres-kpis-agile:/var/lib/postgresql/data
      environment:
          - POSTGRES_USER=postgres
          - POSTGRES_PASSWORD=mypass
+     networks:
+       - backend    
+
+ #Fron-end Angular Application
+  kpis-ui:
+    image: 'kpis-agiles-frontend:latest'
+    build:
+        context: ../kpis-agile-client
+    container_name: kpis-agile-ui
+    ports:
+      - 4200:80
+    depends_on:
+         - kpis-backend
+    networks:
+      - frontend
+
 volumes:
-  postgres-datakpi:     
+  postgres-kpis-agile:     
   
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
+  frontend:
