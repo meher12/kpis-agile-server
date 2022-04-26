@@ -28,7 +28,7 @@ pipeline {
     stage('SCM') {
         steps {
          //define scm connection for polling  
-        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/agile-backend.git']]])
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/kpis-agile-server.git']]])
         }
     }
     
