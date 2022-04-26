@@ -2,10 +2,10 @@ pipeline {
 
   agent  any
   
-  /*triggers {
+  triggers {
         pollSCM ("* * * * *")
     }
-    */
+    
    
    // node {
      //    label 'linux'
@@ -63,7 +63,7 @@ pipeline {
 
     stage("Quality Gate"){
         steps {
-           timeout(time: 20, unit: 'MINUTES') {
+           timeout(time: 2, unit: 'MINUTES') {
             script {
                echo "-=- Get Sonarqube Quality Gate -=-"
               def qg = waitForQualityGate()
