@@ -75,7 +75,6 @@ public class JacocoReportController {
                 return ResponseEntity.badRequest().body(new MessageResponse("Sorry, this content already saved !"));
             }
         }
-
       
         jacocoReportList = jacocoReportRepository.saveAll(jacocoReportList);
 

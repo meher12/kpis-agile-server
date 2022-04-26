@@ -13,16 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mdev.springboot.models.JacocoReport;
 
 @Repository
-public interface JacocoReportRepository extends JpaRepository<JacocoReport, Long>{
+public interface JacocoReportRepository extends JpaRepository<JacocoReport, Long> {
 
     Optional<List<JacocoReport>> findByProjectname(String projectname);
-    
+
     boolean existsByProjectname(String projectname);
-    
+
     @Transactional
     void deleteAllByProjectname(String projectname);
-    
+
     @Query(value = "select totalpercentage from jcoverage where projectname=:projectname group by totalpercentage", nativeQuery = true)
     float getTotalcoverage(@Param("projectname") String projectname);
-    
+
 }

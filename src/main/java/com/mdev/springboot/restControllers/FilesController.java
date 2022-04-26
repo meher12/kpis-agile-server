@@ -40,53 +40,53 @@ public class FilesController {
 
     @Autowired
     private FilesStorageServiceImpl storageService;
-    
+
     @Autowired
     JacocoReportRepository reportRepository;
 
-
     @PostMapping("/upload")
     public ResponseEntity<ApiResourceNotFoundException> uploadFile(@RequestParam("file") MultipartFile file) {
-      String message = "";
-      try {
-        storageService.save(file);
+        String message = "";
+        try {
+            storageService.save(file);
 
-        message = "Uploaded the file successfully: " + file.getOriginalFilename();
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResourceNotFoundException(message));
-      } catch (Exception e) {
-        message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ApiResourceNotFoundException(message));
-      }
+            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResourceNotFoundException(message));
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ApiResourceNotFoundException(message));
+        }
     }
 
     @GetMapping("/files")
     public ResponseEntity<List<FileInfo>> getListFiles() {
-      List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
-        String filename = path.getFileName().toString();
-        String url = MvcUriComponentsBuilder
-            .fromMethodName(FilesController.class, "getFile", path.getFileName().toString()).build().toString();
+        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
+            String filename = path.getFileName().toString();
+            String url = MvcUriComponentsBuilder
+                    .fromMethodName(FilesController.class, "getFile", path.getFileName().toString()).build().toString();
 
-        return new FileInfo(filename, url);
-      }).collect(Collectors.toList());
+            return new FileInfo(filename, url);
+        }).collect(Collectors.toList());
 
-      return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
+        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
     @GetMapping("/files/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-      Resource file = storageService.load(filename);
-      return ResponseEntity.ok()
-          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        Resource file = storageService.load(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
-    
+
     // delete file both from directory and db
     @DeleteMapping("/files/upload/{filename}/{reportName}")
-    public ResponseEntity<Map<String, Boolean>> deleteFileByName(@PathVariable("filename") String filename, @PathVariable("reportName") String reportName) throws IOException {
+    public ResponseEntity<Map<String, Boolean>> deleteFileByName(@PathVariable("filename") String filename,
+            @PathVariable("reportName") String reportName) throws IOException {
 
-       
         Path root = Paths.get("uploads/" + filename);
         Map<String, Boolean> response = new HashMap<String, Boolean>();
-        
+
         boolean fileDeleted = Files.deleteIfExists(root);
 
         if (fileDeleted) {
@@ -98,20 +98,20 @@ public class FilesController {
         }
         return ResponseEntity.ok(response);
 
-    } 
-    
+    }
+
     @PutMapping("/files/rename/{filename}")
-    public ResponseEntity<?> renameFile(@PathVariable("filename") String filename, @RequestBody String newfilename){
-        //Path file = Paths.get("uploads/" + filename);
+    public ResponseEntity<?> renameFile(@PathVariable("filename") String filename, @RequestBody String newfilename) {
+        // Path file = Paths.get("uploads/" + filename);
         File file = new File("uploads/" + filename);
         boolean fileRename = file.renameTo(new File("uploads/" + newfilename));
         if (fileRename) {
-         //System.out.println("File rename successful");
+            // System.out.println("File rename successful");
             return ResponseEntity.ok("File rename successful");
         } else {
-           // System.out.println("File reanme failed");
+            // System.out.println("File reanme failed");
             return ResponseEntity.badRequest().body("File reanme failed");
         }
-       // return new ResponseEntity<>("ok", HttpStatus.OK);
+        // return new ResponseEntity<>("ok", HttpStatus.OK);
     }
-  }
+}
