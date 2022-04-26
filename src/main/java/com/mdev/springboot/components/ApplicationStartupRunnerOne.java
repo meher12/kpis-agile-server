@@ -19,7 +19,6 @@ import com.mdev.springboot.services.FilesStorageServiceImpl;
 @Component
 public class ApplicationStartupRunnerOne implements CommandLineRunner{
     
-
     private static final Logger logger = LoggerFactory.getLogger(ApplicationStartupRunnerOne.class);
     
     @Autowired
@@ -52,7 +51,5 @@ public class ApplicationStartupRunnerOne implements CommandLineRunner{
         // Upload file Config
         //storageService.deleteAll();
         storageService.init();
-        
     }
-
 }
