@@ -77,14 +77,14 @@ pipeline {
         }
     }
    
- //   stage('Tooling Docker versions') {
- //     steps {
- //       sh '''
- //         docker --version
- //         docker-compose --version
- //       '''
-  //    }
-   // }
+    stage('Tooling Docker versions') {
+      steps {
+        sh '''
+          docker --version
+         docker-compose --version
+       '''
+      }
+    }
    
    // stage('Checkout Frontend') {
     //    steps {
