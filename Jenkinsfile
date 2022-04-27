@@ -25,7 +25,7 @@ pipeline {
    
   
   stages {
-    stage('SCM') {
+    stage('SCM Backend') {
         steps {
          //define scm connection for polling  
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/kpis-agile-server.git']]])
@@ -72,18 +72,25 @@ pipeline {
                   }
              }
              
-            waitForQualityGate abortPipeline: true
+           // waitForQualityGate abortPipeline: true
            }
         }
     }
    
-    stage('Tooling Docker versions') {
-      steps {
-        sh '''
-          docker --version
-          docker-compose --version
-        '''
-      }
+ //   stage('Tooling Docker versions') {
+ //     steps {
+ //       sh '''
+ //         docker --version
+ //         docker-compose --version
+ //       '''
+  //    }
+   // }
+   
+    stage('SCM Frontend') {
+        steps {
+         //define scm connection for polling  
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/kpis-agile-client.git']]])
+        }
     }
     
     stage('Docker Deploy') {
