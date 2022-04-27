@@ -3,7 +3,7 @@ pipeline {
   agent  any
   
   triggers {
-        pollSCM ("* * * * *")
+        pollSCM '* * * * *'
     }
     
    
@@ -25,7 +25,7 @@ pipeline {
    
   
   stages {
-    stage('SCM Backend') {
+    stage('Checkout Backend') {
         steps {
          //define scm connection for polling  
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/kpis-agile-server.git']]])
@@ -86,7 +86,7 @@ pipeline {
   //    }
    // }
    
-    stage('SCM Frontend') {
+    stage('Checkout Frontend') {
         steps {
          //define scm connection for polling  
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/kpis-agile-client.git']]])
