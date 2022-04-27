@@ -5,10 +5,10 @@ pipeline {
     //    pollSCM ('* * * * *')
    // }
 
-   // node {
-     //    label 'linux'
-      //   customWorkspace '/home/meher/Documents/StockHere/dd'
-        // }
+    /* node {
+         label 'linux'
+         customWorkspace '/home/meher/Documents/StockHere/dd'
+     } */
 
   environment {
         //PATH = "$PATH:/usr/local/bin/"
