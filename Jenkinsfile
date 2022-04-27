@@ -13,7 +13,7 @@ pipeline {
   environment {
         //PATH = "$PATH:/usr/local/bin/"
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
-    COMPOSE_FILE = 'docker-compose.yml'
+        COMPOSE_FILE = 'docker-compose.yml'
   }
 
   options {
