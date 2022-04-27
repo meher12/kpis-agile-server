@@ -77,21 +77,21 @@ pipeline {
         }
     }
    
-    stage('Tooling Docker versions') {
-      steps {
-        sh '''
-          docker --version
-         docker-compose --version
+    /* stage('Tooling Docker versions') {
+       steps {
+         sh '''
+           docker --version
+          docker-compose --version
        '''
       }
-    }
+    } */
    
-   // stage('Checkout Frontend') {
-    //    steps {
+    stage('Checkout Frontend') {
+        steps {
          //define scm connection for polling  
-    //    checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/kpis-agile-client.git']]])
-     //   }
-   // }
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/kpis-agile-client.git']]])
+        }
+    }
     
     stage('Docker Deploy') {
       steps {
