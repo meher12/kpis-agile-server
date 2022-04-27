@@ -84,7 +84,7 @@ pipeline {
     stage('Docker Deploy') {
       steps {
             //sh "docker-compose -f ${env.COMPOSE_FILE} build"
-            sh 'docker-compose up'
+            sh 'sudo docker-compose up'
       //sh "docker-compose build"
       }
     }
