@@ -235,7 +235,7 @@ public class ProjectServiceImp implements ProjectService {
         SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
 
         Set<Date> listDates = requestMap.keySet();
-        
+
         ArrayList<String> endDateArray = new ArrayList<String>();
         ArrayList<Integer> bugsInTask = new ArrayList<>();
         ArrayList<Integer> taskwithoutBug = new ArrayList<>();
@@ -256,7 +256,8 @@ public class ProjectServiceImp implements ProjectService {
             tasksBugs.setEndDate(dateend);
             tasksBugs.setBugstask(bugstask);
             tasksBugs.setTaskwithoutBug(taskwithoutbugs);
-            tasksBugsList.add(new TasksBugs(tasksBugs.getEndDate(), tasksBugs.getBugstask(), tasksBugs.getTaskwithoutBug()));
+            tasksBugsList
+                    .add(new TasksBugs(tasksBugs.getEndDate(), tasksBugs.getBugstask(), tasksBugs.getTaskwithoutBug()));
 
             // Sort in assending order
             Collections.sort(tasksBugsList, new Comparator<TasksBugs>() {
@@ -265,7 +266,7 @@ public class ProjectServiceImp implements ProjectService {
                 }
             });
         }
-        
+
         for (TasksBugs data : tasksBugsList) {
             String dateString = obj.format(data.getEndDate());
             endDateArray.add(dateString);
@@ -278,7 +279,7 @@ public class ProjectServiceImp implements ProjectService {
 //        System.out.printf("-------------- taskwithoutbugs : \n" + taskwithoutBug);
         DataTaskBugChart dataArrays = new DataTaskBugChart();
         dataArrays.endDateArray = endDateArray;
-        dataArrays.taskBugsArray  = bugsInTask;
+        dataArrays.taskBugsArray = bugsInTask;
         dataArrays.taskSafe = taskwithoutBug;
         return dataArrays;
     }

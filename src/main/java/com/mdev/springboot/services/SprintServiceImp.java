@@ -234,7 +234,7 @@ public class SprintServiceImp implements SprintService {
         // System.out.printf(" average
         // Velocity---------------------------------------------------:s %f d %d j %d
         // \n", sumCapacity, sumDaysSprint, jourSprint);
-        float  capacity_story_points_in_next_sprint = ((sumCapacity / sumDaysSprint) * jourSprint);
+        float capacity_story_points_in_next_sprint = ((sumCapacity / sumDaysSprint) * jourSprint);
 
         // create List of variables:
 //        float nbr_sprintFloat = (float) nbr_sprint;

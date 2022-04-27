@@ -13,12 +13,11 @@ public interface ProjectService {
     ArrayList<String> releaseBurndownChart(int sumStorypoints, ArrayList<String> spDone, ArrayList<String> moresp);
 
     ArrayList<String> pourcentageStoryPointsCompleted(int sumStorypoints, ArrayList<String> tabFromdb);
-    
+
     PairArrays listTaskByStatus(String projetref);
-    
+
     PairArrays efficacityByStartDateTask(String referenceProject, Map<Date, Date> requestMap) throws ParseException;
-    
+
     DataTaskBugChart getTasksBugs(String referenceProject, Map<Date, Date> requestMap);
-    
 
 }

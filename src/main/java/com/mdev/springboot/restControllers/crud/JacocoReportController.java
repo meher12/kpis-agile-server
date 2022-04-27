@@ -64,18 +64,17 @@ public class JacocoReportController {
 
             jacocoReport2.setTotalpercentage(Float.parseFloat(String.format("%.2f", totalcoverage)));
             jacocoReport2.setCreatedAt(new Date());
-           
+
             if (!jacocoReportRepository.existsByProjectname(jacocoReport2.getProjectname())) {
-                
+
                 jacocoReportList.add(new JacocoReport(jacocoReport2.getType(), jacocoReport2.getProjectname(),
                         jacocoReport2.getCovered(), jacocoReport2.getMissed(), jacocoReport2.getPercentage(),
                         jacocoReport2.getTotalpercentage(), jacocoReport2.getCreatedAt()));
-            }
-            else {
+            } else {
                 return ResponseEntity.badRequest().body(new MessageResponse("Sorry, this content already saved !"));
             }
         }
-      
+
         jacocoReportList = jacocoReportRepository.saveAll(jacocoReportList);
 
         return new ResponseEntity<>(jacocoReportList, HttpStatus.CREATED);
