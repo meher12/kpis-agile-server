@@ -40,7 +40,7 @@ services:
   kpis-ui:
     image: 'kpis-agiles-frontend:latest'
     build:
-        context: ../kpis-agile-client
+        context: ../CICD-kpis-agiles-frontend
     container_name: kpis-agile-ui
     ports:
       - 4200:80
