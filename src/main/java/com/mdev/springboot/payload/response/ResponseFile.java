@@ -45,4 +45,11 @@ public class ResponseFile {
       this.size = size;
     }
 
+    @Override
+    public String toString() {
+        return "ResponseFile [name=" + name + ", url=" + url + ", type=" + type + ", size=" + size + "]";
+    }
+    
+    
+
   }
