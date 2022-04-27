@@ -2,9 +2,9 @@ pipeline {
 
   agent  any
   
-  triggers {
-        cron('* * * * *')
-    }
+  //triggers {
+    //    pollSCM ('* * * * *')
+   // }
     
    
    // node {
