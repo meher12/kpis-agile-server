@@ -93,8 +93,8 @@ pipeline {
              sh '''
             echo ' Build apps in container '
              '''
-            //sh 'docker-compose up'
-            sh "docker-compose build up"
+            sh 'docker-compose up'
+            //sh "docker-compose build"
       }
     }
   }
