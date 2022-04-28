@@ -21,7 +21,7 @@ if [ "$(docker ps -qa -f name=$CNAME_Clinet)" ]; then
     docker rm $CNAME_Clinet;
 fi
 
-CNAME_db="db"
+CNAME_db="db-kpis-agile"
 if [ "$(docker ps -qa -f name=$CNAME_db)" ]; then
     echo ":: Found container - $CNAME_db"
     if [ "$(docker ps -q -f name=$CNAME_db)" ]; then
