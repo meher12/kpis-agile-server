@@ -86,8 +86,9 @@ pipeline {
             //sh "docker-compose -f ${env.COMPOSE_FILE} build"
             sh '''
             echo ' Check for a running container, stop it, then remove it '
-            crebuild.sh 
-            '''
+             '''
+            sh ' crebuild.sh '
+           
            
             sh 'docker-compose up'
             
