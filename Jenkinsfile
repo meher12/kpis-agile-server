@@ -84,6 +84,10 @@ pipeline {
     stage('Docker Deploy') {
       steps {
             //sh "docker-compose -f ${env.COMPOSE_FILE} build"
+            sh '''
+            echo " Check for a running container, stop it, then remove it "
+            crebuild.sh 
+            '''
             sh 'docker-compose up'
             
       //sh "docker-compose build"
