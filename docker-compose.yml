@@ -27,7 +27,7 @@ services:
   db:
      image: 'postgres:13.1-alpine'
      restart: always
-     container_name: db
+     container_name: db-kpis-agile
      volumes:
       - postgres-kpis-agile:/var/lib/postgresql/data
      environment:
