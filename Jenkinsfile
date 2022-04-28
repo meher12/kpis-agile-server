@@ -56,7 +56,7 @@ pipeline {
           }
     }
 
-    stage('Quality Gate') {
+  /*   stage('Quality Gate') {
         steps {
           timeout(time: 2, unit: 'MINUTES') {
             script {
@@ -70,7 +70,7 @@ pipeline {
         // waitForQualityGate abortPipeline: true
          }
         }
-    }
+    } */
 
     /* stage('Tooling Docker versions') {
        steps {
@@ -87,7 +87,7 @@ pipeline {
             sh '''
             echo ' Check for a running container, stop it, then remove it '
              '''
-           // sh 'chmod +x crebuild.sh'
+            sh 'chmod +x crebuild.sh'
             sh './crebuild.sh'
 
           /*  sh '''
