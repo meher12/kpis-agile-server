@@ -87,10 +87,10 @@ pipeline {
             sh '''
             echo ' Check for a running container, stop it, then remove it '
              '''
-           // sh 'chmod +x crebuild.sh'
-           // sh 'crebuild.sh'
+            sh 'chmod +x crebuild.sh'
+            sh 'crebuild.sh'
 
-           sh '''
+     /*       sh '''
 CNAME_Server="kpis-agile-server"
 if [ "$(docker ps -qa -f name=$CNAME_Server)" ]; then
     echo ":: Found container - $CNAME_Server"
@@ -122,7 +122,7 @@ if [ "$(docker ps -qa -f name=$CNAME_db)" ]; then
     fi
     echo ":: Removing stopped container - $CNAME_db"
     docker rm $CNAME_db;
-fi'''
+fi''' */
            
            
             sh 'docker-compose up'

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 CNAME_Server="kpis-agile-server"
 if [ "$(docker ps -qa -f name=$CNAME_Server)" ]; then
