@@ -11,15 +11,15 @@ if [ "$(docker ps -qa -f name=$CNAME_Server)" ]; then
     docker rm $CNAME_Server;
 fi
 
-CNAME_Clinet="kpis-agile-ui"
-if [ "$(docker ps -qa -f name=$CNAME_Clinet)" ]; then
-    echo ":: Found container - $CNAME_Clinet"
-    if [ "$(docker ps -q -f name=$CNAME_Clinet)" ]; then
-        echo ":: Stopping running container - $CNAME_Clinet"
-        docker stop $CNAME_Clinet;
+CNAME_Client="kpis-agile-ui"
+if [ "$(docker ps -qa -f name=$CNAME_Client)" ]; then
+    echo ":: Found container - $CNAME_Client"
+    if [ "$(docker ps -q -f name=$CNAME_Client)" ]; then
+        echo ":: Stopping running container - $CNAME_Client"
+        docker stop $CNAME_Client;
     fi
-    echo ":: Removing stopped container - $CNAME_Clinet"
-    docker rm $CNAME_Clinet;
+    echo ":: Removing stopped container - $CNAME_Client"
+    docker rm $CNAME_Client;
 fi
 
 CNAME_db="db-kpis-agile"

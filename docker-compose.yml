@@ -50,7 +50,8 @@ services:
       - frontend
 
 volumes:
-  pgkpis-agile:     
+  pgkpis-agile: 
+    external: true    
   
 # Networks to be created to facilitate communication between containers
 networks:
