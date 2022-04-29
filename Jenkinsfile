@@ -88,13 +88,13 @@ pipeline {
             sh '''
             echo ' Check for a running container, stop it, then remove it '
              '''
-            sh 'chmod +x crebuild.sh'
-            sh './crebuild.sh'
+            //sh 'chmod +x crebuild.sh'
+            //sh './crebuild.sh'
 
              sh '''
             echo ' Build apps in container '
              '''
-            //sh 'docker-compose stop'
+            sh 'docker-compose stop'
             //sh 'docker-compose up --no-recreate'
             
       }
