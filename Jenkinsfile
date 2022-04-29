@@ -94,7 +94,7 @@ pipeline {
              sh '''
             echo ' Build apps in container '
              '''
-            sh "docker-compose stop "
+            sh 'docker-compose stop'
             sh 'docker-compose up -V'
             
       }
