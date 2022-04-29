@@ -95,7 +95,7 @@ pipeline {
             echo ' Build apps in container '
              '''
             sh "docker-compose down -v "
-           // sh 'docker-compose up'
+            sh 'docker-compose up'
             
       }
     }
