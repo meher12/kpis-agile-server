@@ -14,7 +14,7 @@ services:
          - db
       environment:
             #compose-postgres name db user pass
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/kpis-agile
             - SPRING_DATASOURCE_USERNAME=postgres
             - SPRING_DATASOURCE_PASSWORD=mypass
             - SPRING_JPA_HIBERNATE_DDL_AUTO=update
