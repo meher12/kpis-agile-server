@@ -8,7 +8,7 @@ if [ "$(docker ps -qa -f name=$CNAME_Server)" ]; then
         docker stop $CNAME_Server;
     fi
     echo ":: Removing stopped container - $CNAME_Server"
-    docker rm $CNAME_Server;
+    #docker rm $CNAME_Server;
 fi
 
 CNAME_Clinet="kpis-agile-ui"
@@ -19,7 +19,7 @@ if [ "$(docker ps -qa -f name=$CNAME_Clinet)" ]; then
         docker stop $CNAME_Clinet;
     fi
     echo ":: Removing stopped container - $CNAME_Clinet"
-    docker rm $CNAME_Clinet;
+    #docker rm $CNAME_Clinet;
 fi
 
 CNAME_db="db-kpis-agile"
@@ -30,5 +30,5 @@ if [ "$(docker ps -qa -f name=$CNAME_db)" ]; then
         docker stop $CNAME_db;
     fi
     echo ":: Removing stopped container - $CNAME_db"
-    docker rm $CNAME_db;
+    #docker rm $CNAME_db;
 fi
