@@ -1,0 +1,13 @@
+#!/bin/bash
+
+CNAME_db="db-kpis-agile"
+if [ "$(docker ps -qa -f name=$CNAME_db)" ]; then
+    echo ":: Found container - $CNAME_db"
+    if [ "$(docker ps -q -f name=$CNAME_db)" ]; then
+        echo ":: Down service backend and frontend service- "
+        docker-compose down kpis-ui kpis-backend;
+        docker-compose up kpis-ui kpis-backend;
+    fi
+    echo ":: Up all service -"
+     docker-compose up;
+fi
