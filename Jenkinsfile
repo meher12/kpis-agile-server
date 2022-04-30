@@ -85,11 +85,11 @@ pipeline {
       steps {
             //sh "docker-compose -f ${env.COMPOSE_FILE} build"
             //sh 'docker network prune'
-            sh '''
-            //echo ' Check for a running container, stop it, then remove it '
+            /* sh '''
+            echo ' Check for a running container, stop it, then remove it '
              '''
-            //sh 'chmod +x crebuild.sh'
-            //sh './crebuild.sh'
+            sh 'chmod +x crebuild.sh'
+            sh './crebuild.sh' */
 
             sh ' echo " Check if db container running" '
              sh "echo ' Build apps in container ' "
