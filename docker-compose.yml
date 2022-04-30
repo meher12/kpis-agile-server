@@ -41,6 +41,7 @@ services:
     image: 'kpis-agiles-frontend:latest'
     build:
          context: ../CICD-kpis-agiles-frontend
+         #for production mode
          #context: ../kpis-agile-client
     container_name: kpis-agile-ui
     ports:

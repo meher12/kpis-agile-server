@@ -4,7 +4,7 @@ CNAME_db="db-kpis-agile"
 if [ "$(docker ps -qa -f name=$CNAME_db)" ]; then
     echo ":: Found container - $CNAME_db"
    
-        echo "::  No recreate service db, backend and frontend service- "
+        echo ":: No recreate service db, backend and frontend service- "
         #docker-compose run --service-ports db;
         docker-compose up --no-recreate;
         #docker-compose run --service-ports kpis-backend;
