@@ -27,11 +27,12 @@ services:
   db:
      image: 'postgres-alpine'
      restart: on-failure
-     build:
-         context: ./db
+     #build:
+         #context: ./db
      container_name: db-kpis-agile
      volumes:
       - ./pgkpis-agile:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/inti.sql
      environment:
          - POSTGRES_USER=postgres
          - POSTGRES_PASSWORD=mypass
