@@ -27,7 +27,8 @@ services:
   db:
      image: 'postgres-alpine'
      restart: on-failure
-     build: ./Dockerfile.db
+     build:
+         context: ./db/Dockerfile
      container_name: db-kpis-agile
      volumes:
       - ./pgkpis-agile:/var/lib/postgresql/data
