@@ -1,5 +1,5 @@
 #!/bin/bash
-#docker network prune
+docker network prune
 CNAME_Server="kpis-agile-server"
 CNAME_Client="kpis-agile-ui"
 CNAME_db="db-kpis-agile"
