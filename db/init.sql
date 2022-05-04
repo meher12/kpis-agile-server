@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
+\c postgres;
+
 copy public.projets (id, date_debut, date_fin, description, p_reference, pupdated_date, title, totalsp_commitment, totalsp_completed, totalstorypointsinitiallycounts) FROM '/home/meher/Desktop/datasqlkpiagile/projets.csv' CSV QUOTE '\"' ESCAPE '''';""
 
 copy public.sprints (id, more_sp, s_reference, sdate_debut, sdate_fin, description, title, supdated_date, work_commitment, work_completed, projet_id) FROM '/home/meher/Desktop/datasqlkpiagile/sprints.csv' CSV QUOTE '\"' ESCAPE '''';""
 
-USE postgres;
 copy public.story (id, plus_sp, priority, sp_completed, st_reference, description, title, story_point, stupdated_date, sprint_id) FROM '/home/meher/Desktop/datasqlkpiagile/story.csv' CSV QUOTE '\"' ESCAPE '''';""
 
 copy public.tasks (id, bugs, estimation, status, t_reference, tdate_debut, tdate_fin, description, title, tsupdated_date, type_task, story_id) FROM '/home/meher/Desktop/datasqlkpiagile/task.csv' CSV QUOTE '\"' ESCAPE '''';""
