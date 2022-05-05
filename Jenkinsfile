@@ -56,7 +56,7 @@ pipeline {
           }
     }
 
-  /*   stage('Quality Gate') {
+    stage('Quality Gate') {
         steps {
           timeout(time: 2, unit: 'MINUTES') {
             script {
@@ -70,7 +70,7 @@ pipeline {
         // waitForQualityGate abortPipeline: true
          }
         }
-    } */
+    }
 
     /* stage('Tooling Docker versions') {
        steps {
@@ -84,21 +84,21 @@ pipeline {
     stage('Docker Deploy') {
       steps {
             //sh "docker-compose -f ${env.COMPOSE_FILE} build"
-            //sh 'docker network prune'
+            
 
             // script for development and jenkins
-             sh '''
+            /*  sh '''
              echo ' Check for a running container, stop it, then remove it '
              '''
             sh 'chmod +x crebuild.sh'
             sh './crebuild.sh' 
-            sh 'docker-compose up'
+            sh 'docker-compose up' */
 
             // script for production mode
-           /*  sh ' echo " Check if db container running" '
+            sh ' echo " Check if db container running" '
             sh " echo ' Build apps in container ' "
             sh ' chmod +x dockercompose.sh'
-            sh ' ./dockercompose.sh' */
+            sh ' ./dockercompose.sh'
 
             
             
