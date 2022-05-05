@@ -97,6 +97,7 @@ pipeline {
             // script for production mode
             sh ' echo " Check if db container running" '
             sh " echo ' Build apps in container ' "
+            sh 'docker network prune'
             sh ' chmod +x dockercompose.sh'
             sh ' ./dockercompose.sh'
 
