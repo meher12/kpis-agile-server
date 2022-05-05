@@ -47,7 +47,7 @@ pipeline {
         }
     }
 
-    stage('Scan') {
+    stage('Sonar Scan') {
           steps {
             withSonarQubeEnv(installationName: 'sonar') {
           echo '-=- execute Sonarqube jacoco Scan -=-'
@@ -56,7 +56,7 @@ pipeline {
           }
     }
 
-    stage('Quality Gate') {
+    stage('Sonar Quality Gate') {
         steps {
           timeout(time: 2, unit: 'MINUTES') {
             script {
