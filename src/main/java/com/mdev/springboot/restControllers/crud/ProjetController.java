@@ -100,8 +100,16 @@ public class ProjetController {
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
 
+    
+    // for test 
+    @PostMapping("/projectstest/")
+    public ResponseEntity<Projet> addProjet(@RequestBody Projet projet) throws ApiResourceNotFoundException {
+        Projet saveProjet = projectServiceImp.addProjet(projet);
+        return new ResponseEntity<>(saveProjet, HttpStatus.CREATED);
+    }
+    
     // create project
-    @PreAuthorize("hasRole('PRODUCTOWNER')")
+    //@PreAuthorize("hasRole('PRODUCTOWNER')")
     @PostMapping("/projects/")
     public ResponseEntity<Projet> createProjet(@RequestBody Projet projet) {
         Projet _projet = projetRepository.save(projet);

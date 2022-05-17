@@ -5,10 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import com.mdev.springboot.exception.ApiResourceNotFoundException;
+import com.mdev.springboot.models.Projet;
 import com.mdev.springboot.utils.DataTaskBugChart;
 import com.mdev.springboot.utils.PairArrays;
 
 public interface ProjectService {
+    
+    
+    Projet addProjet(Projet projet) throws ApiResourceNotFoundException;
 
     ArrayList<String> releaseBurndownChart(int sumStorypoints, ArrayList<String> spDone, ArrayList<String> moresp);
 

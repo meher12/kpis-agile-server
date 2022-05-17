@@ -103,6 +103,15 @@ public class Projet implements Serializable {
     public Projet() {
         super();
     }
+    
+    //for unit test
+    public Projet(Long id, String titre, int totalstorypointsinitiallycounts, String descriptionProject) {
+        super();
+        this.id = id;
+        this.titre = titre;
+        this.totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
+        this.descriptionProject = descriptionProject;
+    }
 
     public Projet(@NotNull String pReference, @NotNull String titre, @NotNull int totalstorypointsinitiallycounts,
             @NotNull String descriptionProject, Date dateDebut, Date dateFin, Set<Sprint> sprints,

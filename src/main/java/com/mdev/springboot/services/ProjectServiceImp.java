@@ -14,6 +14,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mdev.springboot.exception.ApiResourceNotFoundException;
+import com.mdev.springboot.models.Projet;
 import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
 import com.mdev.springboot.repository.StoryRepository;
@@ -37,6 +39,18 @@ public class ProjectServiceImp implements ProjectService {
 
     @Autowired
     SprintRepository sprintRepository;
+    
+    
+    
+    //For test
+    @Override
+    public Projet addProjet(Projet projet)  throws ApiResourceNotFoundException{
+        if (projetRepository.existsById(projet.getId())) {
+            throw new ApiResourceNotFoundException("Project exists");
+        }
+        return projetRepository.save(projet);
+    }
+
 
     @Override
     public ArrayList<String> releaseBurndownChart(int sumStorypoints, ArrayList<String> spDone,
