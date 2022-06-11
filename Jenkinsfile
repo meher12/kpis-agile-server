@@ -24,7 +24,7 @@ pipeline {
     stage('Checkout Backend') {
         steps {
         //define scm connection for polling
-        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'kpiswiseserver', url: 'https://github.com/meher12/kpis-agile-server.git']]])
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitserver', url: 'https://github.com/meher12/kpis-agile-server.git']]])
         }
     }
 
@@ -49,7 +49,7 @@ pipeline {
 
     stage('Sonar Scan') {
           steps {
-            withSonarQubeEnv(installationName: 'sonar') {
+            withSonarQubeEnv(installationName: 'sonarQ') {
           echo '-=- execute Sonarqube jacoco Scan -=-'
           sh 'mvn clean package  -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml sonar:sonar'
             }
