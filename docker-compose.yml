@@ -35,7 +35,7 @@ services:
      #command: docker cp ./db/data/datasqlkpiagile db-kpis-agile:/datasqlkpiagile
      volumes:
       -  pgkpis-agile:/var/lib/postgresql/data
-      #- ./db/dump.sql:/docker-entrypoint-initdb.d/0_dump.sql
+      - ./db/dump.sql:/docker-entrypoint-initdb.d/0_dump.sql
       
      environment:
          - POSTGRES_USER=postgres
@@ -47,9 +47,9 @@ services:
   kpis-ui:
     image: 'kpis-agiles-frontend:latest'
     build:
-         #context: ../CICD-KPIsAgiles-Client
+         context: ../CICD-KPIsAgiles-Client
          #for production mode
-         context: ../kpis-agile-client
+         #context: ../kpis-agile-client
     container_name: kpis-agile-ui
     ports:
       - 4200:80

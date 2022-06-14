@@ -1,6 +1,8 @@
 #!/bin/bash
 
+  
 CNAME_db="db-kpis-agile"
+   #script for production mode
 if [ "$(docker ps -qa -f name=$CNAME_db)" ]; then
     echo ":: Found container - $CNAME_db"
    
