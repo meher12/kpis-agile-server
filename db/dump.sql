@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.1
--- Dumped by pg_dump version 13.1
+-- Dumped from database version 13.6 (Ubuntu 13.6-1.pgdg20.04+1)
+-- Dumped by pg_dump version 13.6 (Ubuntu 13.6-1.pgdg20.04+1+b1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -573,98 +573,98 @@ COPY public.ideall_sprints (sprint_id, il_array) FROM stdin;
 2	2.6000113
 2	1.3000114
 2	{"(39.0,37.7,36.4,35.100002,33.800003,32.500004,31.200005,29.900005,28.600006,27.300007,26.000008,24.700008,23.40001,22.10001,20.80001,19.500011,18.200012,16.900013,15.600013,14.300013,13.000012,11.700012,10.400012,9.100012,7.8000116,6.5000114,5.2000113,3.9000113,2.6000113,1.3000114)"}
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	0.0
-3	{"(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0)"}
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	0.0
-4	{"(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0)"}
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	0.0
-5	{"(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0)"}
+3	34.0
+3	32.866665
+3	31.733332
+3	30.599998
+3	29.466665
+3	28.333332
+3	27.199999
+3	26.066666
+3	24.933332
+3	23.8
+3	22.666666
+3	21.533333
+3	20.4
+3	19.266666
+3	18.133333
+3	17.0
+3	15.866667
+3	14.733334
+3	13.6
+3	12.466667
+3	11.333334
+3	10.200001
+3	9.066668
+3	7.9333344
+3	6.800001
+3	5.666668
+3	4.5333347
+3	3.4000015
+3	2.2666683
+3	1.133335
+3	{"(34.0,32.866665,31.733332,30.599998,29.466665,28.333332,27.199999,26.066666,24.933332,23.8,22.666666,21.533333,20.4,19.266666,18.133333,17.0,15.866667,14.733334,13.6,12.466667,11.333334,10.200001,9.066668,7.9333344,6.800001,5.666668,4.5333347,3.4000015,2.2666683,1.133335)"}
+4	30.0
+4	28.965517
+4	27.931034
+4	26.896551
+4	25.862068
+4	24.827585
+4	23.793102
+4	22.75862
+4	21.724136
+4	20.689653
+4	19.65517
+4	18.620687
+4	17.586205
+4	16.551722
+4	15.517239
+4	14.482756
+4	13.448273
+4	12.41379
+4	11.379307
+4	10.344824
+4	9.310341
+4	8.275858
+4	7.241375
+4	6.206892
+4	5.172409
+4	4.137926
+4	3.1034434
+4	2.0689607
+4	1.034478
+4	{"(30.0,28.965517,27.931034,26.896551,25.862068,24.827585,23.793102,22.75862,21.724136,20.689653,19.65517,18.620687,17.586205,16.551722,15.517239,14.482756,13.448273,12.41379,11.379307,10.344824,9.310341,8.275858,7.241375,6.206892,5.172409,4.137926,3.1034434,2.0689607,1.034478)"}
+5	34.0
+5	32.866665
+5	31.733332
+5	30.599998
+5	29.466665
+5	28.333332
+5	27.199999
+5	26.066666
+5	24.933332
+5	23.8
+5	22.666666
+5	21.533333
+5	20.4
+5	19.266666
+5	18.133333
+5	17.0
+5	15.866667
+5	14.733334
+5	13.6
+5	12.466667
+5	11.333334
+5	10.200001
+5	9.066668
+5	7.9333344
+5	6.800001
+5	5.666668
+5	4.5333347
+5	3.4000015
+5	2.2666683
+5	1.133335
+5	{"(34.0,32.866665,31.733332,30.599998,29.466665,28.333332,27.199999,26.066666,24.933332,23.8,22.666666,21.533333,20.4,19.266666,18.133333,17.0,15.866667,14.733334,13.6,12.466667,11.333334,10.200001,9.066668,7.9333344,6.800001,5.666668,4.5333347,3.4000015,2.2666683,1.133335)"}
 \.
 
 
@@ -681,6 +681,12 @@ COPY public.jcoverage (id, covered, created_at, missed, percentage, projectname,
 --
 
 COPY public.projet_more_sp (projet_id, project_more_sp) FROM stdin;
+1	0
+1	0
+1	0
+1	0
+1	0
+1	{"(0,0,0,0,0)"}
 \.
 
 
@@ -689,6 +695,12 @@ COPY public.projet_more_sp (projet_id, project_more_sp) FROM stdin;
 --
 
 COPY public.projet_percentage_spc (projet_id, percentage_spc) FROM stdin;
+1	NaN
+1	NaN
+1	NaN
+1	NaN
+1	NaN
+1	{"(NaN,NaN,NaN,NaN,NaN)"}
 \.
 
 
@@ -697,6 +709,13 @@ COPY public.projet_percentage_spc (projet_id, percentage_spc) FROM stdin;
 --
 
 COPY public.projet_sp_commitment (projet_id, project_sp_commitment) FROM stdin;
+1	0
+1	0
+1	0
+1	0
+1	0
+1	0
+1	{"(0,0,0,0,0,0)"}
 \.
 
 
@@ -705,6 +724,12 @@ COPY public.projet_sp_commitment (projet_id, project_sp_commitment) FROM stdin;
 --
 
 COPY public.projet_sp_completed (projet_id, project_sp_completed) FROM stdin;
+1	0
+1	0
+1	0
+1	0
+1	0
+1	{"(0,0,0,0,0)"}
 \.
 
 
@@ -713,7 +738,7 @@ COPY public.projet_sp_completed (projet_id, project_sp_completed) FROM stdin;
 --
 
 COPY public.projets (id, date_debut, date_fin, description, p_reference, pupdated_date, title, totalsp_commitment, totalsp_completed, totalstorypointsinitiallycounts) FROM stdin;
-1	2022-06-01	2022-10-31	description project 1	PUID1CA4E	2022-06-15 17:21:37.873573	project 1	62	0	0
+1	2022-06-01	2022-10-31	description project 1	PUID1CA4E	2022-06-16 09:09:25.474991	project 1	160	0	0
 \.
 
 
@@ -733,11 +758,11 @@ COPY public.roles (id, name) FROM stdin;
 --
 
 COPY public.sprints (id, more_sp, s_reference, sdate_debut, sdate_fin, description, title, supdated_date, work_commitment, work_completed, projet_id) FROM stdin;
-1	0	SUID12E67	2022-06-01	2022-06-30	sprint 1 1	sprint 1 1	2022-06-15 17:21:37.806693	23	0	1
-2	0	SUID1CD4C	2022-07-01	2022-07-31	sprint 2 1	sprint 2 1	2022-06-15 17:21:37.806693	39	0	1
-3	0	SUID1CE23	2022-08-01	2022-08-31	sprint 3 1	sprint 3 1	2022-06-15 17:21:37.806693	0	0	1
-4	0	SUID1BE93	2022-09-01	2022-09-30	sprint 4 1	sprint 4 1	2022-06-15 17:21:37.806693	0	0	1
-5	0	SUID154C9	2022-10-01	2022-10-31	sprint 5 1	sprint 5 1	2022-06-15 17:21:37.806693	0	0	1
+1	0	SUID12E67	2022-06-01	2022-06-30	sprint 1 1	sprint 1 1	2022-06-16 09:09:25.441804	23	0	1
+2	0	SUID1CD4C	2022-07-01	2022-07-31	sprint 2 1	sprint 2 1	2022-06-16 09:09:25.441804	39	0	1
+3	0	SUID1CE23	2022-08-01	2022-08-31	sprint 3 1	sprint 3 1	2022-06-16 09:09:25.441804	34	0	1
+4	0	SUID1BE93	2022-09-01	2022-09-30	sprint 4 1	sprint 4 1	2022-06-16 09:09:25.441804	30	0	1
+5	0	SUID154C9	2022-10-01	2022-10-31	sprint 5 1	sprint 5 1	2022-06-16 09:09:25.441804	34	0	1
 \.
 
 
@@ -746,16 +771,16 @@ COPY public.sprints (id, more_sp, s_reference, sdate_debut, sdate_fin, descripti
 --
 
 COPY public.story (id, plus_sp, priority, sp_completed, st_reference, description, title, story_point, stupdated_date, sprint_id) FROM stdin;
-1	0	1	0	STUID11411	story 1 1 1	story 1 1 1	14	2022-06-15 17:21:37.823644	1
-2	0	2	0	STUID1A4A4	story 2 1 1	story 2 1 1	9	2022-06-15 17:21:37.823644	1
-3	0	1	0	STUID120C5	story 1 2 1	story 1 2 1	21	2022-06-15 17:21:37.823644	2
-4	0	2	0	STUID173B2	story 2 2 1	story 2 2 1	18	2022-06-15 17:21:37.823644	2
-5	0	1	0	STUID1FFB7	story 1 3 1	story 1 3 1	0	2022-06-15 17:21:37.823644	3
-6	0	2	0	STUID1CE17	story 2 3 1	story 2 3 1	0	2022-06-15 17:21:37.823644	3
-7	0	1	0	STUID19DFD	story 1 4 1	story 1 4 1	0	2022-06-15 17:21:37.823644	4
-8	0	2	0	STUID12F5A	story 2 4 1	story 2 4 1	0	2022-06-15 17:21:37.823644	4
-9	0	1	0	STUID199C9	story 1 5 1	story 1 5 1	0	2022-06-15 17:21:37.823644	5
-10	0	2	0	STUID1ED7D	story 2 5 1	story 2 5 1	0	2022-06-15 17:21:37.823644	5
+8	0	2	0	STUID12F5A	story 2 4 1	story 2 4 1	12	2022-06-16 09:09:25.44999	4
+5	0	1	0	STUID1FFB7	story 1 3 1	story 1 3 1	14	2022-06-16 09:09:25.44999	3
+3	0	1	0	STUID120C5	story 1 2 1	story 1 2 1	21	2022-06-16 09:09:25.44999	2
+7	0	1	0	STUID19DFD	story 1 4 1	story 1 4 1	18	2022-06-16 09:09:25.44999	4
+10	0	2	0	STUID1ED7D	story 2 5 1	story 2 5 1	19	2022-06-16 09:09:25.44999	5
+9	0	1	0	STUID199C9	story 1 5 1	story 1 5 1	15	2022-06-16 09:09:25.44999	5
+2	0	2	0	STUID1A4A4	story 2 1 1	story 2 1 1	9	2022-06-16 09:09:25.44999	1
+4	0	2	0	STUID173B2	story 2 2 1	story 2 2 1	18	2022-06-16 09:09:25.44999	2
+6	0	2	0	STUID1CE17	story 2 3 1	story 2 3 1	20	2022-06-16 09:09:25.44999	3
+1	0	1	0	STUID11411	story 1 1 1	story 1 1 1	14	2022-06-16 09:09:25.44999	1
 \.
 
 
@@ -764,26 +789,56 @@ COPY public.story (id, plus_sp, priority, sp_completed, st_reference, descriptio
 --
 
 COPY public.tasks (id, bugs, estimation, status, t_reference, tdate_debut, tdate_fin, description, title, tsupdated_date, type_task, story_id) FROM stdin;
-1	0	2	Scheduled	TUID10CF6	2022-06-01	2022-06-04	task  1 1 1 1	task  1 1 1 1	2022-06-15 17:21:37.856821	Default_task	1
-2	0	3	Scheduled	TUID1F5A1	2022-06-05	2022-06-08	task  2 1 1 1	task  2 1 1 1	2022-06-15 17:21:37.856821	Default_task	1
-3	0	5	Scheduled	TUID112A3	2022-06-09	2022-06-12	task  3 1 1 1	task  3 1 1 1	2022-06-15 17:21:37.856821	Default_task	1
-4	0	2	Scheduled	TUID1B3BC	2022-06-13	2022-06-16	task 4 1 1 1	task 4 1 1 1	2022-06-15 17:21:37.856821	Default_task	1
-5	0	2	Scheduled	TUID1E635	2022-06-17	2022-06-20	task 5 1 1 1	task 5 1 1 1	2022-06-15 17:21:37.856821	Default_task	1
-6	0	2	Scheduled	TUID14235	2022-06-21	2022-06-23	task 1 2 1 1	task 1 2 1 1	2022-06-15 17:21:37.856821	Default_task	2
-7	0	2	Scheduled	TUID172B7	2022-06-24	2022-06-25	task 2 2 1 1	task 2  2 1 1	2022-06-15 17:21:37.856821	Default_task	2
-8	0	2	Scheduled	TUID14A72	2022-06-26	2022-06-27	task 3 2 1 1	task 3 2 1 1	2022-06-15 17:21:37.856821	Default_task	2
-9	0	2	Scheduled	TUID1DB7F	2022-06-28	2022-06-29	task 4 2 1 1	task 4 2 1 1	2022-06-15 17:21:37.856821	Default_task	2
-10	0	1	Scheduled	TUID15B9F	2022-06-30	2022-06-30	task 5 2 1 1	task 5 2 1 1	2022-06-15 17:21:37.856821	Default_task	2
-11	0	2	Scheduled	TUID17995	2022-07-01	2022-07-03	task 1 1 2 1	task 1 1 2 1	2022-06-15 17:21:37.856821	Default_task	3
-12	0	3	Scheduled	TUID1AA61	2022-07-04	2022-07-06	task 2 1 2 1	task 2 1 2 1	2022-06-15 17:21:37.856821	Default_task	3
-13	0	5	Scheduled	TUID162DB	2022-07-06	2022-07-10	task 3 1 2 1	task 3 1 2 1	2022-06-15 17:21:37.856821	Default_task	3
-14	0	3	Scheduled	TUID1FC46	2022-07-11	2022-07-13	task 4 1 2 1	task 4 1 2 1	2022-06-15 17:21:37.856821	Default_task	3
-15	0	8	Scheduled	TUID16E75	2022-07-14	2022-06-17	task 5 1 2 1	task 5 1 2 1	2022-06-15 17:21:37.856821	Default_task	3
-16	0	3	Scheduled	TUID15C07	2022-07-18	2022-07-20	task 1 2 2 1	task 1 2 2 1	2022-06-15 17:21:37.856821	Default_task	4
-17	0	2	Scheduled	TUID10F5E	2022-07-21	2022-07-22	task 2 2 2 1	task 2 2 2 1	2022-06-15 17:21:37.856821	Default_task	4
-18	0	8	Scheduled	TUID1FD11	2022-07-23	2022-07-26	task 3 2 2 1	task 3 2 2 1	2022-06-15 17:21:37.856821	Default_task	4
-19	0	3	Scheduled	TUID14DD7	2022-07-27	2022-07-29	task 4 2 2 1	task 4 2 2 1	2022-06-15 17:21:37.856821	Default_task	4
-20	0	2	Scheduled	TUID15FE7	2022-07-30	2022-07-31	task 5 2 2 1	task 5 2 2 1	2022-06-15 17:21:37.856821	Default_task	4
+158	0	5	Scheduled	TUID16AF8	2022-10-22	2022-10-25	task 3 2 5 1	task 3 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
+156	0	3	Scheduled	TUID19217	2022-10-16	2022-10-18	task 1 2 5 1	task 1 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
+154	0	3	Scheduled	TUID16035	2022-10-11	2022-10-13	task 4 1 5 1	task 4 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
+153	0	2	Scheduled	TUID1A933	2022-10-08	2022-10-10	task 3 1 5 1	task 3 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
+152	0	3	Scheduled	TUID11C7F	2022-10-05	2022-10-07	task 2 1 5 1	task 2 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
+155	0	2	Scheduled	TUID166D0	2022-10-14	2022-10-15	task 5 1 5 1	task 5 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
+159	0	3	Scheduled	TUID1FEC9	2022-10-26	2022-10-28	task 4 2 5 1	task 4 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
+160	0	5	Scheduled	TUID1D69F	2022-10-29	2022-10-31	task 5 2 5 1	task 5 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
+10	0	1	Scheduled	TUID15B9F	2022-06-30	2022-06-30	task 5 2 1 1	task 5 2 1 1	2022-06-16 09:09:25.466595	Default_task	2
+13	0	5	Scheduled	TUID162DB	2022-07-06	2022-07-10	task 3 1 2 1	task 3 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
+14	0	3	Scheduled	TUID1FC46	2022-07-11	2022-07-13	task 4 1 2 1	task 4 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
+70	0	2	Scheduled	TUID116D3	2022-09-26	2022-09-28	task 4 2 4 1	task 4 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
+157	0	3	Scheduled	TUID1AEE1	2022-10-19	2022-10-21	task 2 2 5 1	task 2 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
+67	0	2	Scheduled	TUID1A853	2022-09-18	2022-09-19	task 1 2 4 1	task 1 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
+16	0	3	Scheduled	TUID15C07	2022-07-18	2022-07-20	task 1 2 2 1	task 1 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
+7	0	2	Scheduled	TUID172B7	2022-06-24	2022-06-25	task 2 2 1 1	task 2  2 1 1	2022-06-16 09:09:25.466595	Default_task	2
+8	0	2	Scheduled	TUID14A72	2022-06-26	2022-06-27	task 3 2 1 1	task 3 2 1 1	2022-06-16 09:09:25.466595	Default_task	2
+1	0	2	Scheduled	TUID10CF6	2022-06-01	2022-06-04	task  1 1 1 1	task  1 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
+17	0	2	Scheduled	TUID10F5E	2022-07-21	2022-07-22	task 2 2 2 1	task 2 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
+60	0	3	Scheduled	TUID131EC	2022-08-27	2022-08-29	task 4 2 3 1	task 4 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
+54	0	3	Scheduled	TUID16732	2022-08-07	2022-08-09	task 3 1 3 1	task 3 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
+6	0	2	Scheduled	TUID14235	2022-06-21	2022-06-23	task 1 2 1 1	task 1 2 1 1	2022-06-16 09:09:25.466595	Default_task	2
+55	0	5	Scheduled	TUID1306C	2022-08-10	2022-08-12	task 4 1 3 1	task 4 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
+18	0	8	Scheduled	TUID1FD11	2022-07-23	2022-07-26	task 3 2 2 1	task 3 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
+20	0	2	Scheduled	TUID15FE7	2022-07-30	2022-07-31	task 5 2 2 1	task 5 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
+3	0	5	Scheduled	TUID112A3	2022-06-09	2022-06-12	task  3 1 1 1	task  3 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
+69	0	2	Scheduled	TUID1F582	2022-09-24	2022-09-25	task 3 2 4 1	task 3 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
+58	0	5	Scheduled	TUID156B6	2022-08-19	2022-08-22	task 2 2 3 1	task 2 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
+56	0	2	Scheduled	TUID12730	2022-08-13	2022-08-15	task 5 1 3 1	task 5 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
+63	0	3	Scheduled	TUID1EFF4	2022-09-04	2022-09-06	task 2 1 4 1	task 2 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
+2	0	3	Scheduled	TUID1F5A1	2022-06-05	2022-06-08	task  2 1 1 1	task  2 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
+12	0	3	Scheduled	TUID1AA61	2022-07-04	2022-07-06	task 2 1 2 1	task 2 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
+71	0	1	Scheduled	TUID12AF1	2022-09-29	2022-09-29	task 5 2 4 1	task 5 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
+11	0	2	Scheduled	TUID17995	2022-07-01	2022-07-03	task 1 1 2 1	task 1 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
+62	0	2	Scheduled	TUID142A5	2022-09-01	2022-09-03	task 1 1 4 1	task 1 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
+19	0	3	Scheduled	TUID14DD7	2022-07-27	2022-07-29	task 4 2 2 1	task 4 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
+102	0	5	Scheduled	TUID10EE1	2022-10-01	2022-10-04	task 1 1 5 1	task 1 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
+9	0	2	Scheduled	TUID1DB7F	2022-06-28	2022-06-29	task 4 2 1 1	task 4 2 1 1	2022-06-16 09:09:25.466595	Default_task	2
+61	0	2	Scheduled	TUID1D073	2022-08-30	2022-08-31	task 5 2 3 1	task 5 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
+57	0	2	Scheduled	TUID1C2B3	2022-08-16	2022-08-18	task 1 2 3 1	task 1 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
+68	0	5	Scheduled	TUID18175	2022-09-20	2022-09-23	task 2 2 4 1	task 2 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
+15	0	8	Scheduled	TUID16E75	2022-07-14	2022-06-17	task 5 1 2 1	task 5 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
+5	0	2	Scheduled	TUID1E635	2022-06-17	2022-06-20	task 5 1 1 1	task 5 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
+53	0	2	Scheduled	TUID1EE5F	2022-08-04	2022-08-06	task 2 1 3 1	task 2 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
+64	0	3	Scheduled	TUID1BB09	2022-09-07	2022-09-10	task 3 1 4 1	task 3 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
+52	0	2	Scheduled	TUID10A14	2022-08-01	2022-08-03	task 1 1 3 1	task 1 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
+4	0	2	Scheduled	TUID1B3BC	2022-06-13	2022-06-16	task 4 1 1 1	task 4 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
+59	0	8	Scheduled	TUID184BB	2022-08-23	2022-08-26	task 3 2 3 1	task 3 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
+65	0	2	Scheduled	TUID18917	2022-09-11	2022-09-13	task 4 1 4 1	task 4 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
+66	0	8	Scheduled	TUID11573	2022-09-14	2022-09-17	task 5 1 4 1	task 5 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
 \.
 
 
@@ -852,7 +907,7 @@ SELECT pg_catalog.setval('public.story_generator', 51, true);
 -- Name: task_generator; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.task_generator', 51, true);
+SELECT pg_catalog.setval('public.task_generator', 201, true);
 
 
 --
@@ -1060,6 +1115,111 @@ ALTER TABLE ONLY public.projet_sp_completed
 
 ALTER TABLE ONLY public.projet_sp_commitment
     ADD CONSTRAINT fksg9fpflb15fxc0gohddpo2pxk FOREIGN KEY (projet_id) REFERENCES public.projets(id);
+
+
+--
+-- Name: TABLE days_sprints; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.days_sprints TO myuser;
+
+
+--
+-- Name: TABLE ideall_sprints; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.ideall_sprints TO myuser;
+
+
+--
+-- Name: TABLE jcoverage; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.jcoverage TO myuser;
+
+
+--
+-- Name: TABLE projet_more_sp; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.projet_more_sp TO myuser;
+
+
+--
+-- Name: TABLE projet_percentage_spc; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.projet_percentage_spc TO myuser;
+
+
+--
+-- Name: TABLE projet_sp_commitment; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.projet_sp_commitment TO myuser;
+
+
+--
+-- Name: TABLE projet_sp_completed; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.projet_sp_completed TO myuser;
+
+
+--
+-- Name: TABLE projets; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.projets TO myuser;
+
+
+--
+-- Name: TABLE roles; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.roles TO myuser;
+
+
+--
+-- Name: TABLE sprints; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.sprints TO myuser;
+
+
+--
+-- Name: TABLE story; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.story TO myuser;
+
+
+--
+-- Name: TABLE tasks; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.tasks TO myuser;
+
+
+--
+-- Name: TABLE users; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.users TO myuser;
+
+
+--
+-- Name: TABLE users_roles; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.users_roles TO myuser;
+
+
+--
+-- Name: TABLE workedl_sprints; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.workedl_sprints TO myuser;
 
 
 --
