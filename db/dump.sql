@@ -738,7 +738,7 @@ COPY public.projet_sp_completed (projet_id, project_sp_completed) FROM stdin;
 --
 
 COPY public.projets (id, date_debut, date_fin, description, p_reference, pupdated_date, title, totalsp_commitment, totalsp_completed, totalstorypointsinitiallycounts) FROM stdin;
-1	2022-06-01	2022-10-31	description project 1	PUID1CA4E	2022-06-16 09:09:25.474991	project 1	160	0	0
+1	2022-06-01	2022-10-31	description project 1	PUID1CA4E	2022-06-16 09:14:35.6942	project 1	160	0	160
 \.
 
 
@@ -758,11 +758,11 @@ COPY public.roles (id, name) FROM stdin;
 --
 
 COPY public.sprints (id, more_sp, s_reference, sdate_debut, sdate_fin, description, title, supdated_date, work_commitment, work_completed, projet_id) FROM stdin;
-1	0	SUID12E67	2022-06-01	2022-06-30	sprint 1 1	sprint 1 1	2022-06-16 09:09:25.441804	23	0	1
-2	0	SUID1CD4C	2022-07-01	2022-07-31	sprint 2 1	sprint 2 1	2022-06-16 09:09:25.441804	39	0	1
-3	0	SUID1CE23	2022-08-01	2022-08-31	sprint 3 1	sprint 3 1	2022-06-16 09:09:25.441804	34	0	1
-4	0	SUID1BE93	2022-09-01	2022-09-30	sprint 4 1	sprint 4 1	2022-06-16 09:09:25.441804	30	0	1
-5	0	SUID154C9	2022-10-01	2022-10-31	sprint 5 1	sprint 5 1	2022-06-16 09:09:25.441804	34	0	1
+1	0	SUID12E67	2022-06-01	2022-06-30	sprint 1 1	sprint 1 1	2022-06-16 09:14:35.652884	23	0	1
+2	0	SUID1CD4C	2022-07-01	2022-07-31	sprint 2 1	sprint 2 1	2022-06-16 09:14:35.652884	39	0	1
+3	0	SUID1CE23	2022-08-01	2022-08-31	sprint 3 1	sprint 3 1	2022-06-16 09:14:35.652884	34	0	1
+4	0	SUID1BE93	2022-09-01	2022-09-30	sprint 4 1	sprint 4 1	2022-06-16 09:14:35.652884	30	0	1
+5	0	SUID154C9	2022-10-01	2022-10-31	sprint 5 1	sprint 5 1	2022-06-16 09:14:35.652884	34	0	1
 \.
 
 
@@ -771,16 +771,16 @@ COPY public.sprints (id, more_sp, s_reference, sdate_debut, sdate_fin, descripti
 --
 
 COPY public.story (id, plus_sp, priority, sp_completed, st_reference, description, title, story_point, stupdated_date, sprint_id) FROM stdin;
-8	0	2	0	STUID12F5A	story 2 4 1	story 2 4 1	12	2022-06-16 09:09:25.44999	4
-5	0	1	0	STUID1FFB7	story 1 3 1	story 1 3 1	14	2022-06-16 09:09:25.44999	3
-3	0	1	0	STUID120C5	story 1 2 1	story 1 2 1	21	2022-06-16 09:09:25.44999	2
-7	0	1	0	STUID19DFD	story 1 4 1	story 1 4 1	18	2022-06-16 09:09:25.44999	4
-10	0	2	0	STUID1ED7D	story 2 5 1	story 2 5 1	19	2022-06-16 09:09:25.44999	5
-9	0	1	0	STUID199C9	story 1 5 1	story 1 5 1	15	2022-06-16 09:09:25.44999	5
-2	0	2	0	STUID1A4A4	story 2 1 1	story 2 1 1	9	2022-06-16 09:09:25.44999	1
-4	0	2	0	STUID173B2	story 2 2 1	story 2 2 1	18	2022-06-16 09:09:25.44999	2
-6	0	2	0	STUID1CE17	story 2 3 1	story 2 3 1	20	2022-06-16 09:09:25.44999	3
-1	0	1	0	STUID11411	story 1 1 1	story 1 1 1	14	2022-06-16 09:09:25.44999	1
+8	0	2	0	STUID12F5A	story 2 4 1	story 2 4 1	12	2022-06-16 09:14:35.660887	4
+5	0	1	0	STUID1FFB7	story 1 3 1	story 1 3 1	14	2022-06-16 09:14:35.660887	3
+3	0	1	0	STUID120C5	story 1 2 1	story 1 2 1	21	2022-06-16 09:14:35.660887	2
+7	0	1	0	STUID19DFD	story 1 4 1	story 1 4 1	18	2022-06-16 09:14:35.660887	4
+10	0	2	0	STUID1ED7D	story 2 5 1	story 2 5 1	19	2022-06-16 09:14:35.660887	5
+9	0	1	0	STUID199C9	story 1 5 1	story 1 5 1	15	2022-06-16 09:14:35.660887	5
+2	0	2	0	STUID1A4A4	story 2 1 1	story 2 1 1	9	2022-06-16 09:14:35.660887	1
+4	0	2	0	STUID173B2	story 2 2 1	story 2 2 1	18	2022-06-16 09:14:35.660887	2
+6	0	2	0	STUID1CE17	story 2 3 1	story 2 3 1	20	2022-06-16 09:14:35.660887	3
+1	0	1	0	STUID11411	story 1 1 1	story 1 1 1	14	2022-06-16 09:14:35.660887	1
 \.
 
 
@@ -789,56 +789,56 @@ COPY public.story (id, plus_sp, priority, sp_completed, st_reference, descriptio
 --
 
 COPY public.tasks (id, bugs, estimation, status, t_reference, tdate_debut, tdate_fin, description, title, tsupdated_date, type_task, story_id) FROM stdin;
-158	0	5	Scheduled	TUID16AF8	2022-10-22	2022-10-25	task 3 2 5 1	task 3 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
-156	0	3	Scheduled	TUID19217	2022-10-16	2022-10-18	task 1 2 5 1	task 1 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
-154	0	3	Scheduled	TUID16035	2022-10-11	2022-10-13	task 4 1 5 1	task 4 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
-153	0	2	Scheduled	TUID1A933	2022-10-08	2022-10-10	task 3 1 5 1	task 3 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
-152	0	3	Scheduled	TUID11C7F	2022-10-05	2022-10-07	task 2 1 5 1	task 2 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
-155	0	2	Scheduled	TUID166D0	2022-10-14	2022-10-15	task 5 1 5 1	task 5 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
-159	0	3	Scheduled	TUID1FEC9	2022-10-26	2022-10-28	task 4 2 5 1	task 4 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
-160	0	5	Scheduled	TUID1D69F	2022-10-29	2022-10-31	task 5 2 5 1	task 5 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
-10	0	1	Scheduled	TUID15B9F	2022-06-30	2022-06-30	task 5 2 1 1	task 5 2 1 1	2022-06-16 09:09:25.466595	Default_task	2
-13	0	5	Scheduled	TUID162DB	2022-07-06	2022-07-10	task 3 1 2 1	task 3 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
-14	0	3	Scheduled	TUID1FC46	2022-07-11	2022-07-13	task 4 1 2 1	task 4 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
-70	0	2	Scheduled	TUID116D3	2022-09-26	2022-09-28	task 4 2 4 1	task 4 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
-157	0	3	Scheduled	TUID1AEE1	2022-10-19	2022-10-21	task 2 2 5 1	task 2 2 5 1	2022-06-16 09:09:25.466595	Default_task	10
-67	0	2	Scheduled	TUID1A853	2022-09-18	2022-09-19	task 1 2 4 1	task 1 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
-16	0	3	Scheduled	TUID15C07	2022-07-18	2022-07-20	task 1 2 2 1	task 1 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
-7	0	2	Scheduled	TUID172B7	2022-06-24	2022-06-25	task 2 2 1 1	task 2  2 1 1	2022-06-16 09:09:25.466595	Default_task	2
-8	0	2	Scheduled	TUID14A72	2022-06-26	2022-06-27	task 3 2 1 1	task 3 2 1 1	2022-06-16 09:09:25.466595	Default_task	2
-1	0	2	Scheduled	TUID10CF6	2022-06-01	2022-06-04	task  1 1 1 1	task  1 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
-17	0	2	Scheduled	TUID10F5E	2022-07-21	2022-07-22	task 2 2 2 1	task 2 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
-60	0	3	Scheduled	TUID131EC	2022-08-27	2022-08-29	task 4 2 3 1	task 4 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
-54	0	3	Scheduled	TUID16732	2022-08-07	2022-08-09	task 3 1 3 1	task 3 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
-6	0	2	Scheduled	TUID14235	2022-06-21	2022-06-23	task 1 2 1 1	task 1 2 1 1	2022-06-16 09:09:25.466595	Default_task	2
-55	0	5	Scheduled	TUID1306C	2022-08-10	2022-08-12	task 4 1 3 1	task 4 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
-18	0	8	Scheduled	TUID1FD11	2022-07-23	2022-07-26	task 3 2 2 1	task 3 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
-20	0	2	Scheduled	TUID15FE7	2022-07-30	2022-07-31	task 5 2 2 1	task 5 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
-3	0	5	Scheduled	TUID112A3	2022-06-09	2022-06-12	task  3 1 1 1	task  3 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
-69	0	2	Scheduled	TUID1F582	2022-09-24	2022-09-25	task 3 2 4 1	task 3 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
-58	0	5	Scheduled	TUID156B6	2022-08-19	2022-08-22	task 2 2 3 1	task 2 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
-56	0	2	Scheduled	TUID12730	2022-08-13	2022-08-15	task 5 1 3 1	task 5 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
-63	0	3	Scheduled	TUID1EFF4	2022-09-04	2022-09-06	task 2 1 4 1	task 2 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
-2	0	3	Scheduled	TUID1F5A1	2022-06-05	2022-06-08	task  2 1 1 1	task  2 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
-12	0	3	Scheduled	TUID1AA61	2022-07-04	2022-07-06	task 2 1 2 1	task 2 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
-71	0	1	Scheduled	TUID12AF1	2022-09-29	2022-09-29	task 5 2 4 1	task 5 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
-11	0	2	Scheduled	TUID17995	2022-07-01	2022-07-03	task 1 1 2 1	task 1 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
-62	0	2	Scheduled	TUID142A5	2022-09-01	2022-09-03	task 1 1 4 1	task 1 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
-19	0	3	Scheduled	TUID14DD7	2022-07-27	2022-07-29	task 4 2 2 1	task 4 2 2 1	2022-06-16 09:09:25.466595	Default_task	4
-102	0	5	Scheduled	TUID10EE1	2022-10-01	2022-10-04	task 1 1 5 1	task 1 1 5 1	2022-06-16 09:09:25.466595	Default_task	9
-9	0	2	Scheduled	TUID1DB7F	2022-06-28	2022-06-29	task 4 2 1 1	task 4 2 1 1	2022-06-16 09:09:25.466595	Default_task	2
-61	0	2	Scheduled	TUID1D073	2022-08-30	2022-08-31	task 5 2 3 1	task 5 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
-57	0	2	Scheduled	TUID1C2B3	2022-08-16	2022-08-18	task 1 2 3 1	task 1 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
-68	0	5	Scheduled	TUID18175	2022-09-20	2022-09-23	task 2 2 4 1	task 2 2 4 1	2022-06-16 09:09:25.466595	Default_task	8
-15	0	8	Scheduled	TUID16E75	2022-07-14	2022-06-17	task 5 1 2 1	task 5 1 2 1	2022-06-16 09:09:25.466595	Default_task	3
-5	0	2	Scheduled	TUID1E635	2022-06-17	2022-06-20	task 5 1 1 1	task 5 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
-53	0	2	Scheduled	TUID1EE5F	2022-08-04	2022-08-06	task 2 1 3 1	task 2 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
-64	0	3	Scheduled	TUID1BB09	2022-09-07	2022-09-10	task 3 1 4 1	task 3 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
-52	0	2	Scheduled	TUID10A14	2022-08-01	2022-08-03	task 1 1 3 1	task 1 1 3 1	2022-06-16 09:09:25.466595	Default_task	5
-4	0	2	Scheduled	TUID1B3BC	2022-06-13	2022-06-16	task 4 1 1 1	task 4 1 1 1	2022-06-16 09:09:25.466595	Default_task	1
-59	0	8	Scheduled	TUID184BB	2022-08-23	2022-08-26	task 3 2 3 1	task 3 2 3 1	2022-06-16 09:09:25.466595	Default_task	6
-65	0	2	Scheduled	TUID18917	2022-09-11	2022-09-13	task 4 1 4 1	task 4 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
-66	0	8	Scheduled	TUID11573	2022-09-14	2022-09-17	task 5 1 4 1	task 5 1 4 1	2022-06-16 09:09:25.466595	Default_task	7
+158	0	5	Scheduled	TUID16AF8	2022-10-22	2022-10-25	task 3 2 5 1	task 3 2 5 1	2022-06-16 09:14:35.685886	Default_task	10
+156	0	3	Scheduled	TUID19217	2022-10-16	2022-10-18	task 1 2 5 1	task 1 2 5 1	2022-06-16 09:14:35.685886	Default_task	10
+154	0	3	Scheduled	TUID16035	2022-10-11	2022-10-13	task 4 1 5 1	task 4 1 5 1	2022-06-16 09:14:35.685886	Default_task	9
+153	0	2	Scheduled	TUID1A933	2022-10-08	2022-10-10	task 3 1 5 1	task 3 1 5 1	2022-06-16 09:14:35.685886	Default_task	9
+152	0	3	Scheduled	TUID11C7F	2022-10-05	2022-10-07	task 2 1 5 1	task 2 1 5 1	2022-06-16 09:14:35.685886	Default_task	9
+155	0	2	Scheduled	TUID166D0	2022-10-14	2022-10-15	task 5 1 5 1	task 5 1 5 1	2022-06-16 09:14:35.685886	Default_task	9
+159	0	3	Scheduled	TUID1FEC9	2022-10-26	2022-10-28	task 4 2 5 1	task 4 2 5 1	2022-06-16 09:14:35.685886	Default_task	10
+160	0	5	Scheduled	TUID1D69F	2022-10-29	2022-10-31	task 5 2 5 1	task 5 2 5 1	2022-06-16 09:14:35.685886	Default_task	10
+17	0	2	Scheduled	TUID10F5E	2022-07-21	2022-07-22	task 2 2 2 1	task 2 2 2 1	2022-06-16 09:14:35.685886	Default_task	4
+60	0	3	Scheduled	TUID131EC	2022-08-27	2022-08-29	task 4 2 3 1	task 4 2 3 1	2022-06-16 09:14:35.685886	Default_task	6
+54	0	3	Scheduled	TUID16732	2022-08-07	2022-08-09	task 3 1 3 1	task 3 1 3 1	2022-06-16 09:14:35.685886	Default_task	5
+10	0	1	Scheduled	TUID15B9F	2022-06-30	2022-06-30	task 5 2 1 1	task 5 2 1 1	2022-06-16 09:14:35.685886	Default_task	2
+13	0	5	Scheduled	TUID162DB	2022-07-06	2022-07-10	task 3 1 2 1	task 3 1 2 1	2022-06-16 09:14:35.685886	Default_task	3
+14	0	3	Scheduled	TUID1FC46	2022-07-11	2022-07-13	task 4 1 2 1	task 4 1 2 1	2022-06-16 09:14:35.685886	Default_task	3
+70	0	2	Scheduled	TUID116D3	2022-09-26	2022-09-28	task 4 2 4 1	task 4 2 4 1	2022-06-16 09:14:35.685886	Default_task	8
+157	0	3	Scheduled	TUID1AEE1	2022-10-19	2022-10-21	task 2 2 5 1	task 2 2 5 1	2022-06-16 09:14:35.685886	Default_task	10
+67	0	2	Scheduled	TUID1A853	2022-09-18	2022-09-19	task 1 2 4 1	task 1 2 4 1	2022-06-16 09:14:35.685886	Default_task	8
+16	0	3	Scheduled	TUID15C07	2022-07-18	2022-07-20	task 1 2 2 1	task 1 2 2 1	2022-06-16 09:14:35.685886	Default_task	4
+7	0	2	Scheduled	TUID172B7	2022-06-24	2022-06-25	task 2 2 1 1	task 2  2 1 1	2022-06-16 09:14:35.685886	Default_task	2
+8	0	2	Scheduled	TUID14A72	2022-06-26	2022-06-27	task 3 2 1 1	task 3 2 1 1	2022-06-16 09:14:35.685886	Default_task	2
+1	0	2	Scheduled	TUID10CF6	2022-06-01	2022-06-04	task  1 1 1 1	task  1 1 1 1	2022-06-16 09:14:35.685886	Default_task	1
+6	0	2	Scheduled	TUID14235	2022-06-21	2022-06-23	task 1 2 1 1	task 1 2 1 1	2022-06-16 09:14:35.685886	Default_task	2
+55	0	5	Scheduled	TUID1306C	2022-08-10	2022-08-12	task 4 1 3 1	task 4 1 3 1	2022-06-16 09:14:35.685886	Default_task	5
+18	0	8	Scheduled	TUID1FD11	2022-07-23	2022-07-26	task 3 2 2 1	task 3 2 2 1	2022-06-16 09:14:35.685886	Default_task	4
+20	0	2	Scheduled	TUID15FE7	2022-07-30	2022-07-31	task 5 2 2 1	task 5 2 2 1	2022-06-16 09:14:35.685886	Default_task	4
+3	0	5	Scheduled	TUID112A3	2022-06-09	2022-06-12	task  3 1 1 1	task  3 1 1 1	2022-06-16 09:14:35.685886	Default_task	1
+69	0	2	Scheduled	TUID1F582	2022-09-24	2022-09-25	task 3 2 4 1	task 3 2 4 1	2022-06-16 09:14:35.685886	Default_task	8
+58	0	5	Scheduled	TUID156B6	2022-08-19	2022-08-22	task 2 2 3 1	task 2 2 3 1	2022-06-16 09:14:35.685886	Default_task	6
+56	0	2	Scheduled	TUID12730	2022-08-13	2022-08-15	task 5 1 3 1	task 5 1 3 1	2022-06-16 09:14:35.685886	Default_task	5
+63	0	3	Scheduled	TUID1EFF4	2022-09-04	2022-09-06	task 2 1 4 1	task 2 1 4 1	2022-06-16 09:14:35.685886	Default_task	7
+2	0	3	Scheduled	TUID1F5A1	2022-06-05	2022-06-08	task  2 1 1 1	task  2 1 1 1	2022-06-16 09:14:35.685886	Default_task	1
+12	0	3	Scheduled	TUID1AA61	2022-07-04	2022-07-06	task 2 1 2 1	task 2 1 2 1	2022-06-16 09:14:35.685886	Default_task	3
+71	0	1	Scheduled	TUID12AF1	2022-09-29	2022-09-29	task 5 2 4 1	task 5 2 4 1	2022-06-16 09:14:35.685886	Default_task	8
+11	0	2	Scheduled	TUID17995	2022-07-01	2022-07-03	task 1 1 2 1	task 1 1 2 1	2022-06-16 09:14:35.685886	Default_task	3
+62	0	2	Scheduled	TUID142A5	2022-09-01	2022-09-03	task 1 1 4 1	task 1 1 4 1	2022-06-16 09:14:35.685886	Default_task	7
+19	0	3	Scheduled	TUID14DD7	2022-07-27	2022-07-29	task 4 2 2 1	task 4 2 2 1	2022-06-16 09:14:35.685886	Default_task	4
+102	0	5	Scheduled	TUID10EE1	2022-10-01	2022-10-04	task 1 1 5 1	task 1 1 5 1	2022-06-16 09:14:35.685886	Default_task	9
+9	0	2	Scheduled	TUID1DB7F	2022-06-28	2022-06-29	task 4 2 1 1	task 4 2 1 1	2022-06-16 09:14:35.685886	Default_task	2
+61	0	2	Scheduled	TUID1D073	2022-08-30	2022-08-31	task 5 2 3 1	task 5 2 3 1	2022-06-16 09:14:35.685886	Default_task	6
+57	0	2	Scheduled	TUID1C2B3	2022-08-16	2022-08-18	task 1 2 3 1	task 1 2 3 1	2022-06-16 09:14:35.685886	Default_task	6
+68	0	5	Scheduled	TUID18175	2022-09-20	2022-09-23	task 2 2 4 1	task 2 2 4 1	2022-06-16 09:14:35.685886	Default_task	8
+15	0	8	Scheduled	TUID16E75	2022-07-14	2022-06-17	task 5 1 2 1	task 5 1 2 1	2022-06-16 09:14:35.685886	Default_task	3
+5	0	2	Scheduled	TUID1E635	2022-06-17	2022-06-20	task 5 1 1 1	task 5 1 1 1	2022-06-16 09:14:35.685886	Default_task	1
+53	0	2	Scheduled	TUID1EE5F	2022-08-04	2022-08-06	task 2 1 3 1	task 2 1 3 1	2022-06-16 09:14:35.685886	Default_task	5
+64	0	3	Scheduled	TUID1BB09	2022-09-07	2022-09-10	task 3 1 4 1	task 3 1 4 1	2022-06-16 09:14:35.685886	Default_task	7
+52	0	2	Scheduled	TUID10A14	2022-08-01	2022-08-03	task 1 1 3 1	task 1 1 3 1	2022-06-16 09:14:35.685886	Default_task	5
+4	0	2	Scheduled	TUID1B3BC	2022-06-13	2022-06-16	task 4 1 1 1	task 4 1 1 1	2022-06-16 09:14:35.685886	Default_task	1
+59	0	8	Scheduled	TUID184BB	2022-08-23	2022-08-26	task 3 2 3 1	task 3 2 3 1	2022-06-16 09:14:35.685886	Default_task	6
+65	0	2	Scheduled	TUID18917	2022-09-11	2022-09-13	task 4 1 4 1	task 4 1 4 1	2022-06-16 09:14:35.685886	Default_task	7
+66	0	8	Scheduled	TUID11573	2022-09-14	2022-09-17	task 5 1 4 1	task 5 1 4 1	2022-06-16 09:14:35.685886	Default_task	7
 \.
 
 
