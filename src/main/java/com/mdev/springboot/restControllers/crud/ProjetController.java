@@ -165,23 +165,24 @@ public class ProjetController {
 
     
     // projects by release brundown chart
-    @GetMapping("/projects/updateallsp")
-    public ResponseEntity<Map<String, Boolean>> updatetotalSpInProject() {
-
-        storyRepository.StoryPointUpdate();
-        sprintRepository.sprintStoryPointUpdate();
-
-        storyRepository.updatePlusSp();
-        sprintRepository.updateMoreSp();
-
-        taskRepository.tasktimeUpdate();
-        projetRepository.totalSpInProject();
-
-        Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("story points updated", Boolean.TRUE);
-        return ResponseEntity.ok(response);
-
-    }
+//    @GetMapping("/projects/updateallsp")
+//    public ResponseEntity<Map<String, Boolean>> updatetotalSpInProject() {
+//
+//        this.storyRepository.StoryPointUpdate();
+//        this.sprintRepository.sprintStoryPointUpdate();
+//
+//
+//        storyRepository.updatePlusSp();
+//        sprintRepository.updateMoreSp();
+//
+//        taskRepository.tasktimeUpdate();
+//        projetRepository.totalSpInProject();
+//
+//        Map<String, Boolean> response = new HashMap<String, Boolean>();
+//        response.put("story points updated", Boolean.TRUE);
+//        return ResponseEntity.ok(response);
+//
+//    }
     // projects by release brundown chart
     @GetMapping("/projects/releasebdchart/{pReference}")
     public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(@PathVariable("pReference") String pReference) {
