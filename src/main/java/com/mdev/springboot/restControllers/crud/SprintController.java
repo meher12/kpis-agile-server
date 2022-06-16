@@ -27,6 +27,7 @@ import com.mdev.springboot.models.Sprint;
 import com.mdev.springboot.repository.ProjetRepository;
 import com.mdev.springboot.repository.SprintRepository;
 import com.mdev.springboot.repository.StoryRepository;
+import com.mdev.springboot.repository.TaskRepository;
 import com.mdev.springboot.services.SprintServiceImp;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -45,6 +46,9 @@ public class SprintController {
 
     @Autowired
     StoryRepository storyRepository;
+
+    @Autowired
+    TaskRepository taskRepository;
 
     // get All Sprints By ProjectId
     @GetMapping("/sprints/projects/{projet_id}/sprints")
@@ -167,6 +171,15 @@ public class SprintController {
 
         this.storyRepository.StoryPointUpdate();
         this.sprintRepository.sprintStoryPointUpdate();
+
+
+        storyRepository.updatePlusSp();
+        sprintRepository.updateMoreSp();
+
+        taskRepository.tasktimeUpdate();
+        projetRepository.totalSpInProject();
+
+
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Updated", Boolean.TRUE);
         return ResponseEntity.ok(response);
