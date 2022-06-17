@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.mdev.springboot.models.User;
 import com.mdev.springboot.services.UserDetailsImpl;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -31,7 +32,8 @@ public class JwtUtils {
 
     public String generateJwtToken(Authentication authentication) {
 
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+       UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+       
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getEmail()))

@@ -120,7 +120,7 @@ public class ProjetController {
     @PutMapping("/projects/{id}")
     public ResponseEntity<Projet> updateProjet(@PathVariable("id") Long id, @RequestBody Projet projetDetails) {
         Projet _projet = projetRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found project with id = " + id));
 
         _projet.setTitre(projetDetails.getTitre());
         _projet.setDescriptionProject(projetDetails.getDescriptionProject());
@@ -144,6 +144,7 @@ public class ProjetController {
 
     }
 
+    //Delete all project
     @DeleteMapping("/projects/")
     public ResponseEntity<Map<String, Boolean>> deleteAllProjects() throws ApiResourceNotFoundException {
 
@@ -183,7 +184,7 @@ public class ProjetController {
 //        return ResponseEntity.ok(response);
 //
 //    }
-    // projects by release brundown chart
+    // Projects by release brundown chart
     @GetMapping("/projects/releasebdchart/{pReference}")
     public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(@PathVariable("pReference") String pReference) {
 
@@ -199,12 +200,12 @@ public class ProjetController {
         Projet projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
-        // Completed table in project for brundown release
+        // Completed SP table in project for release brundown 
         ArrayList<String> spDoneFromSprint = sprintRepository.getListSpCompleted(pReference);
 
         // System.out.println("********spDoneFromSprint*********" + spDoneFromSprint);
 
-        // More table in project for brundown release
+        // More SP table in project for release brundown 
         ArrayList<String> morespFromSprint = sprintRepository.getListMoreSp(pReference);
 
         // System.out.println("*******morespFromSprint**********" + morespFromSprint);
@@ -231,7 +232,7 @@ public class ProjetController {
 
     }
 
-    // percentage
+    // percentage SP by project ** story Points Completed Chart
     @GetMapping("/projects/percentageSpcChart/{pReference}")
     public ResponseEntity<Map<String, Boolean>> percentageSpcChart(@PathVariable("pReference") String pReference) {
 
@@ -253,7 +254,7 @@ public class ProjetController {
 
     }
 
-    // task status chart by project preference
+    // task status percentage chart by project  preference
     @GetMapping("/projects/percentTaskStatuscChart/{pReference}")
     public ResponseEntity<PairArrays> getListtaskByStatus(@PathVariable("pReference") String pReference) {
 
@@ -292,7 +293,7 @@ public class ProjetController {
         return new ResponseEntity<>(dataEffecacityChart, HttpStatus.OK);
     }
 
-    // select work completed in task by project reference
+    // select work completed percentage demi-cercle in task by project reference
     @GetMapping("/projects/percentageStoryPointsInProject/{pReference}")
     public ResponseEntity<Map<String, String>> getpercentageStoryPointsInProject( @PathVariable("pReference") String pReference) {
 

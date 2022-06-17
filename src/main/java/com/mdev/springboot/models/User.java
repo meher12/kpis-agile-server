@@ -1,6 +1,7 @@
 package com.mdev.springboot.models;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,11 +20,19 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
-public class User{
+public class User {
     
 
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
@@ -118,6 +127,9 @@ public class User{
         return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", roles="
                 + roles + "]";
     }
+    
+   
+    
 
 
 }

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mdev.springboot.models.User;
 
+//récupérer les données liées à l’utilisateur from UserDetailsServiceImpl
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
@@ -21,6 +22,7 @@ public class UserDetailsImpl implements UserDetails {
 
     private String email;
 
+    // Ignoring password properties 
     @JsonIgnore
     private String password;
 
@@ -35,6 +37,7 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
+    // method static for class not for object instance
     public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))

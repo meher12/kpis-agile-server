@@ -39,18 +39,15 @@ public class ProjectServiceImp implements ProjectService {
 
     @Autowired
     SprintRepository sprintRepository;
-    
-    
-    
-    //For test
+
+    // For test
     @Override
-    public Projet addProjet(Projet projet)  throws ApiResourceNotFoundException{
+    public Projet addProjet(Projet projet) throws ApiResourceNotFoundException {
         if (projetRepository.existsById(projet.getId())) {
             throw new ApiResourceNotFoundException("Project exists");
         }
         return projetRepository.save(projet);
     }
-
 
     @Override
     public ArrayList<String> releaseBurndownChart(int sumStorypoints, ArrayList<String> spDone,
@@ -90,6 +87,7 @@ public class ProjectServiceImp implements ProjectService {
 
     }
 
+    // implement percentage SP by project ** story Points Completed Chart
     @Override
     public ArrayList<String> pourcentageStoryPointsCompleted(int sumStorypoints, ArrayList<String> tabFromdb) {
 
@@ -115,7 +113,7 @@ public class ProjectServiceImp implements ProjectService {
         return percentageTab;
     }
 
-    // List status task by project ref
+    // List task status percentage chart by project  preference
     @Override
     public PairArrays listTaskByStatus(String p_reference) {
 
@@ -244,6 +242,7 @@ public class ProjectServiceImp implements ProjectService {
         return pairArrays;
     }
 
+    // count bug in task by project
     public DataTaskBugChart getTasksBugs(String referenceProject, Map<Date, Date> requestMap) {
 
         SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");

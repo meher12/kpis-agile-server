@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,15 +15,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.mdev.springboot.security.jwt.AuthEntryPointJwt;
 import com.mdev.springboot.security.jwt.AuthTokenFilter;
-import com.mdev.springboot.services.UserDetailsServiceImpl;
 
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    
+    //@Autowired
+    //UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
@@ -34,11 +33,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AuthTokenFilter();
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+//    @Override
+//    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+//        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+//    }
 
+    // For this error "must defining Consider defining a bean of type AuthenticationManager in config"
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests().antMatchers("/api/auth/**").permitAll()
         //.antMatchers("api/files/").permitAll()
         .antMatchers("/api/test/**").permitAll()
-        .antMatchers("/api/").hasAnyAuthority("PRODUCTOWNER", "SCRUMMASTER")
+        .antMatchers("/api/").hasAnyAuthority("PRODUCTOWNER", "SCRUMMASTER", "DEVELOPER")
         .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

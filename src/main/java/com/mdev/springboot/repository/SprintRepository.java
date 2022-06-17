@@ -59,7 +59,7 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
     @Query(value = "update sprints SET more_sp = (SELECT COALESCE(SUM(s.plus_sp),0) FROM story s WHERE sprints.id = s.sprint_id)", nativeQuery = true)
     void  updateMoreSp();
     
-    // select stroy points completed in project
+    // Select stroy points completed in project
     @Query(value = "select sp.work_completed from sprints sp INNER JOIN projets ON sp.projet_id=projets.id AND p_reference=?1 ORDER BY sdate_debut ASC", nativeQuery = true)
     ArrayList<String>  getListSpCompleted(String p_reference);
     
