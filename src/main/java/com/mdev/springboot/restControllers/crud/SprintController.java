@@ -204,7 +204,7 @@ public class SprintController {
         return ResponseEntity.ok(response);
     }
 
-    // get iealLine for sprint story points
+    // get idealLine for sprint story points
     @RequestMapping(value = "/sprints/ideallbrundownChart", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Boolean>> idealLineOfSprint() {
 
@@ -213,11 +213,12 @@ public class SprintController {
         
         List<Sprint> sprints = sprintRepository.findAll();
         for (Sprint sprint : sprints) {
-            sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(),
-                    sprint.getWorkCommitment()));
+            
+            // Insert in db
+            sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(), sprint.getWorkCommitment()));
             List<String> arrayLine = sprint.getIdealLinearray();
             sprintRepository.sprintArrayOfIdealLine(sprint.getId(), arrayLine);
-           System.out.println(arrayLine);
+           //System.out.println(arrayLine);
         }
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();
@@ -225,7 +226,7 @@ public class SprintController {
         return ResponseEntity.ok(response);
     }
 
-    // update sprint work completed
+    // update sprint work completed for brundown chart
     @RequestMapping(value = "/sprints/addspCompleted/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Map<String, Boolean>> updateSprintWorkCompleted(@PathVariable("id") Long id,
             @RequestBody ArrayList<Object> storiesRequest) {
@@ -236,7 +237,7 @@ public class SprintController {
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));
 
-        // System.out.println("---" + storiesRequest);
+         //System.out.println("--- ***************************** ***********************" + storiesRequest);
 
         ArrayList<String> arrayJson = new ArrayList<String>();
         ArrayList<String> arrayFiltred = new ArrayList<String>();
@@ -291,9 +292,9 @@ public class SprintController {
 
         List<Map.Entry<String, Float>> list = new ArrayList<>(set);
 
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i).getKey() + ": " + list.get(i).getValue());
-        }
+        //for (int i = 0; i < list.size(); i++) {
+           // System.out.println(list.get(i).getKey() + ": " + list.get(i).getValue());
+        //}
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

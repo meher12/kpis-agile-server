@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ public class SprintServiceImp implements SprintService {
     @Autowired
     SprintRepository sprintRepository;
 
+    // get and convert date to day "dd-MM-yyyy" in brundown chart axe x
     @Override
     public List<String> numberOfDaysInSprint(Date str_date, Date end_date) throws Exception {
 
@@ -88,14 +88,22 @@ public class SprintServiceImp implements SprintService {
 
         int nbrOfDay = (int) nbrDays;
 
+        // bug idealline horizontal when change type int
+        // int idealLine[] = new int[nbrOfDay];
         float idealLine[] = new float[nbrOfDay];
+
+        // bug idealline horizontal when change type int
+        // int SP = workCommitment;
         float SP = workCommitment;
 
+        // bug idealline horizontal when change type int
+        // int inc = SP / nbrOfDay;
         float inc = SP / nbrOfDay;
 
         for (int i = 0; i < nbrOfDay; i++) {
             idealLine[i] = SP;
             SP = idealLine[i] - inc;
+
         }
 
         for (int i = 0; i < idealLine.length; i++) {
@@ -108,83 +116,7 @@ public class SprintServiceImp implements SprintService {
         return positive;
     }
 
-//    @Override
-//    public List<String> getIdealLine(Date str_date, Date end_date, int workCommitment) {
-    // Set values for both dates
-//        String join = "01-01-2022";   
-//        String leave  = "8-01-2022";   
-    // Calling find() method for getting difference bwtween dates
-    // long nbrDays = calculDaysDiff(str_date, end_date);
-
-//        List<String> negative = new ArrayList<>();
-//        List<String> positive = new ArrayList<>();
-
-//        List<Integer> negative2 = new ArrayList<>();
-//        List<Integer> positive2 = new ArrayList<>();
-
-//        int nbrOfDay = (int) nbrDays;
-//
-//        int idealLine[] = new int[nbrOfDay];
-//        int SP = workCommitment;
-//
-//        int inc = Math.round(SP / nbrOfDay);
-//
-//        for (int i = 0; i < nbrOfDay; i++) {
-//            idealLine[i] = SP;
-//            SP = idealLine[i] - inc;
-//        }
-//
-//        for (int i = 0; i < idealLine.length; i++) {
-//            if (idealLine[i] < 0) {
-//                negative.add(String.valueOf(idealLine[i]));
-//            } else {
-//                positive.add(String.valueOf(idealLine[i]));
-//            }
-//        }
-
-//        for (int i = 0; i < idealLine.length; i++) {
-//            if (idealLine[i] < 0) {
-//                negative.add(""+idealLine[i]);
-//            } else {
-//                positive.add(""+idealLine[i]);
-//            }
-//        }
-
-    /* ******* */
-    // int lastNum = 10;
-//        for (int t= 0; t < positive.size(); t++) {
-//        if (positive.get(positive.size() - 1) != 0) {
-//            int lastNum = positive.get(positive.size() - 1);
-//
-//            int zero = lastNum - inc;
-//            positive.add(zero);
-//        }
-//        }
-//        System.out.println("One one one: "+positive);
-//
-//        for (int i = 0; i < positive.size(); i++) {
-//            if (positive.get(i) < 0) {
-//                negative2.add(positive.get(i));
-//            } else {
-//                positive2.add(positive.get(i));
-//            }
-//        }
-
-    // System.out.println("Tow tow tow: "+positive2);
-//         pure Java:
-//         List<String> sNumbers = new ArrayList<String>();
-//         for (Integer i: positive2) {
-//             sNumbers.add(String.valueOf(i));
-//         }
-
-    // Java 8 - map:
-    // List<String> sNumbers = positive2.stream().map((n) ->
-    // n.toString()).collect(Collectors.toList());
-    // System.out.println(sNumbers);
-//        return positive;
-//    }
-
-    // Number sprint by velocity
+    // Number sprint average_velocity capacity_story_points_in_next_sprint method
     @Override
     public Map<String, Float> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab,
             Long projectId) {
@@ -247,5 +179,81 @@ public class SprintServiceImp implements SprintService {
         resultSprint.put("capacity_story_points_in_next_sprint", capacity_story_points_in_next_sprint);
         return resultSprint;
     }
+
+//  @Override
+//  public List<String> getIdealLine(Date str_date, Date end_date, int workCommitment) {
+    // Set values for both dates
+//      String join = "01-01-2022";   
+//      String leave  = "8-01-2022";   
+    // Calling find() method for getting difference bwtween dates
+    // long nbrDays = calculDaysDiff(str_date, end_date);
+
+//      List<String> negative = new ArrayList<>();
+//      List<String> positive = new ArrayList<>();
+
+//      List<Integer> negative2 = new ArrayList<>();
+//      List<Integer> positive2 = new ArrayList<>();
+
+//      int nbrOfDay = (int) nbrDays;
+//
+//      int idealLine[] = new int[nbrOfDay];
+//      int SP = workCommitment;
+//
+//      int inc = Math.round(SP / nbrOfDay);
+//
+//      for (int i = 0; i < nbrOfDay; i++) {
+//          idealLine[i] = SP;
+//          SP = idealLine[i] - inc;
+//      }
+//
+//      for (int i = 0; i < idealLine.length; i++) {
+//          if (idealLine[i] < 0) {
+//              negative.add(String.valueOf(idealLine[i]));
+//          } else {
+//              positive.add(String.valueOf(idealLine[i]));
+//          }
+//      }
+
+//      for (int i = 0; i < idealLine.length; i++) {
+//          if (idealLine[i] < 0) {
+//              negative.add(""+idealLine[i]);
+//          } else {
+//              positive.add(""+idealLine[i]);
+//          }
+//      }
+
+    /* ******* */
+    // int lastNum = 10;
+//      for (int t= 0; t < positive.size(); t++) {
+//      if (positive.get(positive.size() - 1) != 0) {
+//          int lastNum = positive.get(positive.size() - 1);
+//
+//          int zero = lastNum - inc;
+//          positive.add(zero);
+//      }
+//      }
+//      System.out.println("One one one: "+positive);
+//
+//      for (int i = 0; i < positive.size(); i++) {
+//          if (positive.get(i) < 0) {
+//              negative2.add(positive.get(i));
+//          } else {
+//              positive2.add(positive.get(i));
+//          }
+//      }
+
+    // System.out.println("Tow tow tow: "+positive2);
+//       pure Java:
+//       List<String> sNumbers = new ArrayList<String>();
+//       for (Integer i: positive2) {
+//           sNumbers.add(String.valueOf(i));
+//       }
+
+    // Java 8 - map:
+    // List<String> sNumbers = positive2.stream().map((n) ->
+    // n.toString()).collect(Collectors.toList());
+    // System.out.println(sNumbers);
+//      return positive;
+//  }
 
 }
