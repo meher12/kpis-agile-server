@@ -58,6 +58,7 @@ public class FilesController {
         }
     }
 
+    // get List of Files
     @GetMapping("/files")
     public ResponseEntity<List<FileInfo>> getListFiles() {
         List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
@@ -71,6 +72,7 @@ public class FilesController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
+    //get file by name
     @GetMapping("/files/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = storageService.load(filename);
@@ -100,6 +102,7 @@ public class FilesController {
 
     }
 
+    // rename file 
     @PutMapping("/files/rename/{filename}")
     public ResponseEntity<?> renameFile(@PathVariable("filename") String filename, @RequestBody String newfilename) {
         // Path file = Paths.get("uploads/" + filename);

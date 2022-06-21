@@ -80,7 +80,7 @@ public class JacocoReportController {
         return new ResponseEntity<>(jacocoReportList, HttpStatus.CREATED);
     }
 
-    // get total jacoco coverage
+    // get total jacoco coverage in demi-cercle 
     @GetMapping("/reports/projectcoverage/{projectname}")
     public ResponseEntity<Float> getTotalJacocoCoverage(@PathVariable("projectname") String projectname) {
         float result = jacocoReportRepository.getTotalcoverage(projectname);
