@@ -93,7 +93,7 @@ public class FilesController {
 
         if (fileDeleted) {
 
-            reportRepository.deleteAllByProjectname(reportName);
+            //reportRepository.deleteAllByProjectname(reportName);
             response.put("File Deleted", Boolean.TRUE);
         } else {
             response.put("File does not exist", Boolean.TRUE);

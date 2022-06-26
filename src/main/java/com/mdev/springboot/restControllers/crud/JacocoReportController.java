@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mdev.springboot.exception.ApiResourceNotFoundException;
+import com.mdev.springboot.exception.ResourceNotFoundException;
 import com.mdev.springboot.models.JacocoReport;
 import com.mdev.springboot.payload.response.MessageResponse;
 import com.mdev.springboot.repository.JacocoReportRepository;
@@ -62,7 +64,8 @@ public class JacocoReportController {
 
         for (JacocoReport jacocoReport2 : reportRequest) {
 
-            jacocoReport2.setTotalpercentage(Float.parseFloat(String.format("%.2f", totalcoverage)));
+            //jacocoReport2.setTotalpercentage(Float.parseFloat(String.format("%.2f", totalcoverage)));
+            jacocoReport2.setTotalpercentage(totalcoverage);
             jacocoReport2.setCreatedAt(new Date());
 
             if (!jacocoReportRepository.existsByProjectname(jacocoReport2.getProjectname())) {
@@ -86,6 +89,16 @@ public class JacocoReportController {
         float result = jacocoReportRepository.getTotalcoverage(projectname);
         return new ResponseEntity<>(result, HttpStatus.OK);
 
+    }
+    
+    @DeleteMapping("/report/deleteallbyname/{reportName}")
+    public ResponseEntity<?> deleteAllReportByName(@PathVariable("reportName") String reportName){
+        if(!jacocoReportRepository.existsByProjectname(reportName)) {
+            throw new ResourceNotFoundException("Not found Report with Name = " + reportName);
+        }
+        
+        jacocoReportRepository.deleteAllByProjectname(reportName);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
