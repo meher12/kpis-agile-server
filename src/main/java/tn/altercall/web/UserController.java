@@ -1,113 +1,51 @@
 package tn.altercall.web;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import tn.altercall.entities.ERole;
-import tn.altercall.entities.Role;
 import tn.altercall.entities.User;
 import tn.altercall.payload.request.LoginRequest;
 import tn.altercall.payload.request.SignupRequest;
-import tn.altercall.payload.response.JwtResponse;
 import tn.altercall.payload.response.MessageResponse;
-import tn.altercall.repository.RoleRepository;
-import tn.altercall.repository.UserRepository;
-import tn.altercall.security.jwt.JwtUtils;
-import tn.altercall.services.UserDetailsImpl;
+import tn.altercall.services.UserImpl;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
+    private UserImpl userService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        
-        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(
-                new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+        var jwtResponse = userService.authenticateUser(loginRequest);
+        return ResponseEntity.ok(jwtResponse);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-//        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-//        }
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-        }
-
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        String strEmail = signUpRequest.getEmail();
-        Set<Role> roles = new HashSet<>();
-
-        if (strEmail.contains("@productowner.tn")) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_PRODUCTOWNER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        }
-        if (strEmail.contains("@scrumm.tn")) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_SCRUMMASTER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        }
-        if (strEmail.contains("@developer.tn")) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_DEVELOPER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        }
-
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        var registerMessage = userService.registerUser(signUpRequest);
+        return ResponseEntity.ok(new MessageResponse(registerMessage));
     }
 
-  /*  @PutMapping("/updateUser")
-    public ResponseEntity<User> updateUser(@RequestBody User userDetail){
+    @PutMapping("/updateUser/{id}")
+    public ResponseEntity<User> updateUser(@RequestBody User userDetail, @PathVariable("id") Long id){
+         User _user = userService.updateUser(userDetail, id);
+        return new ResponseEntity<>(_user, HttpStatus.OK);
+    }
 
-        return null;
-    }*/
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable("id") Long id){
+     var response =    userService.deleteUser(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

@@ -1,7 +1,9 @@
 package tn.altercall.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,12 +38,12 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonBackReference
+    @JsonManagedReference
     private Set<Projet> projets;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -110,12 +112,12 @@ public class User {
         this.roles = roles;
     }
 
-    public Set<Projet> getProjet() {
+    public Set<Projet> getProjets() {
         return projets;
     }
 
-    public void setProjet(Set<Projet> projet) {
-        this.projets = projet;
+    public void setProjets(Set<Projet> projets) {
+        this.projets = projets;
     }
 
     @Override
@@ -126,7 +128,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
-                ", projet=" + projets +
+                ", projets=" + projets +
                 '}';
     }
 }
