@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "projets", uniqueConstraints = {@UniqueConstraint(columnNames = "pReference")})
+@Table(name = "projects", uniqueConstraints = {@UniqueConstraint(columnNames = "pReference")})
 /* ----- dealing with bi-directional relationships */
 //@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,   property = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -57,10 +57,10 @@ public class Projet implements Serializable {
     @JsonManagedReference
     private Set<JacocoReport> reports;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    /*@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
-    private User user;
+    private User user;*/
 
 
     @NotNull
@@ -259,13 +259,7 @@ public class Projet implements Serializable {
         this.percentage_spc = percentage_spc;
     }
 
-    public User getUser() {
-        return user;
-    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Override
     public String toString() {
@@ -279,7 +273,6 @@ public class Projet implements Serializable {
                 ", dateFin=" + dateFin +
                 ", sprints=" + sprints +
                 ", reports=" + reports +
-                ", user=" + user +
                 ", totalspCommitment=" + totalspCommitment +
                 ", totalspCompleted=" + totalspCompleted +
                 ", pupdatedDate=" + pupdatedDate +

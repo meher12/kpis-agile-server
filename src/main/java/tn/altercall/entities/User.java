@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     
 
@@ -42,9 +42,13 @@ public class User {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+   /* @OneToMany(mappedBy = "user")
     @JsonManagedReference
-    private Set<Projet> projets;
+    private Set<Projet> projets;*/
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinTable(name = "users_projects", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name="project_id", referencedColumnName = "id"))
+    private Set<Projet> projects;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
             @JoinTable(name = "users_tasks", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -112,13 +116,7 @@ public class User {
         this.roles = roles;
     }
 
-    public Set<Projet> getProjets() {
-        return projets;
-    }
 
-    public void setProjets(Set<Projet> projets) {
-        this.projets = projets;
-    }
 
     @Override
     public String toString() {
@@ -128,7 +126,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
-                ", projets=" + projets +
                 '}';
     }
 }
