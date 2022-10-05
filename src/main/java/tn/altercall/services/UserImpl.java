@@ -39,7 +39,8 @@ public class UserImpl implements UserService {
     @Autowired
     JwtUtils jwtUtils;
 
-    public UserImpl(){}
+    public UserImpl() {
+    }
 
     @Override
     public String registerUser(SignupRequest signUpRequest) {
@@ -93,6 +94,17 @@ public class UserImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        var user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found user with id = " + id));
+        return user;
+    }
+
+    @Override
     public User updateUser(User user, Long id) {
 
         var userUpdated = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with id = " + id));
@@ -113,5 +125,19 @@ public class UserImpl implements UserService {
         Map<String, Boolean> response = new HashMap<>();
         response.put("Deleted", Boolean.TRUE);
         return response;
+    }
+
+    @Override
+    public Map<String, Boolean> deleteAllUser() {
+        List<User> deletedUser = userRepository.findAll();
+        Map<String, Boolean> response = new HashMap<String, Boolean>();
+
+        response.put("Not found users to Delete it!", Boolean.FALSE);
+        if (!deletedUser.isEmpty()) {
+            userRepository.deleteAll();
+            response.put("Users Deleted", Boolean.TRUE);
+        }
+        return response;
+
     }
 }
