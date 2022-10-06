@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import tn.altercall.entities.Projet;
+import tn.altercall.entities.Project;
 import tn.altercall.web.ProjetController;
 import tn.altercall.services.ProjectService;
 
@@ -30,15 +30,15 @@ public class ProjectControllerTest {
 
     @Mock
     private ProjectService projetService;
-    private Projet projet;
-    private List<Projet> projetList;
+    private Project projet;
+    private List<Project> projetList;
     
     @InjectMocks
     private ProjetController projetController;
     
     @BeforeEach
     public void setup() {
-        projet = new Projet(785L, "project test title", 50, "project test description" );
+        projet = new Project(785L, "project test title", 50, "project test description" );
         mockMvc = MockMvcBuilders.standaloneSetup(projetController).build();
     }
 

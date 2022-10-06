@@ -2,21 +2,10 @@ package tn.altercall.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.OnDelete;
@@ -78,6 +67,11 @@ public class Task implements Serializable {
     @JsonBackReference
     private Story story;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_tasks", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+    private Set<User> users = new HashSet<>();
+
     public Task() {
         super();
     }
@@ -97,6 +91,24 @@ public class Task implements Serializable {
         this.estimation = estimation;
         this.bugs = bugs;
         this.story = story;
+    }
+
+    public Task(Long id, String tname, String tReference, String tdescription, Date tdateDebut,
+                Date tdateFin, ETask status, ETypeTask typeTask,
+                Date tsupdatedDate, int estimation, int bugs, Story story, Set<User> users) {
+        this.id = id;
+        this.tname = tname;
+        this.tReference = tReference;
+        this.tdescription = tdescription;
+        this.tdateDebut = tdateDebut;
+        this.tdateFin = tdateFin;
+        this.status = status;
+        this.typeTask = typeTask;
+        this.tsupdatedDate = tsupdatedDate;
+        this.estimation = estimation;
+        this.bugs = bugs;
+        this.story = story;
+        this.users = users;
     }
 
     public Long getId() {
@@ -195,15 +207,30 @@ public class Task implements Serializable {
         this.story = story;
     }
 
-    @Override
-    public String toString() {
-        return "Task [id=" + id + ", tname=" + tname + ", tReference=" + tReference + ", tdescription=" + tdescription
-                + ", tdateDebut=" + tdateDebut + ", tdateFin=" + tdateFin + ", status=" + status + ", typeTask="
-                + typeTask + ", tsupdatedDate=" + tsupdatedDate + ", estimation=" + estimation + ", bugs=" + bugs
-                + ", story=" + story + "]";
+    public Set<User> getUsers() {
+        return users;
     }
 
-    
-    
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
 
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", tname='" + tname + '\'' +
+                ", tReference='" + tReference + '\'' +
+                ", tdescription='" + tdescription + '\'' +
+                ", tdateDebut=" + tdateDebut +
+                ", tdateFin=" + tdateFin +
+                ", status=" + status +
+                ", typeTask=" + typeTask +
+                ", tsupdatedDate=" + tsupdatedDate +
+                ", estimation=" + estimation +
+                ", bugs=" + bugs +
+                ", story=" + story +
+                ", users=" + users +
+                '}';
+    }
 }

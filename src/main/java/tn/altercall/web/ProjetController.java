@@ -1,13 +1,7 @@
 package tn.altercall.web;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import tn.altercall.entities.ERole;
+import tn.altercall.entities.Role;
+import tn.altercall.entities.User;
 import tn.altercall.exception.ApiResourceNotFoundException;
 import tn.altercall.exception.ResourceNotFoundException;
-import tn.altercall.entities.Projet;
-import tn.altercall.repository.ProjetRepository;
-import tn.altercall.repository.SprintRepository;
-import tn.altercall.repository.StoryRepository;
-import tn.altercall.repository.TaskRepository;
+import tn.altercall.entities.Project;
+import tn.altercall.repository.*;
 import tn.altercall.services.ProjectServiceImp;
 import tn.altercall.utils.DataTaskBugChart;
 import tn.altercall.utils.Efficacity;
@@ -57,11 +51,14 @@ public class ProjetController {
     @Autowired
     TaskRepository taskRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     // get all project by Title or All
     // @PreAuthorize("hasRole('PRODUCTOWNER')")
     @GetMapping("/projects")
-    public ResponseEntity<List<Projet>> getAllProjects(@RequestParam(required = false) String titre) {
-        List<Projet> projets = new ArrayList<Projet>();
+    public ResponseEntity<List<Project>> getAllProjects(@RequestParam(required = false) String titre) {
+        List<Project> projets = new ArrayList<Project>();
 
         if (titre == null)
             projetRepository.findAll().forEach(projets::add);
@@ -72,7 +69,7 @@ public class ProjetController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        Comparator<Projet> comparator = (c1, c2) -> {
+        Comparator<Project> comparator = (c1, c2) -> {
             return Long.valueOf(c1.getDateDebut().getTime()).compareTo(c2.getDateDebut().getTime());
         };
 
@@ -83,42 +80,61 @@ public class ProjetController {
     // get project by Id
     // @PreAuthorize("hasRole('PRODUCTOWNER')")
     @GetMapping("/projects/{id}")
-    public ResponseEntity<Projet> getProjectById(@PathVariable("id") Long id) {
-        Projet projet = projetRepository.findById(id)
+    public ResponseEntity<Project> getProjectById(@PathVariable("id") Long id) {
+        Project projet = projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with id = " + id));
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
 
     //// get project by reference
     @RequestMapping(value = "/projects/{pReference}/", method = RequestMethod.GET)
-    public ResponseEntity<Projet> getProjectBypReference(@PathVariable("pReference") String pReference) {
+    public ResponseEntity<Project> getProjectBypReference(@PathVariable("pReference") String pReference) {
 
-        Projet projet = projetRepository.findBypReference(pReference)
+        Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
 
     
-    // for test 
-    @PostMapping("/projectstest/")
-    public ResponseEntity<Projet> addProjet(@RequestBody Projet projet) throws ApiResourceNotFoundException {
-        Projet saveProjet = projectServiceImp.addProjet(projet);
-        return new ResponseEntity<>(saveProjet, HttpStatus.CREATED);
-    }
+
     
     // create project
     //@PreAuthorize("hasRole('PRODUCTOWNER')")
     @PostMapping("/projects/")
-    public ResponseEntity<Projet> createProjet(@RequestBody Projet projet) {
-        Projet _projet = projetRepository.save(projet);
+    public ResponseEntity<Project> createProjet(@RequestBody Project projet) {
+        Set<User> users = new HashSet<>();
+        var userFound = new User();
+
+
+        for ( String email: projet.getEmailMember()) {
+
+
+            userFound = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found member with email:"+ email));
+
+
+
+
+             userFound.setEmail(userFound.getEmail());
+             userFound.setUsername(userFound.getUsername());
+             userFound.setRoles(userFound.getRoles());
+             userFound.setPassword("crypted");
+            users.add(userFound);
+         }
+
+
+        projet.setUsers(users);
+
+
+        Project _projet = projetRepository.save(projet);
         return new ResponseEntity<>(_projet, HttpStatus.CREATED);
     }
 
     // update project by id
     @PutMapping("/projects/{id}")
-    public ResponseEntity<Projet> updateProjet(@PathVariable("id") Long id, @RequestBody Projet projetDetails) {
-        Projet _projet = projetRepository.findById(id)
+    public ResponseEntity<Project> updateProjet(@PathVariable("id") Long id, @RequestBody Project projetDetails) {
+        Project _projet = projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found project with id = " + id));
 
         _projet.setTitre(projetDetails.getTitre());
@@ -133,7 +149,7 @@ public class ProjetController {
     @DeleteMapping("/projects/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteProjectById(@PathVariable Long id) {
 
-        Projet projet = this.projetRepository.findById(id)
+        Project projet = this.projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found project with id: " + id));
         this.projetRepository.delete(projet);
 
@@ -147,7 +163,7 @@ public class ProjetController {
     @DeleteMapping("/projects/")
     public ResponseEntity<Map<String, Boolean>> deleteAllProjects() throws ApiResourceNotFoundException {
 
-        List<Projet> deletedProject = projetRepository.findAll();
+        List<Project> deletedProject = projetRepository.findAll();
         Map<String, Boolean> response = new HashMap<String, Boolean>();
 
         response.put("Not found Projects to Delete it!", Boolean.FALSE);
@@ -196,7 +212,7 @@ public class ProjetController {
         taskRepository.tasktimeUpdate();
         projetRepository.totalSpInProject();
 
-        Projet projet = projetRepository.findBypReference(pReference)
+        Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         // Completed SP table in project for release brundown 
@@ -239,7 +255,7 @@ public class ProjetController {
         sprintRepository.sprintStoryPointUpdate();
         ArrayList<String> tabFromdb = sprintRepository.getListSpCompleted(pReference);
 
-        Projet projet = projetRepository.findBypReference(pReference)
+        Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         projet.setPercentage_spc(projectServiceImp
@@ -257,7 +273,7 @@ public class ProjetController {
     @GetMapping("/projects/percentTaskStatuscChart/{pReference}")
     public ResponseEntity<PairArrays> getListtaskByStatus(@PathVariable("pReference") String pReference) {
 
-        Projet projet = projetRepository.findBypReference(pReference)
+        Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         PairArrays pair = projectServiceImp.listTaskByStatus(projet.getpReference());
@@ -269,7 +285,7 @@ public class ProjetController {
     @GetMapping("/projects/listStartDateTask/{pReference}")
     public ResponseEntity<ArrayList<String>> getListTaskStartDateBypRef(@PathVariable("pReference") String pReference) {
 
-        Projet projet = projetRepository.findBypReference(pReference)
+        Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         ArrayList<String> listStartDate = projetRepository.getListTaskStartDate(pReference);
@@ -296,7 +312,7 @@ public class ProjetController {
     @GetMapping("/projects/percentageStoryPointsInProject/{pReference}")
     public ResponseEntity<Map<String, String>> getpercentageStoryPointsInProject( @PathVariable("pReference") String pReference) {
 
-        Projet projet = projetRepository.findBypReference(pReference)
+        Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
         // calcul % completed sp
         float percentageSpCompletedByProject = ((float) projet.getTotalspCompleted() * 100)
@@ -341,8 +357,17 @@ public class ProjetController {
         return new ResponseEntity<>(dataChart, HttpStatus.OK);
     }
 
-   
-    
+
+    public static String[] toArray(String emails) {
+        if (emails == null)
+            return new String[0];
+
+        String[] tmp = emails.split(",");
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = tmp[i].trim();
+        }
+        return tmp;
+    }
     
 
 }

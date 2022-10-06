@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.altercall.exception.ResourceNotFoundException;
-import tn.altercall.entities.Projet;
+import tn.altercall.entities.Project;
 import tn.altercall.entities.Sprint;
 import tn.altercall.repository.ProjetRepository;
 import tn.altercall.repository.SprintRepository;
@@ -73,7 +73,7 @@ public class SprintController {
     public ResponseEntity<List<Sprint>> getAllSprintByProjetReference(
             @PathVariable(value = "pReference") String pReference) {
 
-        Projet projet = projetRepository.findBypReference(pReference)
+        Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         List<Sprint> sprints = sprintRepository.findByProjetId(projet.getId());
@@ -266,7 +266,7 @@ public class SprintController {
     public ResponseEntity<List<Map.Entry<String, Float>>> getNumberOfSprintByVelocity(
             @PathVariable(value = "pReference") String pReference) {
 
-        Projet projet = projetRepository.findBypReference(pReference)
+        Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
         List<Sprint> sprints = sprintRepository.findByProjetId(projet.getId());

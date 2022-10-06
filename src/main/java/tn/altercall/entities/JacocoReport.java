@@ -37,7 +37,7 @@ public class JacocoReport implements Serializable {
     @JoinColumn(name = "projet_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
-    private Projet projet;
+    private Project projet;
 
     public JacocoReport() {
         super();
@@ -119,11 +119,11 @@ public class JacocoReport implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Projet getProjet() {
+    public Project getProjet() {
         return projet;
     }
 
-    public void setProjet(Projet projet) {
+    public void setProjet(Project projet) {
         this.projet = projet;
     }
 

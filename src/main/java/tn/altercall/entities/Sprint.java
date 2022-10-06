@@ -84,7 +84,7 @@ public class Sprint implements Serializable {
     @JoinColumn(name = "projet_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
-    private Projet projet;
+    private Project projet;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "days_sprints", joinColumns = @JoinColumn(name = "sprint_id"))
@@ -106,9 +106,9 @@ public class Sprint implements Serializable {
     }
 
     public Sprint(@NotNull String sReference, @NotNull String stitre, @NotNull String sdescription,
-            @NotNull int workCommitment, @NotNull int workCompleted, @NotNull int moreSp, Date sdateDebut,
-            Date sdateFin, Date supdatedDate, Set<Story> stories, @NotNull Projet projet, List<String> daysarray,
-            List<String> idealLinearray, List<String> workedlarray) {
+                  @NotNull int workCommitment, @NotNull int workCompleted, @NotNull int moreSp, Date sdateDebut,
+                  Date sdateFin, Date supdatedDate, Set<Story> stories, @NotNull Project projet, List<String> daysarray,
+                  List<String> idealLinearray, List<String> workedlarray) {
         super();
         this.sReference = sReference;
         this.stitre = stitre;
@@ -214,11 +214,11 @@ public class Sprint implements Serializable {
         this.stories = stories;
     }
 
-    public Projet getProjet() {
+    public Project getProjet() {
         return projet;
     }
 
-    public void setProjet(Projet projet) {
+    public void setProjet(Project projet) {
         this.projet = projet;
     }
 

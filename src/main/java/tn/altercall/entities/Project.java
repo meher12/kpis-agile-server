@@ -1,22 +1,19 @@
 package tn.altercall.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "projects", uniqueConstraints = {@UniqueConstraint(columnNames = "pReference")})
 /* ----- dealing with bi-directional relationships */
 //@JsonIdentityInfo( generator = ObjectIdGenerators.PropertyGenerator.class,   property = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Projet implements Serializable {
+public class Project implements Serializable {
 
     /**
      *
@@ -57,11 +54,6 @@ public class Projet implements Serializable {
     @JsonManagedReference
     private Set<JacocoReport> reports;
 
-    /*@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
-    private User user;*/
-
 
     @NotNull
     @Column(name = "totalspCommitment", columnDefinition = "integer default 0")
@@ -96,20 +88,28 @@ public class Projet implements Serializable {
     @Column(name = "percentage_spc", length = 1000)
     private List<String> percentage_spc;
 
-    public Projet() {
-        super();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_projets",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"))
+    private Set<User> users = new HashSet<>();
+
+    private ArrayList<String> emailMember;
+
+
+
+    public Project() {
     }
 
     //for unit test
-    public Projet(Long id, String titre, int totalstorypointsinitiallycounts, String descriptionProject) {
-        super();
+    public Project(Long id, String titre, int totalstorypointsinitiallycounts, String descriptionProject) {
         this.id = id;
         this.titre = titre;
         this.totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
         this.descriptionProject = descriptionProject;
     }
 
-    public Projet(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut,
+    /*public Projet(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut,
                   Date dateFin, Set<Sprint> sprints, Set<JacocoReport> reports, int totalspCommitment, int totalspCompleted, Date pupdatedDate,
                   List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp, List<String> percentage_spc) {
         this.id = id;
@@ -128,6 +128,28 @@ public class Projet implements Serializable {
         this.pSpwrked = pSpwrked;
         this.pMoresp = pMoresp;
         this.percentage_spc = percentage_spc;
+    }*/
+
+    public Project(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut, Date dateFin, Set<Sprint> sprints, Set<JacocoReport> reports, int totalspCommitment, int totalspCompleted, Date pupdatedDate, List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp,
+                   List<String> percentage_spc, Set<User> users, ArrayList<String> emailMember) {
+        this.id = id;
+        this.pReference = pReference;
+        this.titre = titre;
+        this.totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
+        this.descriptionProject = descriptionProject;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.sprints = sprints;
+        this.reports = reports;
+        this.totalspCommitment = totalspCommitment;
+        this.totalspCompleted = totalspCompleted;
+        this.pupdatedDate = pupdatedDate;
+        this.pSpCommitment = pSpCommitment;
+        this.pSpwrked = pSpwrked;
+        this.pMoresp = pMoresp;
+        this.percentage_spc = percentage_spc;
+        this.users = users;
+        this.emailMember = emailMember;
     }
 
     public Long getId() {
@@ -259,11 +281,25 @@ public class Projet implements Serializable {
         this.percentage_spc = percentage_spc;
     }
 
+    public Set<User> getUsers() {
+        return users;
+    }
 
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public ArrayList<String> getEmailMember() {
+        return emailMember;
+    }
+
+    public void setEmailMember(ArrayList<String> emailMember) {
+        this.emailMember = emailMember;
+    }
 
     @Override
     public String toString() {
-        return "Projet{" +
+        return "Project{" +
                 "id=" + id +
                 ", pReference='" + pReference + '\'' +
                 ", titre='" + titre + '\'' +
@@ -280,6 +316,8 @@ public class Projet implements Serializable {
                 ", pSpwrked=" + pSpwrked +
                 ", pMoresp=" + pMoresp +
                 ", percentage_spc=" + percentage_spc +
+                ", users=" + users +
+                ", emailMember=" + emailMember +
                 '}';
     }
 }

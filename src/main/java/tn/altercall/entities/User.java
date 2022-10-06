@@ -43,24 +43,24 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinTable(name = "users_projects", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name="project_id", referencedColumnName = "id"))
-    private Set<Projet> projects;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-            @JoinTable(name = "users_tasks", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
-    private Set<Task> tasks;
+
+
 
     public User() {
         super();
     }
 
     public User(String username, String email, String password) {
-        super();
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public User(String username, String email, Set<Role> roles) {
+        this.username = username;
+        this.email = email;
+        this.roles = roles;
     }
 
     public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email,
@@ -112,7 +112,6 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
 
 
     @Override

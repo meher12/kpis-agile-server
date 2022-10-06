@@ -6,14 +6,14 @@ import java.util.Date;
 import java.util.Map;
 
 import tn.altercall.exception.ApiResourceNotFoundException;
-import tn.altercall.entities.Projet;
+import tn.altercall.entities.Project;
 import tn.altercall.utils.DataTaskBugChart;
 import tn.altercall.utils.PairArrays;
 
 public interface ProjectService {
     
     
-    Projet addProjet(Projet projet) throws ApiResourceNotFoundException;
+    Project addProjet(Project projet) throws ApiResourceNotFoundException;
 
     ArrayList<String> releaseBurndownChart(int sumStorypoints, ArrayList<String> spDone, ArrayList<String> moresp);
 

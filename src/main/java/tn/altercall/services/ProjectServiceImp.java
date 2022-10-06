@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.altercall.exception.ApiResourceNotFoundException;
-import tn.altercall.entities.Projet;
+import tn.altercall.entities.Project;
 import tn.altercall.repository.ProjetRepository;
 import tn.altercall.repository.SprintRepository;
 import tn.altercall.repository.StoryRepository;
@@ -42,7 +42,7 @@ public class ProjectServiceImp implements ProjectService {
 
     // For test
     @Override
-    public Projet addProjet(Projet projet) throws ApiResourceNotFoundException {
+    public Project addProjet(Project projet) throws ApiResourceNotFoundException {
         if (projetRepository.existsById(projet.getId())) {
             throw new ApiResourceNotFoundException("Project exists");
         }

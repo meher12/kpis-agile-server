@@ -13,14 +13,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import tn.altercall.entities.Projet;
+import tn.altercall.entities.Project;
 
 @Repository
-public interface ProjetRepository extends JpaRepository<Projet, Long> {
+public interface ProjetRepository extends JpaRepository<Project, Long> {
 
-    List<Projet> findByTitre(String titre);
+    List<Project> findByTitre(String titre);
 
-    Optional<Projet> findBypReference(String pReference);
+    Optional<Project> findBypReference(String pReference);
 
     @Transactional
     @Modifying
