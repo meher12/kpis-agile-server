@@ -2,8 +2,12 @@ package tn.altercall.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
@@ -88,13 +92,16 @@ public class Project implements Serializable {
     @Column(name = "percentage_spc", length = 1000)
     private List<String> percentage_spc;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(name = "users_projets",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"))
     private Set<User> users = new HashSet<>();
 
-    private ArrayList<String> emailMember;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name= "member_of_project", joinColumns = @JoinColumn(name = "project_id", nullable = false), uniqueConstraints = @UniqueConstraint(columnNames = {"project_id"}))
+    @Column(name="email", length = 255)
+    private Set<String> emailMember = new HashSet<>();
 
 
 
@@ -130,8 +137,8 @@ public class Project implements Serializable {
         this.percentage_spc = percentage_spc;
     }*/
 
-    public Project(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut, Date dateFin, Set<Sprint> sprints, Set<JacocoReport> reports, int totalspCommitment, int totalspCompleted, Date pupdatedDate, List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp,
-                   List<String> percentage_spc, Set<User> users, ArrayList<String> emailMember) {
+    public Project(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut, Date dateFin, Set<Sprint> sprints, Set<JacocoReport> reports, int totalspCommitment, int totalspCompleted, Date pupdatedDate,
+                   List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp, List<String> percentage_spc, Set<User> users, Set<String> emailMember) {
         this.id = id;
         this.pReference = pReference;
         this.titre = titre;
@@ -289,11 +296,11 @@ public class Project implements Serializable {
         this.users = users;
     }
 
-    public ArrayList<String> getEmailMember() {
+    public Set<String> getEmailMember() {
         return emailMember;
     }
 
-    public void setEmailMember(ArrayList<String> emailMember) {
+    public void setEmailMember(Set<String> emailMember) {
         this.emailMember = emailMember;
     }
 

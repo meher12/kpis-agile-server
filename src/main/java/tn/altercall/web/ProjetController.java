@@ -1,29 +1,17 @@
 package tn.altercall.web;
 
-import java.text.ParseException;
-import java.util.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import tn.altercall.entities.ERole;
+import tn.altercall.entities.Project;
 import tn.altercall.entities.Role;
 import tn.altercall.entities.User;
 import tn.altercall.exception.ApiResourceNotFoundException;
 import tn.altercall.exception.ResourceNotFoundException;
-import tn.altercall.entities.Project;
 import tn.altercall.repository.*;
 import tn.altercall.services.ProjectServiceImp;
 import tn.altercall.utils.DataTaskBugChart;
@@ -31,28 +19,38 @@ import tn.altercall.utils.Efficacity;
 import tn.altercall.utils.PairArrays;
 import tn.altercall.utils.TasksBugs;
 
+import java.text.ParseException;
+import java.util.*;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class ProjetController {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(ProjetController.class);
     @Autowired
     ProjetRepository projetRepository;
-
     @Autowired
     ProjectServiceImp projectServiceImp;
-
     @Autowired
     SprintRepository sprintRepository;
-
     @Autowired
     StoryRepository storyRepository;
-
     @Autowired
     TaskRepository taskRepository;
-
     @Autowired
     UserRepository userRepository;
+
+    public static String[] toArray(String emails) {
+        if (emails == null)
+            return new String[0];
+
+        String[] tmp = emails.split(",");
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = tmp[i].trim();
+        }
+        return tmp;
+    }
 
     // get all project by Title or All
     // @PreAuthorize("hasRole('PRODUCTOWNER')")
@@ -96,9 +94,6 @@ public class ProjetController {
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
 
-    
-
-    
     // create project
     //@PreAuthorize("hasRole('PRODUCTOWNER')")
     @PostMapping("/projects/")
@@ -106,27 +101,17 @@ public class ProjetController {
         Set<User> users = new HashSet<>();
         var userFound = new User();
 
-
-        for ( String email: projet.getEmailMember()) {
-
-
+        for (String email : projet.getEmailMember()) {
             userFound = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found member with email:"+ email));
-
-
-
-
-             userFound.setEmail(userFound.getEmail());
-             userFound.setUsername(userFound.getUsername());
-             userFound.setRoles(userFound.getRoles());
-             userFound.setPassword("crypted");
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found member with email:" + email));
+            userFound.setEmail(userFound.getEmail());
+            userFound.setUsername(userFound.getUsername());
+            userFound.setRoles(userFound.getRoles());
+            // userFound.setPassword(userFound.getPassword());
             users.add(userFound);
-         }
-
+        }
 
         projet.setUsers(users);
-
-
         Project _projet = projetRepository.save(projet);
         return new ResponseEntity<>(_projet, HttpStatus.CREATED);
     }
@@ -134,6 +119,7 @@ public class ProjetController {
     // update project by id
     @PutMapping("/projects/{id}")
     public ResponseEntity<Project> updateProjet(@PathVariable("id") Long id, @RequestBody Project projetDetails) {
+
         Project _projet = projetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found project with id = " + id));
 
@@ -143,7 +129,29 @@ public class ProjetController {
         _projet.setTotalstorypointsinitiallycounts(projetDetails.getTotalstorypointsinitiallycounts());
         _projet.setDateFin(projetDetails.getDateFin());
 
-        return new ResponseEntity<>(projetRepository.save(_projet), HttpStatus.OK);
+        //  update member team
+        //LOGGER.info("user is {}", projetDetails.getEmailMember());
+        Set<User> users = new HashSet<>();
+        Set<Role> rl = new HashSet<>();
+      /*  rl.add(new Role(ERole.ROLE_DEVELOPER));
+        var userFound = new User("", " ", rl);*/
+
+      //  var userFound = new User();
+        for (String email : projetDetails.getEmailMember()) {
+           var userFound = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found member with email:" + email));
+            userFound.setEmail(userFound.getEmail());
+            userFound.setUsername(userFound.getUsername());
+            userFound.setRoles(userFound.getRoles());
+            //  userFound.setPassword(userFound.getPassword());
+
+            users.add(userFound);
+        }
+        _projet.setUsers(users);
+        _projet.setEmailMember(projetDetails.getEmailMember());
+
+
+        return new ResponseEntity<>(projetRepository.saveAndFlush(_projet), HttpStatus.OK);
     }
 
     @DeleteMapping("/projects/{id}")
@@ -169,9 +177,7 @@ public class ProjetController {
         response.put("Not found Projects to Delete it!", Boolean.FALSE);
         if (deletedProject.isEmpty()) {
             return ResponseEntity.badRequest().body(response);
-        }
-
-        else {
+        } else {
             projetRepository.deleteAll();
             response.put("Projects Deleted", Boolean.TRUE);
             return ResponseEntity.ok(response);
@@ -179,7 +185,6 @@ public class ProjetController {
 
     }
 
-    
     // projects by release brundown chart
 //    @GetMapping("/projects/updateallsp")
 //    public ResponseEntity<Map<String, Boolean>> updatetotalSpInProject() {
@@ -215,12 +220,12 @@ public class ProjetController {
         Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
 
-        // Completed SP table in project for release brundown 
+        // Completed SP table in project for release brundown
         ArrayList<String> spDoneFromSprint = sprintRepository.getListSpCompleted(pReference);
 
         // System.out.println("********spDoneFromSprint*********" + spDoneFromSprint);
 
-        // More SP table in project for release brundown 
+        // More SP table in project for release brundown
         ArrayList<String> morespFromSprint = sprintRepository.getListMoreSp(pReference);
 
         // System.out.println("*******morespFromSprint**********" + morespFromSprint);
@@ -296,7 +301,7 @@ public class ProjetController {
     // get efficacity by startDate of task by project ref
     @RequestMapping(value = "/projects/getEfficacity/{pReference}", method = RequestMethod.PUT)
     public ResponseEntity<PairArrays> getEfficacityByStartDateTask(@PathVariable("pReference") String pReference,
-            @RequestBody ArrayList<Efficacity> efficacityDataRequest) throws ParseException {
+                                                                   @RequestBody ArrayList<Efficacity> efficacityDataRequest) throws ParseException {
 
         Map<Date, Date> mapDate = new HashMap<Date, Date>();
 
@@ -310,7 +315,7 @@ public class ProjetController {
 
     // select work completed percentage demi-cercle in task by project reference
     @GetMapping("/projects/percentageStoryPointsInProject/{pReference}")
-    public ResponseEntity<Map<String, String>> getpercentageStoryPointsInProject( @PathVariable("pReference") String pReference) {
+    public ResponseEntity<Map<String, String>> getpercentageStoryPointsInProject(@PathVariable("pReference") String pReference) {
 
         Project projet = projetRepository.findBypReference(pReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
@@ -324,15 +329,15 @@ public class ProjetController {
 
         String percentageSpCompletedByProjectString = String.format("%.2f", percentageSpCompletedByProject);
         String percentageSpCommitmentByProjectString = String.format("%.2f", percentageSpCommitmentByProject);
-        
+
         // total sp completed
-        String totalspcompleted =  String.valueOf(projet.getTotalspCompleted());
-        
+        String totalspcompleted = String.valueOf(projet.getTotalspCompleted());
+
         // total sp initialized
-        String totalstorypointsinitiallycounts =  String.valueOf(projet.getTotalstorypointsinitiallycounts());
-        
+        String totalstorypointsinitiallycounts = String.valueOf(projet.getTotalstorypointsinitiallycounts());
+
         Map<String, String> data = new HashMap<String, String>();
-        
+
         data.put("SpCompleted", percentageSpCompletedByProjectString);
         data.put("SpCommitment", percentageSpCommitmentByProjectString);
         data.put("totalspcompleted", totalspcompleted);
@@ -340,12 +345,11 @@ public class ProjetController {
         //System.out.println(data);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
-    
-    
+
     // get taskBugs by startDate of task by project ref
     @RequestMapping(value = "/projects/gettaskbugs/{pReference}", method = RequestMethod.PUT)
     public ResponseEntity<DataTaskBugChart> getTaskBugByStartDateTask(@PathVariable("pReference") String pReference,
-            @RequestBody ArrayList<TasksBugs> dataRequest)  {
+                                                                      @RequestBody ArrayList<TasksBugs> dataRequest) {
 
         Map<Date, Date> mapDate = new HashMap<Date, Date>();
 
@@ -357,17 +361,5 @@ public class ProjetController {
         return new ResponseEntity<>(dataChart, HttpStatus.OK);
     }
 
-
-    public static String[] toArray(String emails) {
-        if (emails == null)
-            return new String[0];
-
-        String[] tmp = emails.split(",");
-        for (int i = 0; i < tmp.length; i++) {
-            tmp[i] = tmp[i].trim();
-        }
-        return tmp;
-    }
-    
 
 }

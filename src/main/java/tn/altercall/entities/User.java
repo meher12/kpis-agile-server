@@ -1,9 +1,7 @@
 package tn.altercall.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,11 +39,6 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
-
-
-
-
-
 
     public User() {
         super();
