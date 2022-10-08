@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tasks", uniqueConstraints = { @UniqueConstraint(columnNames = "tReference") })
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+
 public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -67,10 +67,15 @@ public class Task implements Serializable {
     @JsonBackReference
     private Story story;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_tasks", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinTable(name = "users_tasks", joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "id"))
     private Set<User> users = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name= "member_of_task", joinColumns = @JoinColumn(name = "taskAttached_id", nullable = false))
+    @Column(name="mail", length = 255)
+    private Set<String> emailUser = new HashSet<>();
 
     public Task() {
         super();
@@ -93,9 +98,10 @@ public class Task implements Serializable {
         this.story = story;
     }
 
-    public Task(Long id, String tname, String tReference, String tdescription, Date tdateDebut,
-                Date tdateFin, ETask status, ETypeTask typeTask,
-                Date tsupdatedDate, int estimation, int bugs, Story story, Set<User> users) {
+
+
+    public Task(Long id, String tname, String tReference, String tdescription, Date tdateDebut, Date tdateFin,
+                ETask status, ETypeTask typeTask, Date tsupdatedDate, int estimation, int bugs, Story story, Set<User> users, Set<String> emailUser) {
         this.id = id;
         this.tname = tname;
         this.tReference = tReference;
@@ -109,6 +115,7 @@ public class Task implements Serializable {
         this.bugs = bugs;
         this.story = story;
         this.users = users;
+        this.emailUser = emailUser;
     }
 
     public Long getId() {
@@ -215,6 +222,14 @@ public class Task implements Serializable {
         this.users = users;
     }
 
+    public Set<String> getEmailUser() {
+        return emailUser;
+    }
+
+    public void setEmailUser(Set<String> emailUser) {
+        this.emailUser = emailUser;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -231,6 +246,7 @@ public class Task implements Serializable {
                 ", bugs=" + bugs +
                 ", story=" + story +
                 ", users=" + users +
+                ", emailUser=" + emailUser +
                 '}';
     }
 }

@@ -99,7 +99,8 @@ public class Project implements Serializable {
     private Set<User> users = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name= "member_of_project", joinColumns = @JoinColumn(name = "project_id", nullable = false), uniqueConstraints = @UniqueConstraint(columnNames = {"project_id"}))
+    @CollectionTable(name= "member_of_project", joinColumns = @JoinColumn(name = "project_id", nullable = false),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"project_id"}))
     @Column(name="email", length = 255)
     private Set<String> emailMember = new HashSet<>();
 
@@ -116,26 +117,7 @@ public class Project implements Serializable {
         this.descriptionProject = descriptionProject;
     }
 
-    /*public Projet(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut,
-                  Date dateFin, Set<Sprint> sprints, Set<JacocoReport> reports, int totalspCommitment, int totalspCompleted, Date pupdatedDate,
-                  List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp, List<String> percentage_spc) {
-        this.id = id;
-        this.pReference = pReference;
-        this.titre = titre;
-        this.totalstorypointsinitiallycounts = totalstorypointsinitiallycounts;
-        this.descriptionProject = descriptionProject;
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
-        this.sprints = sprints;
-        this.reports = reports;
-        this.totalspCommitment = totalspCommitment;
-        this.totalspCompleted = totalspCompleted;
-        this.pupdatedDate = pupdatedDate;
-        this.pSpCommitment = pSpCommitment;
-        this.pSpwrked = pSpwrked;
-        this.pMoresp = pMoresp;
-        this.percentage_spc = percentage_spc;
-    }*/
+
 
     public Project(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut, Date dateFin, Set<Sprint> sprints, Set<JacocoReport> reports, int totalspCommitment, int totalspCompleted, Date pupdatedDate,
                    List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp, List<String> percentage_spc, Set<User> users, Set<String> emailMember) {

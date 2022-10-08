@@ -1,34 +1,25 @@
 package tn.altercall.web;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import tn.altercall.exception.ApiResourceNotFoundException;
-import tn.altercall.exception.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.*;
 import tn.altercall.entities.Story;
 import tn.altercall.entities.Task;
+import tn.altercall.entities.User;
+import tn.altercall.exception.ApiResourceNotFoundException;
+import tn.altercall.exception.ResourceNotFoundException;
 import tn.altercall.repository.StoryRepository;
 import tn.altercall.repository.TaskRepository;
+import tn.altercall.repository.UserRepository;
+
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/")
+@Slf4j
 public class TaskController {
 
     @Autowired
@@ -36,6 +27,9 @@ public class TaskController {
 
     @Autowired
     StoryRepository storyRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     // get All Task By StoryId
     @RequestMapping(value = "/stories/{story_id}/tasks")
@@ -60,7 +54,7 @@ public class TaskController {
     public ResponseEntity<List<Task>> getAllTask() {
 
         List<Task> tasks = taskRepository.findAll();
-        
+
         Comparator<Task> comparator = (c1, c2) -> {
             return Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
         };
@@ -76,7 +70,7 @@ public class TaskController {
         Story story = storyRepository.findBystReference(stReference)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Story with Reference : " + stReference));
         List<Task> tasks = taskRepository.findByStoryId(story.getId());
-        
+
         Comparator<Task> comparator = (c1, c2) -> {
             return Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
         };
@@ -106,15 +100,50 @@ public class TaskController {
 
     // create Task
     @PostMapping("/story/{story_id}/task")
-    public ResponseEntity<Task> createTask(@PathVariable(value = "story_id") Long story_id,
-            @RequestBody Task taskRequest) {
+    public ResponseEntity<Task> createTask(@PathVariable(value = "story_id") Long story_id, @RequestBody Task taskRequest) {
+
+        Set<User> users = new HashSet<>();
+
         Task task = storyRepository.findById(story_id).map(story -> {
             taskRequest.setStory(story);
+
+            for (String email : taskRequest.getEmailUser()) {
+                var userFound = userRepository.findByEmail(email)
+                        .orElseThrow(() -> new ResourceNotFoundException("Not found user with email:" + email));
+                //log.info("************ {}", userFound);
+                userFound.setEmail(userFound.getEmail());
+                userFound.setUsername(userFound.getUsername());
+                userFound.setRoles(userFound.getRoles());
+                // userFound.setPassword(userFound.getPassword());
+                users.add(userFound);
+            }
+            taskRequest.setUsers(users);
 
             return taskRepository.save(taskRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Story with id = " + story_id));
 
         return new ResponseEntity<>(task, HttpStatus.CREATED);
+
+        //************************
+      /*
+
+        for (String email : taskRequest.getEmailUser()) {
+            var userFound = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found user with email:" + email));
+            log.info("************ {}", userFound);
+            userFound.setEmail(userFound.getEmail());
+            userFound.setUsername(userFound.getUsername());
+            userFound.setRoles(userFound.getRoles());
+            // userFound.setPassword(userFound.getPassword());
+            users.add(userFound);
+
+        }*/
+
+        // *************
+        //task.setUsers(users);
+        // task.setEmailUser(taskRequest.getEmailUser());
+
+        //************************
     }
 
     // update Task
@@ -131,6 +160,23 @@ public class TaskController {
         task.setBugs(taskRequest.getBugs());
         task.setStatus(taskRequest.getStatus());
         task.setTypeTask(taskRequest.getTypeTask());
+
+        // update member of task
+        Set<User> users = new HashSet<>();
+
+        for (String email : taskRequest.getEmailUser()) {
+            var userFound = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found user with email:" + email));
+            log.info("************ {}", userFound);
+            userFound.setEmail(userFound.getEmail());
+            userFound.setUsername(userFound.getUsername());
+            userFound.setRoles(userFound.getRoles());
+            // userFound.setPassword(userFound.getPassword());
+            users.add(userFound);
+        }
+
+        task.setUsers(users);
+        task.setEmailUser(taskRequest.getEmailUser());
 
         return new ResponseEntity<>(taskRepository.save(task), HttpStatus.OK);
     }
