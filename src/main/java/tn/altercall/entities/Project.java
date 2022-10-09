@@ -54,9 +54,9 @@ public class Project implements Serializable {
     @JsonManagedReference
     private Set<Sprint> sprints;
 
-    @OneToMany(mappedBy = "projet")
+   /* @OneToMany(mappedBy = "project")
     @JsonManagedReference
-    private Set<JacocoReport> reports;
+    private Set<JacocoReport> reports;*/
 
 
     @NotNull
@@ -118,9 +118,8 @@ public class Project implements Serializable {
     }
 
 
-
-    public Project(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut, Date dateFin, Set<Sprint> sprints, Set<JacocoReport> reports, int totalspCommitment, int totalspCompleted, Date pupdatedDate,
-                   List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp, List<String> percentage_spc, Set<User> users, Set<String> emailMember) {
+    public Project(Long id, String pReference, String titre, int totalstorypointsinitiallycounts, String descriptionProject, Date dateDebut, Date dateFin, Set<Sprint> sprints, int totalspCommitment, int totalspCompleted, Date pupdatedDate, List<String> pSpCommitment, List<String> pSpwrked, List<String> pMoresp,
+                   List<String> percentage_spc, Set<User> users, Set<String> emailMember) {
         this.id = id;
         this.pReference = pReference;
         this.titre = titre;
@@ -129,7 +128,6 @@ public class Project implements Serializable {
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.sprints = sprints;
-        this.reports = reports;
         this.totalspCommitment = totalspCommitment;
         this.totalspCompleted = totalspCompleted;
         this.pupdatedDate = pupdatedDate;
@@ -206,13 +204,6 @@ public class Project implements Serializable {
         this.sprints = sprints;
     }
 
-    public Set<JacocoReport> getReports() {
-        return reports;
-    }
-
-    public void setReports(Set<JacocoReport> reports) {
-        this.reports = reports;
-    }
 
     public int getTotalspCommitment() {
         return totalspCommitment;
@@ -297,7 +288,6 @@ public class Project implements Serializable {
                 ", dateDebut=" + dateDebut +
                 ", dateFin=" + dateFin +
                 ", sprints=" + sprints +
-                ", reports=" + reports +
                 ", totalspCommitment=" + totalspCommitment +
                 ", totalspCompleted=" + totalspCompleted +
                 ", pupdatedDate=" + pupdatedDate +

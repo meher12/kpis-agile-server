@@ -8,15 +8,16 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tasks", uniqueConstraints = { @UniqueConstraint(columnNames = "tReference") })
-
+/* ----- dealing with bi-directional relationships */
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;

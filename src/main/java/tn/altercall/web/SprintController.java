@@ -68,7 +68,7 @@ public class SprintController {
         return new ResponseEntity<>(sprints, HttpStatus.OK);
     }
 
-    // get All Sprint By Projet Reference
+    // get All Sprint By Project Reference
     @RequestMapping(value = "/sprints/{pReference}/sprints", method = RequestMethod.GET)
     public ResponseEntity<List<Sprint>> getAllSprintByProjetReference(
             @PathVariable(value = "pReference") String pReference) {

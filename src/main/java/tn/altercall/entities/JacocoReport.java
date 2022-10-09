@@ -33,18 +33,20 @@ public class JacocoReport implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+   private String projectRef;
+/*
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "projet_id", nullable = false)
+    @JoinColumn(name = "project_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
-    private Project projet;
+    private Project project;*/
 
     public JacocoReport() {
         super();
     }
 
     public JacocoReport(String type, String projectname, float covered, float missed, float percentage,
-            float totalpercentage, Date createdAt) {
+            float totalpercentage, Date createdAt, String projectRef) {
         super();
         this.type = type;
         this.projectname = projectname;
@@ -53,7 +55,22 @@ public class JacocoReport implements Serializable {
         this.percentage = percentage;
         this.totalpercentage = totalpercentage;
         this.createdAt = createdAt;
+        this.projectRef = projectRef;
     }
+
+    public JacocoReport(Long id, String type, String projectname, float covered, float missed, float percentage, float totalpercentage, Date createdAt, String projectRef) {
+        this.id = id;
+        this.type = type;
+        this.projectname = projectname;
+        this.covered = covered;
+        this.missed = missed;
+        this.percentage = percentage;
+        this.totalpercentage = totalpercentage;
+        this.createdAt = createdAt;
+        this.projectRef = projectRef;
+    }
+
+
 
     public Long getId() {
         return id;
@@ -119,26 +136,13 @@ public class JacocoReport implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Project getProjet() {
-        return projet;
+    public String getProjectRef() {
+        return projectRef;
     }
 
-    public void setProjet(Project projet) {
-        this.projet = projet;
+    public void setProjectRef(String projectRef) {
+        this.projectRef = projectRef;
     }
 
-    @Override
-    public String toString() {
-        return "JacocoReport{" +
-                "id=" + id +
-                ", type='" + type + '\'' +
-                ", projectname='" + projectname + '\'' +
-                ", covered=" + covered +
-                ", missed=" + missed +
-                ", percentage=" + percentage +
-                ", totalpercentage=" + totalpercentage +
-                ", createdAt=" + createdAt +
-                ", projet=" + projet +
-                '}';
-    }
+
 }
