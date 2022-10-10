@@ -1,12 +1,12 @@
 package tn.altercall.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.altercall.entities.ERole;
 import tn.altercall.entities.Project;
 import tn.altercall.entities.Role;
 import tn.altercall.entities.User;
@@ -25,6 +25,7 @@ import java.util.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class ProjetController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ProjetController.class);
@@ -136,9 +137,9 @@ public class ProjetController {
       /*  rl.add(new Role(ERole.ROLE_DEVELOPER));
         var userFound = new User("", " ", rl);*/
 
-      //  var userFound = new User();
+        //  var userFound = new User();
         for (String email : projetDetails.getEmailMember()) {
-           var userFound = userRepository.findByEmail(email)
+            var userFound = userRepository.findByEmail(email)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found member with email:" + email));
             userFound.setEmail(userFound.getEmail());
             userFound.setUsername(userFound.getUsername());
@@ -359,6 +360,57 @@ public class ProjetController {
         // System.out.println(mapDate);
         DataTaskBugChart dataChart = this.projectServiceImp.getTasksBugs(pReference, mapDate);
         return new ResponseEntity<>(dataChart, HttpStatus.OK);
+    }
+
+
+    // Add, update memeber
+    @PutMapping(value = "/project/addmember/{id}")
+    public ResponseEntity<Map<String, Boolean>> createTeam(@PathVariable("id") Long id,
+                                                           @RequestBody Set<Object> teamRequest) {
+
+        Project project = projetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ProjectId " + id + "not found"));
+
+        Set<String> arrayFiltred = new HashSet<>();
+        Set<String> arrayJson = new HashSet<>();
+        Set<String> arrayMail = new HashSet<>();
+
+        //log.info("Request data from client {}",teamRequest);
+
+        teamRequest.forEach(name -> {
+            arrayJson.add(name.toString());
+        });
+
+        for (String item : arrayJson) {
+            String mail = item.replaceAll("emailMember=", "");
+            arrayFiltred.add(mail);
+        }
+        // log.info("*****{}", arrayFiltred );
+
+        for (String filterdMail : arrayFiltred) {
+            filterdMail = filterdMail.replaceAll("[\\{|\\}]", "");
+            arrayMail.add(filterdMail);
+        }
+        log.info("arrayMail {}", arrayMail);
+
+        project.setEmailMember(arrayMail);
+        Set<User> users = new HashSet<>();
+
+        for (String email : arrayMail) {
+            var userFound = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found member with email:" + email));
+            userFound.setEmail(userFound.getEmail());
+            userFound.setUsername(userFound.getUsername());
+            userFound.setRoles(userFound.getRoles());
+
+            users.add(userFound);
+        }
+        project.setUsers(users);
+        projetRepository.saveAndFlush(project);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("team Inserted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 
 

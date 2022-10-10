@@ -38,11 +38,17 @@ public class KpisAgileServerApplication {
             }
         }
     }*/
-   @Scheduled(cron = "2 * * * * *")
+   @Scheduled(cron = "* 1 * * * *")
     void deleteDirectoryStream() throws IOException {
         Path path = Paths.get("uploads");
        File directory = new File(path +"");
-       FileUtils.cleanDirectory(directory);
+       if(!FileUtils.isEmptyDirectory(directory)) {
+           FileUtils.cleanDirectory(directory);
+           log.info("File deleted");
+       }
+       else{
+           log.info("Directory is empty");
+       }
     }
 
 

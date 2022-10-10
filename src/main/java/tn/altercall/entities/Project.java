@@ -99,8 +99,8 @@ public class Project implements Serializable {
     private Set<User> users = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name= "member_of_project", joinColumns = @JoinColumn(name = "project_id", nullable = false),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"project_id"}))
+    @CollectionTable(name= "member_of_project", joinColumns = @JoinColumn(name = "project_id", nullable = false)/*,
+            uniqueConstraints = @UniqueConstraint(columnNames = {"project_id"})*/)
     @Column(name="email", length = 255)
     private Set<String> emailMember = new HashSet<>();
 
