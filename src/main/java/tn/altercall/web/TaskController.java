@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.altercall.entities.Project;
 import tn.altercall.entities.Story;
 import tn.altercall.entities.Task;
 import tn.altercall.entities.User;
@@ -211,6 +212,57 @@ public class TaskController {
         this.taskRepository.tasktimeUpdate();
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("Updated table task", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Add, update member
+    @PutMapping(value = "/task/addmember/{id}")
+    public ResponseEntity<Map<String, Boolean>> createTeamForTask(@PathVariable("id") Long id,
+                                                           @RequestBody Set<Object> teamRequest) {
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("TaskId " + id + "not found"));
+
+        Set<String> arrayFiltred = new HashSet<>();
+        Set<String> arrayJson = new HashSet<>();
+        Set<String> arrayMail = new HashSet<>();
+
+        //log.info("Request data from client {}",teamRequest);
+
+        teamRequest.forEach(name -> {
+            arrayJson.add(name.toString());
+        });
+
+        for (String item : arrayJson) {
+            String mail = item.replaceAll("emailMember=", "");
+            arrayFiltred.add(mail);
+        }
+        // log.info("*****{}", arrayFiltred );
+
+        for (String filterdMail : arrayFiltred) {
+            filterdMail = filterdMail.replaceAll("[\\{|\\}]", "");
+            arrayMail.add(filterdMail);
+        }
+        //log.info("arrayMail {}", arrayMail);
+
+        task.setEmailUser(arrayMail);
+        Set<User> users = new HashSet<>();
+
+        for (String email : arrayMail) {
+            var userFound = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found member with email:" + email));
+            userFound.setEmail(userFound.getEmail());
+            userFound.setUsername(userFound.getUsername());
+            userFound.setRoles(userFound.getRoles());
+
+            users.add(userFound);
+        }
+        task.setUsers(users);
+        taskRepository.saveAndFlush(task);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("team Inserted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
 

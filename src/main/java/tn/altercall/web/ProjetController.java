@@ -363,7 +363,7 @@ public class ProjetController {
     }
 
 
-    // Add, update memeber
+    // Add, update member
     @PutMapping(value = "/project/addmember/{id}")
     public ResponseEntity<Map<String, Boolean>> createTeam(@PathVariable("id") Long id,
                                                            @RequestBody Set<Object> teamRequest) {
