@@ -24,8 +24,8 @@ public interface ProjetRepository extends JpaRepository<Project, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE projets SET pupdated_date = (SELECT now()), totalsp_commitment = (SELECT COALESCE(SUM(sp.work_commitment),0) FROM sprints sp WHERE projets.id = sp.projet_id),"
-            + "totalsp_completed = (SELECT COALESCE(SUM(sp.work_completed),0) FROM sprints sp WHERE projets.id = sp.projet_id)", nativeQuery = true)
+    @Query(value = "UPDATE projects SET pupdated_date = (SELECT now()), totalsp_commitment = (SELECT COALESCE(SUM(sp.work_commitment),0) FROM sprints sp WHERE projects.id = sp.projet_id),"
+            + "totalsp_completed = (SELECT COALESCE(SUM(sp.work_completed),0) FROM sprints sp WHERE projects.id = sp.projet_id)", nativeQuery = true)
     void totalSpInProject();
 
     @Transactional
@@ -51,14 +51,14 @@ public interface ProjetRepository extends JpaRepository<Project, Long> {
     // select List status tasks in project
     @Query(value = "select tasks.status as status, count(tasks.status) as count from tasks"
             + " join story  on story.id = tasks.story_id" + " join sprints on sprints.id = story.sprint_id"
-            + " join projets on projets.id = sprints.projet_id"
+            + " join projects on projects.id = sprints.projet_id"
             + " AND p_reference=?1 group by tasks.status ORDER BY tasks.status ASC", nativeQuery = true)
     List<String[]> getListStatusTasks(String p_reference);
 
     // select count status Scheduled in tasks by project ref
     @Query(value = "select count(status) from tasks" + " join story on story.id = tasks.story_id"
             + " join sprints on sprints.id = story.sprint_id"
-            + " join projets on projets.id = sprints.projet_id AND p_reference =:p_reference"
+            + " join projects on projects.id = sprints.projet_id AND p_reference =:p_reference"
             + " WHERE status='Scheduled' and tdate_debut BETWEEN :start AND :end ;", nativeQuery = true)
     float getCountStatusScheduled(@Param("p_reference") String p_reference, @Param("start") Date start,
             @Param("end") Date end);
@@ -66,7 +66,7 @@ public interface ProjetRepository extends JpaRepository<Project, Long> {
     // select count status In_progress in tasks by project ref
     @Query(value = "select count(status) from tasks" + " join story on story.id = tasks.story_id"
             + " join sprints on sprints.id = story.sprint_id"
-            + " join projets on projets.id = sprints.projet_id AND p_reference =:p_reference"
+            + " join projects on projects.id = sprints.projet_id AND p_reference =:p_reference"
             + " WHERE status='In_progress' and tdate_debut BETWEEN :start AND :end ;", nativeQuery = true)
     float getCountStatusInprogress(@Param("p_reference") String p_reference, @Param("start") Date start,
             @Param("end") Date end);
@@ -74,18 +74,18 @@ public interface ProjetRepository extends JpaRepository<Project, Long> {
     // select tdate_debut in task by project ref
     @Query(value = "select tdate_debut from tasks" + " join story on story.id = tasks.story_id"
             + " join sprints on sprints.id = story.sprint_id"
-            + " join projets on projets.id = sprints.projet_id AND p_reference=:preference ORDER BY tdate_debut ASC", nativeQuery = true)
+            + " join projects on projects.id = sprints.projet_id AND p_reference=:preference ORDER BY tdate_debut ASC", nativeQuery = true)
     ArrayList<String> getListTaskStartDate(String preference);
 
     // sum tasks has bugs
     @Query(value = "select COALESCE(SUM(bugs),0) from tasks join story on story.id = tasks.story_id join sprints on sprints.id = story.sprint_id"
-            + " join projets on projets.id = sprints.projet_id AND p_reference =:p_reference"
+            + " join projects on projects.id = sprints.projet_id AND p_reference =:p_reference"
             + " where bugs!=0 AND (tdate_debut BETWEEN :start AND :end ) ", nativeQuery = true)
     int getSumBugsTask(@Param("p_reference") String p_reference, @Param("start") Date start, @Param("end") Date end);
 
     // sum tasks not has bugs
     @Query(value = "select count(bugs) from tasks join story on story.id = tasks.story_id join sprints on sprints.id = story.sprint_id"
-            + " join projets on projets.id = sprints.projet_id AND p_reference =:p_reference"
+            + " join projects on projects.id = sprints.projet_id AND p_reference =:p_reference"
             + " where bugs=0 AND (tdate_debut BETWEEN :start AND :end ) ", nativeQuery = true)
     int getSumNotBugsTask(@Param("p_reference") String p_reference, @Param("start") Date start, @Param("end") Date end);
 
