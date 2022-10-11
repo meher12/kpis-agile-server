@@ -9,8 +9,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.Comparator;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @SpringBootApplication
 @Slf4j
@@ -38,19 +38,26 @@ public class KpisAgileServerApplication {
             }
         }
     }*/
-   @Scheduled(cron = "* 1 * * * *")
+    /*
+    * the expression into separate components:
+        0 - at second :00,
+        0/5 - every 5 minutes starting at minute :00,
+        * - every hour,
+        * - every day,
+        * - every month,
+        ? - any day of the week.
+    * */
+    @Scheduled(cron = "0 0/5 * * * ?")  // 0 */5 * * * ?
     void deleteDirectoryStream() throws IOException {
         Path path = Paths.get("uploads");
-       File directory = new File(path +"");
-       if(!FileUtils.isEmptyDirectory(directory)) {
-           FileUtils.cleanDirectory(directory);
-           log.info("File deleted");
-       }
-       else{
-           log.info("Directory is empty");
-       }
+        File directory = new File(path + "");
+        if (!FileUtils.isEmptyDirectory(directory)) {
+            FileUtils.cleanDirectory(directory);
+            log.info("File deleted");
+        } else {
+            log.info("Directory is empty");
+        }
     }
-
 
 
 //    @Bean

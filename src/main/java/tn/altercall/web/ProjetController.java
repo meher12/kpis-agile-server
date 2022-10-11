@@ -99,7 +99,7 @@ public class ProjetController {
     //@PreAuthorize("hasRole('PRODUCTOWNER')")
     @PostMapping("/projects/")
     public ResponseEntity<Project> createProjet(@RequestBody Project projet) {
-        Set<User> users = new HashSet<>();
+        /*Set<User> users = new HashSet<>();
         var userFound = new User();
 
         for (String email : projet.getEmailMember()) {
@@ -112,7 +112,7 @@ public class ProjetController {
             users.add(userFound);
         }
 
-        projet.setUsers(users);
+        projet.setUsers(users);*/
         Project _projet = projetRepository.save(projet);
         return new ResponseEntity<>(_projet, HttpStatus.CREATED);
     }
@@ -132,10 +132,9 @@ public class ProjetController {
 
         //  update member team
         //LOGGER.info("user is {}", projetDetails.getEmailMember());
-        Set<User> users = new HashSet<>();
+     /*   Set<User> users = new HashSet<>();
         Set<Role> rl = new HashSet<>();
-      /*  rl.add(new Role(ERole.ROLE_DEVELOPER));
-        var userFound = new User("", " ", rl);*/
+
 
         //  var userFound = new User();
         for (String email : projetDetails.getEmailMember()) {
@@ -149,7 +148,7 @@ public class ProjetController {
             users.add(userFound);
         }
         _projet.setUsers(users);
-        _projet.setEmailMember(projetDetails.getEmailMember());
+        _projet.setEmailMember(projetDetails.getEmailMember());*/
 
 
         return new ResponseEntity<>(projetRepository.saveAndFlush(_projet), HttpStatus.OK);

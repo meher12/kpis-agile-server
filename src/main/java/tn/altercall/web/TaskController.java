@@ -103,12 +103,12 @@ public class TaskController {
     @PostMapping("/story/{story_id}/task")
     public ResponseEntity<Task> createTask(@PathVariable(value = "story_id") Long story_id, @RequestBody Task taskRequest) {
 
-        Set<User> users = new HashSet<>();
+       // Set<User> users = new HashSet<>();
 
         Task task = storyRepository.findById(story_id).map(story -> {
             taskRequest.setStory(story);
 
-            for (String email : taskRequest.getEmailUser()) {
+           /* for (String email : taskRequest.getEmailUser()) {
                 var userFound = userRepository.findByEmail(email)
                         .orElseThrow(() -> new ResourceNotFoundException("Not found user with email:" + email));
                 //log.info("************ {}", userFound);
@@ -118,33 +118,14 @@ public class TaskController {
                 // userFound.setPassword(userFound.getPassword());
                 users.add(userFound);
             }
-            taskRequest.setUsers(users);
+            taskRequest.setUsers(users);*/
 
             return taskRepository.save(taskRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Story with id = " + story_id));
 
         return new ResponseEntity<>(task, HttpStatus.CREATED);
 
-        //************************
-      /*
 
-        for (String email : taskRequest.getEmailUser()) {
-            var userFound = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found user with email:" + email));
-            log.info("************ {}", userFound);
-            userFound.setEmail(userFound.getEmail());
-            userFound.setUsername(userFound.getUsername());
-            userFound.setRoles(userFound.getRoles());
-            // userFound.setPassword(userFound.getPassword());
-            users.add(userFound);
-
-        }*/
-
-        // *************
-        //task.setUsers(users);
-        // task.setEmailUser(taskRequest.getEmailUser());
-
-        //************************
     }
 
     // update Task
@@ -163,7 +144,7 @@ public class TaskController {
         task.setTypeTask(taskRequest.getTypeTask());
 
         // update member of task
-        Set<User> users = new HashSet<>();
+        /*Set<User> users = new HashSet<>();
 
         for (String email : taskRequest.getEmailUser()) {
             var userFound = userRepository.findByEmail(email)
@@ -177,7 +158,7 @@ public class TaskController {
         }
 
         task.setUsers(users);
-        task.setEmailUser(taskRequest.getEmailUser());
+        task.setEmailUser(taskRequest.getEmailUser());*/
 
         return new ResponseEntity<>(taskRepository.save(task), HttpStatus.OK);
     }
