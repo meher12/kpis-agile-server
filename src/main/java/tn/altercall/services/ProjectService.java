@@ -16,6 +16,7 @@ public interface ProjectService {
     Project addProjet(Project projet) throws ApiResourceNotFoundException;
 
     ArrayList<String> releaseBurndownChart(int sumStorypoints, ArrayList<String> spDone, ArrayList<String> moresp);
+    ArrayList<String>  productBurndownChart(int remaining, ArrayList<String> spDone, ArrayList<String> newSp);
 
     ArrayList<String> pourcentageStoryPointsCompleted(int sumStorypoints, ArrayList<String> tabFromdb);
 

@@ -1,21 +1,9 @@
 package tn.altercall.services;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import tn.altercall.exception.ApiResourceNotFoundException;
 import tn.altercall.entities.Project;
+import tn.altercall.exception.ApiResourceNotFoundException;
 import tn.altercall.repository.ProjetRepository;
 import tn.altercall.repository.SprintRepository;
 import tn.altercall.repository.StoryRepository;
@@ -24,6 +12,10 @@ import tn.altercall.utils.DataTaskBugChart;
 import tn.altercall.utils.Efficacity;
 import tn.altercall.utils.PairArrays;
 import tn.altercall.utils.TasksBugs;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class ProjectServiceImp implements ProjectService {
@@ -49,9 +41,53 @@ public class ProjectServiceImp implements ProjectService {
         return projetRepository.save(projet);
     }
 
+    // product burnDown Chart
+    @Override
+    public ArrayList<String> productBurndownChart(int remaining, ArrayList<String> doneSp,
+                                                  ArrayList<String> newSp) {
+        /*
+        *  [85, 61, 40, 18, 10]
+           [24, 21, 22, 33]
+           [0, 0, 15, 0]
+           * */
+        ArrayList<String> totalSpRemaining = new ArrayList<>();
+
+        int spWorked[] = new int[doneSp.size()];
+        int newWork[] = new int[newSp.size()];
+
+        for (int index = 0; index < spWorked.length; index++) {
+
+            spWorked[index] = Integer.parseInt(doneSp.get(index));
+        }
+
+        for (int index = 0; index < newWork.length; index++) {
+
+            newWork[index] = Integer.parseInt(newSp.get(index));
+        }
+
+        int SP = remaining;
+        int newtask = 0;
+        totalSpRemaining.add(String.valueOf(SP));
+        for (int j = 0; j < spWorked.length; j++) {
+            if (newWork[j] == 0) {
+                newtask = Math.abs(SP - spWorked[j]);
+                SP = newtask;
+            } else {
+                newtask = Math.abs(SP + newWork[j] - spWorked[j]);
+                SP = newtask;
+            }
+            totalSpRemaining.add(String.valueOf(SP));
+        }
+
+        System.out.println("Commitement" + totalSpRemaining);
+        return totalSpRemaining;
+
+    }
+
+    // release burnDown Chart
     @Override
     public ArrayList<String> releaseBurndownChart(int sumStorypoints, ArrayList<String> spDone,
-            ArrayList<String> moresp) {
+                                                  ArrayList<String> moresp) {
 
         ArrayList<String> totalspCommitment = new ArrayList<String>();
 

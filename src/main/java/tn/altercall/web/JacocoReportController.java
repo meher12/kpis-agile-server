@@ -49,7 +49,7 @@ public class JacocoReportController {
 
         return new ResponseEntity<>(jacocoReports, HttpStatus.OK);
     }
-
+    // get List report by projectReference
     @GetMapping("/reports/{pReference}")
     public ResponseEntity<List<JacocoReport>> getAllReportByProjectReference(@PathVariable("pReference") String pReference) {
         var result = jacocoReportRepository.findByProjectRef(pReference)

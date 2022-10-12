@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.altercall.entities.Project;
-import tn.altercall.entities.Role;
 import tn.altercall.entities.User;
 import tn.altercall.exception.ApiResourceNotFoundException;
 import tn.altercall.exception.ResourceNotFoundException;
@@ -185,7 +184,7 @@ public class ProjetController {
 
     }
 
-    // projects by release brundown chart
+    // update all story points
 //    @GetMapping("/projects/updateallsp")
 //    public ResponseEntity<Map<String, Boolean>> updatetotalSpInProject() {
 //
@@ -204,7 +203,56 @@ public class ProjetController {
 //        return ResponseEntity.ok(response);
 //
 //    }
-    // Projects by release brundown chart
+
+
+    //  product burndown chart by Project reference in params
+    @GetMapping("/projects/productbdchart")
+    public ResponseEntity<Map<String, Boolean>> productBurndownChart(@RequestParam("pReference") String pReference) {
+
+        storyRepository.StoryPointUpdate();
+        sprintRepository.sprintStoryPointUpdate();
+
+        storyRepository.updatePlusSp();
+        sprintRepository.updateMoreSp();
+
+        taskRepository.tasktimeUpdate();
+        projetRepository.totalSpInProject();
+
+        Project projet = projetRepository.findBypReference(pReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+
+        // Completed SP table in project for product brundown chart
+        ArrayList<String> spDoneFromSprint = sprintRepository.getListSpCompleted(pReference);
+
+        log.info("********  spDoneFromSprint:  {}", spDoneFromSprint);
+
+        // new SP table in project for product brundown chart
+        ArrayList<String> newspFromSprint = sprintRepository.getListMoreSp(pReference);
+
+        log.info("******* NewSpFromSprint: {}", newspFromSprint);
+
+
+        int sumSp = projet.getTotalstorypointsinitiallycounts();
+
+        projet.setpSpwrked(spDoneFromSprint);
+        ArrayList<String> arrayspworked = (ArrayList<String>) projet.getpSpwrked();
+        projetRepository.projectSpCompletedArray(projet.getId(), arrayspworked);
+
+        projet.setpMoresp(newspFromSprint);
+        ArrayList<String> arrayspmore = (ArrayList<String>) projet.getpMoresp();
+        projetRepository.projectMoreSpArray(projet.getId(), arrayspmore);
+
+        projet.setpSpCommitment(this.projectServiceImp.productBurndownChart(sumSp, spDoneFromSprint, newspFromSprint));
+        projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
+
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("product Burndown Chart generated", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+
+    }
+
+    // Projects by release burndown chart
     @GetMapping("/projects/releasebdchart/{pReference}")
     public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(@PathVariable("pReference") String pReference) {
 
