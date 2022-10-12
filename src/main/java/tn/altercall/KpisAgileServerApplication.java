@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -17,14 +18,39 @@ import java.nio.file.Paths;
 @EnableScheduling
 public class KpisAgileServerApplication {
 
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         SpringApplication.run(KpisAgileServerApplication.class, args);
+        deleteDirectoryStream();
 
     }
 
-    /*@Scheduled(cron = "2 * * * * *")
-    public void scheduleTaskUsingCronExpression() {
+    /*
+  * the expression into separate components:
+      0 - at second :00,
+      0/5 - every 5 minutes starting at minute :00,
+      * - every hour,
+      * - every day,
+      * - every month,
+      ? - any day of the week.
+  * */
+    @Scheduled(cron = "0 0/5 * * * ?")  // 0 */5 * * * ?
+    private static void  deleteDirectoryStream() throws IOException, InterruptedException {
+        Path path = Paths.get("uploads");
+        File directory = new File(path + "");
+        if (!FileUtils.isEmptyDirectory(directory)) {
+            log.info("Directory not empty");
+            Thread.sleep(5000);
+            FileUtils.cleanDirectory(directory);
+            log.info("File deleted");
+        } else {
+            log.info("Directory is empty");
+        }
+    }
+
+
+
+    //@Scheduled(cron = "2 * * * * *")
+   /* public void scheduleTaskUsingCronExpression() {
          Path path = Paths.get("uploads");
         long now = System.currentTimeMillis() / 1000;
         System.out.println( "schedule tasks using cron jobs - " + now);
@@ -38,26 +64,9 @@ public class KpisAgileServerApplication {
             }
         }
     }*/
-    /*
-    * the expression into separate components:
-        0 - at second :00,
-        0/5 - every 5 minutes starting at minute :00,
-        * - every hour,
-        * - every day,
-        * - every month,
-        ? - any day of the week.
-    * */
-    @Scheduled(cron = "0 0/5 * * * ?")  // 0 */5 * * * ?
-    void deleteDirectoryStream() throws IOException {
-        Path path = Paths.get("uploads");
-        File directory = new File(path + "");
-        if (!FileUtils.isEmptyDirectory(directory)) {
-            FileUtils.cleanDirectory(directory);
-            log.info("File deleted");
-        } else {
-            log.info("Directory is empty");
-        }
-    }
+
+
+
 
 
 //    @Bean

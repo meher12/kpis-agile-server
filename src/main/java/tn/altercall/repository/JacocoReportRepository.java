@@ -16,6 +16,7 @@ public interface JacocoReportRepository extends JpaRepository<JacocoReport, Long
 
 
     Optional<List<JacocoReport>> findByProjectname(String projectname);
+    Optional<List<JacocoReport>> findByProjectRef(String pReference);
 
     boolean existsByProjectname(String projectname);
 

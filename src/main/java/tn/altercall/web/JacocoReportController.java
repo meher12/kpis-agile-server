@@ -50,6 +50,13 @@ public class JacocoReportController {
         return new ResponseEntity<>(jacocoReports, HttpStatus.OK);
     }
 
+    @GetMapping("/reports/{pReference}")
+    public ResponseEntity<List<JacocoReport>> getAllReportByProjectReference(@PathVariable("pReference") String pReference) {
+        var result = jacocoReportRepository.findByProjectRef(pReference)
+                .orElseThrow(()-> new ResourceNotFoundException("Not found report with reference : " + pReference));
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     // create Sprint
     @PostMapping("/reports/add")
     public ResponseEntity<?> addXmlReport(@RequestBody ArrayList<JacocoReport> reportRequest) {
@@ -90,7 +97,6 @@ public class JacocoReportController {
     public ResponseEntity<Float> getTotalJacocoCoverage(@PathVariable("projectname") String projectname) {
         float result = jacocoReportRepository.getTotalcoverage(projectname);
         return new ResponseEntity<>(result, HttpStatus.OK);
-
     }
 
     @DeleteMapping("/report/deleteallbyname/{reportName}")
