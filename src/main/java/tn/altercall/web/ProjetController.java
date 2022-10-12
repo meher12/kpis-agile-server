@@ -13,10 +13,7 @@ import tn.altercall.exception.ApiResourceNotFoundException;
 import tn.altercall.exception.ResourceNotFoundException;
 import tn.altercall.repository.*;
 import tn.altercall.services.ProjectServiceImp;
-import tn.altercall.utils.DataTaskBugChart;
-import tn.altercall.utils.Efficacity;
-import tn.altercall.utils.PairArrays;
-import tn.altercall.utils.TasksBugs;
+import tn.altercall.utils.*;
 
 import java.text.ParseException;
 import java.util.*;
@@ -207,7 +204,7 @@ public class ProjetController {
 
     //  product burndown chart by Project reference in params
     @GetMapping("/projects/productbdchart")
-    public ResponseEntity<Map<String, Boolean>> productBurndownChart(@RequestParam("pReference") String pReference) {
+    public ResponseEntity<ProductDate> productBurndownChart(@RequestParam("pReference") String pReference) {
 
         storyRepository.StoryPointUpdate();
         sprintRepository.sprintStoryPointUpdate();
@@ -227,28 +224,29 @@ public class ProjetController {
         log.info("********  spDoneFromSprint:  {}", spDoneFromSprint);
 
         // new SP table in project for product brundown chart
-        ArrayList<String> newspFromSprint = sprintRepository.getListMoreSp(pReference);
+        ArrayList<String> newSpFromSprint = sprintRepository.getListMoreSp(pReference);
 
-        log.info("******* NewSpFromSprint: {}", newspFromSprint);
+        log.info("******* NewSpFromSprint: {}", newSpFromSprint);
 
 
         int sumSp = projet.getTotalstorypointsinitiallycounts();
 
         projet.setpSpwrked(spDoneFromSprint);
-        ArrayList<String> arrayspworked = (ArrayList<String>) projet.getpSpwrked();
-        projetRepository.projectSpCompletedArray(projet.getId(), arrayspworked);
+        ArrayList<String> arraySpWorked = (ArrayList<String>) projet.getpSpwrked();
+        projetRepository.projectSpCompletedArray(projet.getId(), arraySpWorked);
 
-        projet.setpMoresp(newspFromSprint);
-        ArrayList<String> arrayspmore = (ArrayList<String>) projet.getpMoresp();
-        projetRepository.projectMoreSpArray(projet.getId(), arrayspmore);
+        projet.setpMoresp(newSpFromSprint);
+        ArrayList<String> arraySpmore = (ArrayList<String>) projet.getpMoresp();
+        projetRepository.projectMoreSpArray(projet.getId(), arraySpmore);
 
-        projet.setpSpCommitment(this.projectServiceImp.productBurndownChart(sumSp, spDoneFromSprint, newspFromSprint));
+        projet.setpSpCommitment(this.projectServiceImp.productBurndownChart(sumSp, spDoneFromSprint, newSpFromSprint));
         projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
 
+        ArrayList<String> remainingSp = new ArrayList<>(projet.getpSpCommitment());
+        log.info("******* remainingSp: {}", remainingSp);
 
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("product Burndown Chart generated", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+        ProductDate productData = new ProductDate(spDoneFromSprint, newSpFromSprint, remainingSp);
+        return new ResponseEntity<>(productData, HttpStatus.OK);
 
     }
 

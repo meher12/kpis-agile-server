@@ -79,7 +79,7 @@ public class ProjectServiceImp implements ProjectService {
             totalSpRemaining.add(String.valueOf(SP));
         }
 
-        System.out.println("Commitement" + totalSpRemaining);
+       // System.out.println("Commitment" + totalSpRemaining);
         return totalSpRemaining;
 
     }
