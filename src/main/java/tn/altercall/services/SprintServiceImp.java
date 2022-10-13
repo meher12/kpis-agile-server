@@ -1,17 +1,12 @@
 package tn.altercall.services;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import tn.altercall.entities.Sprint;
 import tn.altercall.repository.SprintRepository;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class SprintServiceImp implements SprintService {
@@ -21,7 +16,7 @@ public class SprintServiceImp implements SprintService {
 
     // get and convert date to day "dd-MM-yyyy" in brundown chart axe x
     @Override
-    public List<String> numberOfDaysInSprint(Date str_date, Date end_date)  {
+    public List<String> numberOfDaysInSprint(Date str_date, Date end_date) {
 
         List<Date> dates = new ArrayList<Date>();
         List<String> datesS = new ArrayList<String>();
@@ -119,7 +114,7 @@ public class SprintServiceImp implements SprintService {
     // Number sprint average_velocity capacity_story_points_in_next_sprint method
     @Override
     public Map<String, Float> nbrSprintByvelocity(List<Integer> diffSprint, List<Integer> commitmentSprintTab,
-            Long projectId) {
+                                                  Long projectId) {
 
         // Nbr of sprint in project par rapport au velocity:
         int sumDiff = 0;
@@ -139,7 +134,8 @@ public class SprintServiceImp implements SprintService {
             sumCommit += number;
         }
 
-        float nbr_sprint = (sumCommit / avgVelocity);
+        float nbr_sprint = avgVelocity != 0  ? (sumCommit / avgVelocity) : 0;
+
 
         // Capacity story points in sprint par rapport au velocity:
         ArrayList<Integer> nbrDayArray = new ArrayList<Integer>();
