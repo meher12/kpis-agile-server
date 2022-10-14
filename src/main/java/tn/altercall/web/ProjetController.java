@@ -246,8 +246,8 @@ public class ProjetController {
         log.info("******* remainingSp: {}", remainingSp);
 
         spDoneFromSprint.set(0, "0");
-       newSpFromSprint.set(0, "0");
-       /*  remainingSp.add(0, String.valueOf(sumSp));*/
+        newSpFromSprint.set(0, "0");
+        /*  remainingSp.add(0, String.valueOf(sumSp));*/
 
         ProductDate productData = new ProductDate(spDoneFromSprint, newSpFromSprint, remainingSp);
         return new ResponseEntity<>(productData, HttpStatus.OK);
