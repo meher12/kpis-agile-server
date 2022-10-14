@@ -239,11 +239,15 @@ public class ProjetController {
         ArrayList<String> arraySpmore = (ArrayList<String>) projet.getpMoresp();
         projetRepository.projectMoreSpArray(projet.getId(), arraySpmore);
 
-        projet.setpSpCommitment(this.projectServiceImp.productBurndownChart(sumSp, spDoneFromSprint, newSpFromSprint));
+        projet.setpSpCommitment(this.projectServiceImp.productBurndownChart(sumSp, spDoneFromSprint, newSpFromSprint, pReference));
         projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
 
         ArrayList<String> remainingSp = new ArrayList<>(projet.getpSpCommitment());
         log.info("******* remainingSp: {}", remainingSp);
+
+        spDoneFromSprint.set(0, "0");
+       newSpFromSprint.set(0, "0");
+       /*  remainingSp.add(0, String.valueOf(sumSp));*/
 
         ProductDate productData = new ProductDate(spDoneFromSprint, newSpFromSprint, remainingSp);
         return new ResponseEntity<>(productData, HttpStatus.OK);

@@ -24,8 +24,8 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE story SET stupdated_date = (SELECT now()), story_point = (SELECT COALESCE(SUM(ts.estimation),0) FROM tasks ts WHERE (story.id = ts.story_id AND ts.status = 'Scheduled')) "
-            + ", sp_completed = (SELECT COALESCE(SUM(ts.estimation),0) FROM tasks ts WHERE (story.id = ts.story_id AND ts.status = 'Completed'))", nativeQuery = true)
+    @Query(value = "UPDATE story SET stupdated_date = (SELECT now()), story_point = (SELECT COALESCE(SUM(ts.estimation),0) FROM tasks ts WHERE (story.id = ts.story_id AND (ts.status = 'Scheduled' OR ts.status = 'In_progress'))) "
+            + ", sp_completed = (SELECT COALESCE(SUM(ts.estimation),0) FROM tasks ts WHERE (story.id = ts.story_id AND (ts.status = 'Completed' OR ts.status = 'Succeeded')))", nativeQuery = true)
     void StoryPointUpdate();
 
     @Transactional

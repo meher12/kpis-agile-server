@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.altercall.entities.Project;
 import tn.altercall.exception.ApiResourceNotFoundException;
+import tn.altercall.exception.ResourceNotFoundException;
 import tn.altercall.repository.ProjetRepository;
 import tn.altercall.repository.SprintRepository;
 import tn.altercall.repository.StoryRepository;
@@ -44,12 +45,13 @@ public class ProjectServiceImp implements ProjectService {
     // product burnDown Chart
     @Override
     public ArrayList<String> productBurndownChart(int remaining, ArrayList<String> doneSp,
-                                                  ArrayList<String> newSp) {
-        /*
-        *  [85, 61, 40, 18, 10]
-           [24, 21, 22, 33]
-           [0, 0, 15, 0]
-           * */
+                                                  ArrayList<String> newSp, String pReference) {
+
+        Project projet = projetRepository.findBypReference(pReference)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with Reference : " + pReference));
+
+
+
         ArrayList<String> totalSpRemaining = new ArrayList<>();
 
         int spWorked[] = new int[doneSp.size()];
@@ -73,13 +75,15 @@ public class ProjectServiceImp implements ProjectService {
                 newtask = Math.abs(SP - spWorked[j]);
                 SP = newtask;
             } else {
-                newtask = Math.abs(SP + newWork[j] - spWorked[j]);
+                newtask = Math.abs((SP + newWork[j]) - spWorked[j]);
                 SP = newtask;
+                // SP = SP + Arrays.stream(newWork).sum();
+                // SP = SP + newtask;
             }
             totalSpRemaining.add(String.valueOf(SP));
         }
 
-       // System.out.println("Commitment" + totalSpRemaining);
+        // System.out.println("Commitment" + totalSpRemaining);
         return totalSpRemaining;
 
     }
