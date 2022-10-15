@@ -255,8 +255,8 @@ public class ProjetController {
     }
 
     // Projects by release burndown chart
-    @GetMapping("/projects/releasebdchart/{pReference}")
-    public ResponseEntity<Map<String, Boolean>> pReleaseBurndownChart(@PathVariable("pReference") String pReference) {
+    @GetMapping("/projects/releasebdchart")
+    public ResponseEntity<ProductDate> pReleaseBurndownChart(@RequestParam("pReference") String pReference) {
 
         storyRepository.StoryPointUpdate();
         sprintRepository.sprintStoryPointUpdate();
@@ -296,9 +296,9 @@ public class ProjetController {
         projetRepository.spCommitmentArray(projet.getId(), projet.getpSpCommitment());
         // }
 
-        Map<String, Boolean> response = new HashMap<String, Boolean>();
-        response.put("release Burndown Chart", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+        ArrayList<String> remainingSp = new ArrayList<>(projet.getpSpCommitment());
+        ProductDate productData = new ProductDate(spDoneFromSprint, morespFromSprint, remainingSp);
+        return new ResponseEntity<>(productData, HttpStatus.OK);
 
     }
 
@@ -424,7 +424,7 @@ public class ProjetController {
         Set<String> arrayJson = new HashSet<>();
         Set<String> arrayMail = new HashSet<>();
 
-        //log.info("Request data from client {}",teamRequest);
+        log.info("Request data from client {}",teamRequest);
 
         teamRequest.forEach(name -> {
             arrayJson.add(name.toString());
