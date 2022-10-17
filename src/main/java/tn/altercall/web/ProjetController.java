@@ -247,6 +247,7 @@ public class ProjetController {
 
         spDoneFromSprint.set(0, "0");
         newSpFromSprint.set(0, "0");
+       // remainingSp.set(0,"60");
         /*  remainingSp.add(0, String.valueOf(sumSp));*/
 
         ProductDate productData = new ProductDate(spDoneFromSprint, newSpFromSprint, remainingSp);

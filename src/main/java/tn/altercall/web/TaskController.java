@@ -199,7 +199,7 @@ public class TaskController {
 
     // Add, update member
     @PutMapping(value = "/task/addmember/{id}")
-    public ResponseEntity<Map<String, Boolean>> createTeamForTask(@PathVariable("id") Long id,
+    public ResponseEntity<Task> createTeamForTask(@PathVariable("id") Long id,
                                                            @RequestBody Set<Object> teamRequest) {
 
         Task task = taskRepository.findById(id)
@@ -232,7 +232,7 @@ public class TaskController {
 
         for (String email : arrayMail) {
             var userFound = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found member with email:" + email));
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found user with email:" + email + "create it"));
             userFound.setEmail(userFound.getEmail());
             userFound.setUsername(userFound.getUsername());
             userFound.setRoles(userFound.getRoles());
@@ -242,9 +242,11 @@ public class TaskController {
         task.setUsers(users);
         taskRepository.saveAndFlush(task);
 
-        Map<String, Boolean> response = new HashMap<>();
+      /*  Map<String, Boolean> response = new HashMap<>();
         response.put("team Inserted", Boolean.TRUE);
         return ResponseEntity.ok(response);
+       */
+        return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
 }
