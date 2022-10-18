@@ -1,4 +1,5 @@
-### Eclipse ### 
+### Eclipse and intellij ###
+.idea
 .classpath  
 .editorconfig  
 .factorypath  
