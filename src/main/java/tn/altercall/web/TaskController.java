@@ -232,7 +232,7 @@ public class TaskController {
 
         for (String email : arrayMail) {
             var userFound = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found user with email:" + email + "create it"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found user with email:" + email));
             userFound.setEmail(userFound.getEmail());
             userFound.setUsername(userFound.getUsername());
             userFound.setRoles(userFound.getRoles());
