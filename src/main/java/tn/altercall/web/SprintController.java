@@ -46,15 +46,15 @@ public class SprintController {
     // search by project reference
     @GetMapping("/projects/searchByPReference")
     public ResponseEntity<List<Sprint>> getAllSprintsByPReference(@RequestParam(required = false) String projectReference) {
-        try {
+       // try {
             var project = new Project();
             List<Sprint> sprints = new ArrayList<>();
 
             if (projectReference == null)
                 sprintRepository.findAll().forEach(sprints::add);
             else
-                project   = projetRepository.findByTitreContaining(projectReference)
-                                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with reference" + projectReference));
+                project   = projetRepository.findBypReference(projectReference)
+                                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with reference: " + projectReference));
 
                 sprintRepository.findByProjetId(project.getId()).forEach(sprints::add);
 
@@ -62,15 +62,13 @@ public class SprintController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            Comparator<Sprint> comparator = (c1, c2) -> {
-                return Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
-            };
+            Comparator<Sprint> comparator = (c1, c2) -> Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
 
             Collections.sort(sprints, comparator);
             return new ResponseEntity<>(sprints, HttpStatus.OK);
-        } catch (Exception e) {
+       /* } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        }*/
     }
 
     // get All Sprints By ProjectId

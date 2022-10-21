@@ -29,7 +29,7 @@ public class StoryController {
     // search by sprint reference
     @GetMapping("/searchBySReference")
     public ResponseEntity<List<Story>> getAllStoryBySpReference(@RequestParam(required = false) String sprintReference) {
-        try {
+       // try {
             var sprint = new Sprint();
             List<Story> stories = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class StoryController {
             }
             else {
                 sprint = sprintRepository.findBysReference(sprintReference)
-                        .orElseThrow(() -> new ResourceNotFoundException("Not found Sprint with reference" + sprintReference));
+                        .orElseThrow(() -> new ResourceNotFoundException("Not found Sprint with reference: " + sprintReference));
 
                 storyRepository.findBySprintId(sprint.getId()).forEach(stories::add);
             }
@@ -52,9 +52,9 @@ public class StoryController {
             Collections.sort(stories, comparator);
 
             return new ResponseEntity<>(stories, HttpStatus.OK);
-        } catch (Exception e) {
+       /* } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        }*/
     }
 
     // get All Story By SprinttId
