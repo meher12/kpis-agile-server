@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.altercall.entities.Project;
-import tn.altercall.entities.Story;
-import tn.altercall.entities.Task;
-import tn.altercall.entities.User;
+import tn.altercall.entities.*;
 import tn.altercall.exception.ApiResourceNotFoundException;
 import tn.altercall.exception.ResourceNotFoundException;
 import tn.altercall.repository.StoryRepository;
@@ -31,6 +28,38 @@ public class TaskController {
 
     @Autowired
     UserRepository userRepository;
+
+
+    // search by story reference
+    @GetMapping("/searchBySTReference")
+    public ResponseEntity<List<Task>> getAllTaskBySTReference(@RequestParam(required = false) String storyReference) {
+        // try {
+        var story = new Story();
+        List<Task> tasks = new ArrayList<>();
+
+        if (storyReference == null) {
+            taskRepository.findAll().forEach(tasks::add);
+        }
+        else {
+            story = storyRepository.findBystReference(storyReference)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found Story with reference: " + storyReference));
+
+            taskRepository.findByStoryId(story.getId()).forEach(tasks::add);
+        }
+
+        if (tasks.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        Comparator<Task> comparator = (c1, c2) -> Long.valueOf(c1.getTdateDebut().getTime()).compareTo(c2.getTdateDebut().getTime());
+
+        Collections.sort(tasks, comparator);
+
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
+       /* } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }*/
+    }
 
     // get All Task By StoryId
     @RequestMapping(value = "/stories/{story_id}/tasks")

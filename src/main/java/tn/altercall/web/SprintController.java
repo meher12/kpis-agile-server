@@ -99,9 +99,7 @@ public class SprintController {
 
         List<Sprint> sprints = sprintRepository.findByProjetId(projet.getId());
 
-        Comparator<Sprint> comparatorSprint = (c1, c2) -> {
-            return Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
-        };
+        Comparator<Sprint> comparatorSprint = (c1, c2) -> Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
 
         Collections.sort(sprints, comparatorSprint);
 
