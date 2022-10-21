@@ -33,7 +33,7 @@ public class KpisAgileServerApplication {
       * - every month,
       ? - any day of the week.
   * */
-    @Scheduled(cron = "0 0/5 * * * ?")  // 0 */5 * * * ?
+    @Scheduled(cron = "0 0/15 * * * ?")  // 0 */5 * * * ?
     private static void  deleteDirectoryStream() throws IOException, InterruptedException {
         Path path = Paths.get("uploads");
         File directory = new File(path + "");

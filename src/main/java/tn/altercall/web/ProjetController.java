@@ -81,6 +81,13 @@ public class ProjetController {
         return new ResponseEntity<>(projet, HttpStatus.OK);
     }
 
+    @GetMapping("/projects/findProjects")
+    public ResponseEntity<Project> getProjectById(@RequestParam("title") String title) {
+        Project projet = projetRepository.findByTitreContaining(title)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with title = " + title));
+        return new ResponseEntity<>(projet, HttpStatus.OK);
+    }
+
     //// get project by reference
     @RequestMapping(value = "/projects/{pReference}/", method = RequestMethod.GET)
     public ResponseEntity<Project> getProjectBypReference(@PathVariable("pReference") String pReference) {

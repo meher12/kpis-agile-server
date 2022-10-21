@@ -17,8 +17,7 @@ import tn.altercall.entities.Sprint;
 public interface SprintRepository extends JpaRepository<Sprint, Long> {
 
     List<Sprint> findByProjetId(Long projetId);
-    
-   
+
 
     Optional<Sprint> findBysReference(String sReference);
 

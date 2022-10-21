@@ -21,6 +21,7 @@ public interface ProjetRepository extends JpaRepository<Project, Long> {
     List<Project> findByTitre(String titre);
 
     Optional<Project> findBypReference(String pReference);
+    Optional<Project> findByTitreContaining(String title);
 
     @Transactional
     @Modifying

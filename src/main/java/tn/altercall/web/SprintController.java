@@ -11,15 +11,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import tn.altercall.exception.ResourceNotFoundException;
 import tn.altercall.entities.Project;
@@ -49,6 +41,37 @@ public class SprintController {
 
     @Autowired
     TaskRepository taskRepository;
+
+
+    // search by project reference
+    @GetMapping("/projects/searchByPReference")
+    public ResponseEntity<List<Sprint>> getAllSprintsByPReference(@RequestParam(required = false) String projectReference) {
+        try {
+            var project = new Project();
+            List<Sprint> sprints = new ArrayList<>();
+
+            if (projectReference == null)
+                sprintRepository.findAll().forEach(sprints::add);
+            else
+                project   = projetRepository.findByTitreContaining(projectReference)
+                                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with reference" + projectReference));
+
+                sprintRepository.findByProjetId(project.getId()).forEach(sprints::add);
+
+            if (sprints.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            Comparator<Sprint> comparator = (c1, c2) -> {
+                return Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
+            };
+
+            Collections.sort(sprints, comparator);
+            return new ResponseEntity<>(sprints, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // get All Sprints By ProjectId
     @GetMapping("/sprints/projects/{projet_id}/sprints")
