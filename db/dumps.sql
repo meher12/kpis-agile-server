@@ -1201,9 +1201,9 @@ GRANT ALL ON TABLE public.projets TO myuser;
 GRANT ALL ON TABLE public.roles TO myuser;
 
 
---
+------
 -- Name: TABLE sprints; Type: ACL; Schema: public; Owner: postgres
---
+-----
 
 GRANT ALL ON TABLE public.sprints TO myuser;
 

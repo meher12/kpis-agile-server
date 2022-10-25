@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import tn.altercall.services.SprintServiceImp;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class SprintController {
 
     @Autowired
@@ -237,7 +239,7 @@ public class SprintController {
             sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(), sprint.getWorkCommitment()));
             List<String> arrayLine = sprint.getIdealLinearray();
             sprintRepository.sprintArrayOfIdealLine(sprint.getId(), arrayLine);
-           //System.out.println(arrayLine);
+          // log.info("ideal line {} ",arrayLine);
         }
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();
@@ -274,6 +276,7 @@ public class SprintController {
         sprint.setWorkedlarray(arrayFiltred);
         // List<String> arraysp = sprintRequest.getWorkedlarray();
         sprintRepository.sprintArrayOfWorkedLine(sprint.getId(), arrayFiltred);
+        //log.info("Done line {} ",arrayFiltred);
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();
         response.put("worked sp Inserted", Boolean.TRUE);
