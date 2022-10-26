@@ -1,5 +1,8 @@
 pipeline {
   agent  any
+  tools{
+  maven "MAVEN_HOME"
+  }
 
   //triggers {
     //    pollSCM ('* * * * *')

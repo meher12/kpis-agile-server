@@ -4,11 +4,11 @@ services:
 #Back-end spring-boot Application
   kpis-backend:
       image: 'kpis-agiles-backend:latest'
+      container_name: kpis-agile-server
       ports:
          - "8081:8081"
       build:
          context: .
-      container_name: kpis-agile-server
       restart: on-failure
       depends_on:
          - db
@@ -27,11 +27,12 @@ services:
   db:
      #image: 'postgres-alpine'
      image: 'postgres:13.1-alpine'
+     container_name: db-kpis-agile
      restart: always
      #build:
          #context: ./db
          #dockerfile: Dockerfile
-     container_name: db-kpis-agile
+
      #command: docker cp ./db/data/datasqlkpiagile db-kpis-agile:/datasqlkpiagile
      volumes:
       -  pgkpis-agile:/var/lib/postgresql/data
@@ -46,11 +47,12 @@ services:
  #Fron-end Angular Application
   kpis-ui:
     image: 'kpis-agiles-frontend:latest'
+    container_name: kpis-agile-ui
     build:
          context: ../CICD-KPIsAgiles-Client
          #for production mode
          #context: ../kpis-agile-client
-    container_name: kpis-agile-ui
+
     ports:
       - 4200:80
     depends_on:
