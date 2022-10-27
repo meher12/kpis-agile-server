@@ -15,7 +15,7 @@ import tn.altercall.entities.User;
 public class UserRepositoryTest {
     
     //integration test
-    @Autowired(required = true)
+  /*  @Autowired(required = true)
     private UserRepository userRepository;
     
     private User user;
@@ -30,7 +30,7 @@ public class UserRepositoryTest {
     public void tearDown() {
         userRepository.deleteAll();
         user = null;
-    }
+    }*/
     
     // Test Case for Saving a Product
 //    @Test
