@@ -1,7 +1,8 @@
 pipeline {
   agent  any
   tools {
-  maven "M3"
+     jdk "JDK_JENKINS"
+     maven "MAVEN_JENKINS"
   }
 
   //triggers {
