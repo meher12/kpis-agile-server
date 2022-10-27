@@ -42,7 +42,7 @@ pipeline {
     stage('Unit Test') {
         steps {
           echo '-=- execute unit tests -=-'
-          sh 'mvn -DskipTests'//'mvn test'
+          sh 'mvn test' //'mvn -DskipTests'
         }
         post {
         always {
