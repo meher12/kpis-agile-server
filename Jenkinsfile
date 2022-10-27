@@ -38,17 +38,17 @@ pipeline {
         }
     }
 
-   /*  stage('Unit Test') {
+    stage('Unit Test') {
         steps {
           echo '-=- execute unit tests -=-'
           sh 'mvn -DskipTests'//'mvn test'
         }
-         *//* post {
+        post {
         always {
-          junit '**//*  *//* target/surefire-reports/TEST-*.xml'
+          junit '**/target/surefire-reports/TEST-*.xml'
         }
-        } *//*
-    } */
+        }
+    }
 
     stage('Sonar Scan') {
           steps {
