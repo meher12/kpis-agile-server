@@ -77,20 +77,20 @@ services:
       restart: unless-stopped
 
  #Fron-end Angular Application
-  kpis-ui:
-    image: 'kpis-agiles-frontend:latest'
-    container_name: kpis-agile-ui
-    build:
-         context: ../CICD-KPIsAgiles-Client
-         #for production mode
-         #context: ../kpis-agile-client
-
-    ports:
-      - 4200:80
-    depends_on:
-         - kpis-backend
-    networks:
-      - frontend
+#  kpis-ui:
+#    image: 'kpis-agiles-frontend:latest'
+#    container_name: kpis-agile-ui
+#    build:
+#         context: ../CICD-KPIsAgiles-Client
+#         #for production mode
+#         #context: ../kpis-agile-client
+#
+#    ports:
+#      - 4200:80
+#    depends_on:
+#         - kpis-backend
+#    networks:
+#      - frontend
 
 volumes:
   #pgkpis-agile:
