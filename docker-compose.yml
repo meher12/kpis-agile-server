@@ -12,13 +12,16 @@ services:
       restart: on-failure
       depends_on:
          - db
-#      environment:
-#            #compose-postgres name db user pass
+      environment:
+            #compose-postgres name db user pass
 #            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
 #            - SPRING_DATASOURCE_USERNAME=postgres
 #            - SPRING_DATASOURCE_PASSWORD=mypass
-#            - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-#            - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+             - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/agilekpiskit
+             - SPRING_DATASOURCE_USERNAME=meherguru
+             - SPRING_DATASOURCE_PASSWORD=password
+             - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+             - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
       networks: # Networks to join (Services on the same network can communicate with each other using their name)
         - backend
         - frontend
