@@ -55,7 +55,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - university-network
+      - backend
     restart: unless-stopped
 
   pgadmin:
