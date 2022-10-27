@@ -14,9 +14,9 @@ services:
          - db
       environment:
             #compose-postgres name db user pass
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/compose-postgres
             - SPRING_DATASOURCE_USERNAME=postgres
-            - SPRING_DATASOURCE_PASSWORD=mypass
+            - SPRING_DATASOURCE_PASSWORD=pass
             - SPRING_JPA_HIBERNATE_DDL_AUTO=update
             - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
       networks: # Networks to join (Services on the same network can communicate with each other using their name)
@@ -40,7 +40,7 @@ services:
       
      environment:
          - POSTGRES_USER=postgres
-         - POSTGRES_PASSWORD=mypass
+         - POSTGRES_PASSWORD=pass
      networks:
        - backend    
 
