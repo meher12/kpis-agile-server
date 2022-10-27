@@ -41,7 +41,7 @@ pipeline {
     stage('Unit Test') {
         steps {
           echo '-=- execute unit tests -=-'
-          sh 'mvn clean package -DskipTests'//'mvn test'
+          sh 'mvn -DskipTests'//'mvn test'
         }
         post {
         always {
