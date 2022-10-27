@@ -32,7 +32,7 @@ import tn.altercall.services.ProjectService;
 public class ProjectControllerTest extends AbstractTest{
 
 
-    @Override
+  /*  @Override
     @Before
     public void setUp() {
         super.setUp();
@@ -91,7 +91,7 @@ public class ProjectControllerTest extends AbstractTest{
         String content = mvcResult.getResponse().getContentAsString();
         assertEquals(content, "Projects is deleted successsfully");
     }
-
+*/
 
     
    // unit test
