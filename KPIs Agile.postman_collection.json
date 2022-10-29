@@ -1,0 +1,880 @@
+{
+	"info": {
+		"_postman_id": "a38f0258-ff2f-4c42-89a6-1c4fb4b80a3b",
+		"name": "KPIs Agile",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19388834"
+	},
+	"item": [
+		{
+			"name": "Manage User",
+			"item": [
+				{
+					"name": "SignUp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 2,\n    \"username\": \"maroua\",\n    \"email\": \"maroua@developer.tn\",\n    \"password\": \"maroua22\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SignIn",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"meher@scrumm.tn\",\n    \"password\": \"meher22\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/auth/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true,
+							"user-agent": true,
+							"connection": true,
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"noussa\",\n    \"password\": \"noussa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/auth/updateUser/53",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"updateUser",
+								"53"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true,
+							"user-agent": true,
+							"connection": true,
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/auth/deleteUser/52",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"auth",
+								"deleteUser",
+								"52"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Manage Project",
+			"item": [
+				{
+					"name": "Add Project",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"/*",
+									"\"users\": [ {",
+									"        \"username\": \"meher\",",
+									"        \"email\": \"meher@scrumm.tn\",",
+									"        \"roles\": [{",
+									"            \"name\": \"ROLE_SCRUMMASTER\"}]",
+									"    } ]",
+									"    */",
+									"",
+									"    //, \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"",
+									"",
+									"    //\"emailMember\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUzOTE2NzIsImV4cCI6MTY2NTQ3ODA3Mn0.P0qXSon1WvaLP2Ib8vW335DmqWfVLQhUVnUQ4b8a2f45okiXc1U5BMb98BKdzGqqCv_OkDCrc2SrmlOcbLAyfg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"titre\": \"{{$randomJobArea}}\",\n    \"pReference\": \"PUID1BAFM\",\n    \"descriptionProject\": \"{{$randomLoremParagraph}}\",\n    \"dateDebut\": \"2022-09-29\",\n    \"dateFin\": \"2022-10-29\",\n    \"emailMember\": [\"ahmed@productowner.tn\", \"meher@scrumm.tn\"]\n\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/projects/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"projects",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Project",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"/*",
+									"\"users\": [ {",
+									"        \"username\": \"meher\",",
+									"        \"email\": \"meher@scrumm.tn\",",
+									"        \"roles\": [{",
+									"            \"name\": \"ROLE_SCRUMMASTER\"}]",
+									"    } ]",
+									"    */",
+									"",
+									"    //, \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"",
+									"",
+									"    //\"emailMember\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUzOTE2NzIsImV4cCI6MTY2NTQ3ODA3Mn0.P0qXSon1WvaLP2Ib8vW335DmqWfVLQhUVnUQ4b8a2f45okiXc1U5BMb98BKdzGqqCv_OkDCrc2SrmlOcbLAyfg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"titre\": \"{{$randomJobArea}}\",\n    \"pReference\": \"{{$randomHexColor}}\",\n    \"descriptionProject\": \"{{$randomLoremParagraph}}\",\n    \"dateDebut\": \"2022-09-29\",\n    \"dateFin\": \"2022-10-29\",\n    \"emailMember\": [\"noussa@developer.tn\"]\n\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/projects/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"projects",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All Project",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"/*",
+									"\"users\": [ {",
+									"        \"username\": \"meher\",",
+									"        \"email\": \"meher@scrumm.tn\",",
+									"        \"roles\": [{",
+									"            \"name\": \"ROLE_SCRUMMASTER\"}]",
+									"    } ]",
+									"    */",
+									"",
+									"    //, \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"",
+									"",
+									"    //\"emailMember\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUxNTAyOTQsImV4cCI6MTY2NTIzNjY5NH0.Ilx1n5ERimbcojwdD0R8YFUz25HdfgidWb_A2o1UQr3Nwvb87qh3RbtEYPK1TAM81xL01M4Ci2XWd6Ci4HPr8g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/projects/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"projects",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"/*",
+									"\"users\": [ {",
+									"        \"username\": \"meher\",",
+									"        \"email\": \"meher@scrumm.tn\",",
+									"        \"roles\": [{",
+									"            \"name\": \"ROLE_SCRUMMASTER\"}]",
+									"    } ]",
+									"    */",
+									"",
+									"    //, \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"",
+									"",
+									"    //\"emailMember\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUxNTAyOTQsImV4cCI6MTY2NTIzNjY5NH0.Ilx1n5ERimbcojwdD0R8YFUz25HdfgidWb_A2o1UQr3Nwvb87qh3RbtEYPK1TAM81xL01M4Ci2XWd6Ci4HPr8g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/projects/102",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"projects",
+								"102"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Manage Task",
+			"item": [
+				{
+					"name": "Add task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//\"emailUser\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUyMjMxOTcsImV4cCI6MTY2NTMwOTU5N30.fr1IDorblxsPo98utqQiuM9B9XkQjCmkAAu2N10PQsK0x9YlyS4cM-CvRi_IYd4tLHhlgxxo6F5mBm7_sJ68JQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tname\": \"{{$randomJobArea}}\",\n    \"tReference\": \"{{$randomHexColor}}\",\n    \"tdescription\":  \"{{$randomLoremParagraph}}\",\n    \"tdateDebut\": \"2022-09-29\",\n    \"tdateFin\" : \"2022-09-29\",\n    \"status\": \"Scheduled\",\n    \"typeTask\": \"Default_task\",\n    \"estimation\": 5,\n    \"emailUser\": [\"noussa@developer.tn\"]\n    \n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/story/1/task",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"story",
+								"1",
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All Task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//\"emailUser\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUyMjMxOTcsImV4cCI6MTY2NTMwOTU5N30.fr1IDorblxsPo98utqQiuM9B9XkQjCmkAAu2N10PQsK0x9YlyS4cM-CvRi_IYd4tLHhlgxxo6F5mBm7_sJ68JQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//\"emailUser\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUyMjMxOTcsImV4cCI6MTY2NTMwOTU5N30.fr1IDorblxsPo98utqQiuM9B9XkQjCmkAAu2N10PQsK0x9YlyS4cM-CvRi_IYd4tLHhlgxxo6F5mBm7_sJ68JQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tname\": \"{{$randomJobArea}}\",\n    \"tReference\": \"{{$randomHexColor}}\",\n    \"tdescription\":  \"{{$randomLoremParagraph}}\",\n    \"tdateDebut\": \"2022-09-29\",\n    \"tdateFin\" : \"2022-09-29\",\n    \"status\": \"Scheduled\",\n    \"typeTask\": \"Default_task\",\n    \"estimation\": 5,\n    \"emailUser\": [\"ahmed@productowner.tn\",  \"meher@scrumm.tn\"]\n    \n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/task/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"task",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//\"emailUser\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUyMjMxOTcsImV4cCI6MTY2NTMwOTU5N30.fr1IDorblxsPo98utqQiuM9B9XkQjCmkAAu2N10PQsK0x9YlyS4cM-CvRi_IYd4tLHhlgxxo6F5mBm7_sJ68JQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/task/53",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"task",
+								"53"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete All Task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//\"emailUser\": [\"ahmed@productowner.tn\", \"noussa@developer.tn\", \"meher@scrumm.tn\", \"maroua@developer.tn\"]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjUyMjMxOTcsImV4cCI6MTY2NTMwOTU5N30.fr1IDorblxsPo98utqQiuM9B9XkQjCmkAAu2N10PQsK0x9YlyS4cM-CvRi_IYd4tLHhlgxxo6F5mBm7_sJ68JQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/story/{story_id}/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"story",
+								"{story_id}",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "story_id",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Manage Report",
+			"item": []
+		},
+		{
+			"name": "Product burndown chart",
+			"item": [
+				{
+					"name": "Get Product Burndown Chart",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZWhlckBzY3J1bW0udG4iLCJpYXQiOjE2NjU2ODE2NjgsImV4cCI6MTY2NTc2ODA2OH0.TaRc6xqF6wGeLnbUtLskpR5AgI6us9FM5RYBT-pEYQooD4Ol07UUf-7AwzakMpFLL4B-Dct996Wt9pcAPo7TXg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/projects/productbdchart?pReference=PUID1BAAF",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"projects",
+								"productbdchart"
+							],
+							"query": [
+								{
+									"key": "pReference",
+									"value": "PUID1BAAF"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var projectReference = \"PUID1BAAF\""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "get all reference by project",
+			"item": [
+				{
+					"name": "Get All reference by project ref",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzeXJpbmVAc2NydW1tLnRuIiwiaWF0IjoxNjY3MDQwMTUxLCJleHAiOjE2NjcxMjY1NTF9.kFjjQiZyyvQiB7mnNbHF27bJ45leAYjQp7dbWizX8qrWUT7RJJMoTfuAZNQfgCznCnbgEFFYU_JgSW0BOeDPnw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/projects/theref?ref_p=PUID1EBD9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"projects",
+								"theref"
+							],
+							"query": [
+								{
+									"key": "ref_p",
+									"value": "PUID1EBD9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "story_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

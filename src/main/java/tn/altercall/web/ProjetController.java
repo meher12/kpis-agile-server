@@ -17,6 +17,7 @@ import tn.altercall.utils.*;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -37,6 +38,9 @@ public class ProjetController {
     TaskRepository taskRepository;
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ViewAllReferenceRepository allByRefRepository;
 
     public static String[] toArray(String emails) {
         if (emails == null)
@@ -254,7 +258,7 @@ public class ProjetController {
 
         spDoneFromSprint.set(0, "0");
         newSpFromSprint.set(0, "0");
-       // remainingSp.set(0,"60");
+        // remainingSp.set(0,"60");
         /*  remainingSp.add(0, String.valueOf(sumSp));*/
 
         ProductDate productData = new ProductDate(spDoneFromSprint, newSpFromSprint, remainingSp);
@@ -432,7 +436,7 @@ public class ProjetController {
         Set<String> arrayJson = new HashSet<>();
         Set<String> arrayMail = new HashSet<>();
 
-        log.info("Request data from client {}",teamRequest);
+        log.info("Request data from client {}", teamRequest);
 
         teamRequest.forEach(name -> {
             arrayJson.add(name.toString());
@@ -468,6 +472,49 @@ public class ProjetController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("team Inserted", Boolean.TRUE);
         return ResponseEntity.ok(response);
+    }
+
+
+    @RequestMapping(value = "/projects/theref", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllPReference(@RequestParam("ref_p") String ref_p) {
+
+        var allReference = new ArrayList<ViewAllReference>();
+
+
+        allByRefRepository.deleteAllByrefProject(ref_p);
+
+        allByRefRepository.insertAllReferenceByProject(ref_p);
+
+        allReference = allByRefRepository.getAllReferenceByProject(ref_p);
+
+        // .orElseThrow(() -> new ResourceNotFoundException("Not found List with Reference : " + ref_p));
+
+       /* for (var obj : allReference ) {
+            log.info("The result is::::::::::::  {} ", obj);
+        }*/
+
+        // log.info("The result is::::::::::::  {} ", allReference);
+        // Group By Multiple Fields with Collectors.groupingBy()
+       // https://www.javacodegeeks.com/2021/05/java-8-streams-group-by-multiple-fields-with-collectors-groupingby.html
+        Map<String, Map<String, Map<String, List<ViewAllReference>>>> viewMapList = allReference.stream()
+                .collect(
+
+                        Collectors.groupingBy(ViewAllReference::getRefProject,
+                                Collectors.groupingBy(ViewAllReference::getRefSprint,
+                                Collectors.groupingBy(ViewAllReference::getRefStory
+                                      // Collectors.groupingBy(ViewAllReference::getRefTask
+                                      )))); //);
+
+
+
+
+
+
+
+        // printing the count based on the designation and gender.
+        log.info("Group by on multiple properties: {}", viewMapList);
+
+        return new ResponseEntity<>(viewMapList, HttpStatus.OK);
     }
 
 

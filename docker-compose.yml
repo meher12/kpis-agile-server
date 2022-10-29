@@ -1,68 +1,48 @@
 version: '3.8'
 services:
-
-#Back-end spring-boot Application
-  kpis-backend:
-      image: 'kpis-agiles-backend:latest'
-      container_name: kpis-agile-server
+  akk-server:
+      image: 'akk-backend:latest'
+      container_name: akk-server-container
       ports:
          - "8081:8081"
       build:
          context: .
       restart: on-failure
       depends_on:
-         - db
+         - akk-db
       environment:
             #compose-postgres name db user pass
-#            - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
-#            - SPRING_DATASOURCE_USERNAME=postgres
-#            - SPRING_DATASOURCE_PASSWORD=mypass
-             - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/agilekpiskit
-             - SPRING_DATASOURCE_USERNAME=meherguru
-             - SPRING_DATASOURCE_PASSWORD=password
+             - SPRING_DATASOURCE_URL=jdbc:postgresql://akk-db:5432/postgres
+             - SPRING_DATASOURCE_USERNAME=postgres
+             - SPRING_DATASOURCE_PASSWORD=mypass
+        # Hibernate ddl auto (create, create-drop, validate, update)
              - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-             - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
       networks: # Networks to join (Services on the same network can communicate with each other using their name)
-        - jenkins
-        #- frontend
+        - akk-network
 
 #Postgres db
-#  db:
-#    #image: 'postgres-alpine'
-#    image: 'postgres:13.1-alpine'
-#    container_name: db-kpis-agile
-#    restart: always
-#      #build:
-#    #context: ./db
-#    #dockerfile: Dockerfile
-#
-#    #command: docker cp ./db/data/datasqlkpiagile db-kpis-agile:/datasqlkpiagile
-#    volumes:
-#      - pgkpis-agile:/var/lib/postgresql/data
-#      - ./db/dumps.sql:/docker-entrypoint-initdb.d/0_dumps.sql
-#
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=mypass
-#    networks:
-#      - backend
-  db:
-    # container_name: postgres
-    image: postgres
-    environment:
-      POSTGRES_USER: meherguru
-      POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
+  akk-db:
+    #image: 'postgres-alpine'
+    image: 'postgres:13.1-alpine'
+    container_name: akk-db-container
+    restart: always
+      #build:
+    #context: ./db
+    #dockerfile: Dockerfile
+
+    #command: docker cp ./db/data/datasqlkpiagile db-kpis-agile:/datasqlkpiagile
     volumes:
-      - postgres:/data/postgres
-    ports:
-      - "5432:5432"
+      - pg-akk:/var/lib/postgresql/data
+#      - ./db/dumps.sql:/docker-entrypoint-initdb.d/0_dumps.sql
+
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mypass
     networks:
-      - jenkins
-    restart: unless-stopped
+      - akk-network
 
   pgadmin:
-      # container_name: pgadmin
+      container_name: pgadmin
       image: dpage/pgadmin4
       environment:
         PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
@@ -73,32 +53,30 @@ services:
       ports:
         - "5050:80"
       networks:
-        - jenkins
+        - akk-network
       restart: unless-stopped
 
- #Fron-end Angular Application
-#  kpis-ui:
-#    image: 'kpis-agiles-frontend:latest'
-#    container_name: kpis-agile-ui
-#    build:
+# Fron-end Angular Application
+  akk-ui:
+    image: 'akk-frontend:latest'
+    container_name: akk-ui-container
+    build:
 #         context: ../CICD-KPIsAgiles-Client
-#         #for production mode
-#         #context: ../kpis-agile-client
-#
-#    ports:
-#      - 4200:80
-#    depends_on:
-#         - kpis-backend
-#    networks:
-#      - frontend
+         #for production mode
+         context: ../kpis-agile-client
+
+    ports:
+      - 4200:80
+    depends_on:
+         - akk-server
+    networks:
+      - akk-network
 
 volumes:
-  #pgkpis-agile:
-  postgres:
+  pg-akk:
+#  postgres:
   pgadmin:
   
 # Networks to be created to facilitate communication between containers
 networks:
-  backend:
-  frontend:
-  jenkins:
+  akk-network:

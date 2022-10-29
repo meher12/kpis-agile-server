@@ -39,10 +39,13 @@ pipeline {
         }
     }
 
+
     stage('Unit Test') {
         steps {
           echo '-=- execute unit tests -=-'
           sh 'mvn test' //'mvn -DskipTests'
+          echo '-=- create the jar file for Akk -=-'
+          sh 'mvn clean install'
         }
         post {
         always {
