@@ -21,6 +21,147 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: by_ref_view; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.by_ref_view (
+    id bigint NOT NULL,
+    ref_project character varying(255),
+    ref_sprint character varying(255),
+    ref_story character varying(255),
+    ref_task character varying(255),
+    task_stared_at timestamp without time zone,
+    title_project character varying(255),
+    title_sprint character varying(255),
+    title_story character varying(255),
+    title_task character varying(255)
+);
+
+
+ALTER TABLE public.by_ref_view OWNER TO postgres;
+
+--
+-- Name: projects; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.projects (
+    id bigint NOT NULL,
+    date_debut date,
+    date_fin date,
+    description text,
+    p_reference character varying(15),
+    pupdated_date timestamp without time zone,
+    title text,
+    totalsp_commitment integer DEFAULT 0,
+    totalsp_completed integer DEFAULT 0,
+    totalstorypointsinitiallycounts integer DEFAULT 0
+);
+
+
+ALTER TABLE public.projects OWNER TO postgres;
+
+--
+-- Name: sprints; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sprints (
+    id bigint NOT NULL,
+    more_sp integer DEFAULT 0,
+    s_reference character varying(15),
+    sdate_debut date,
+    sdate_fin date,
+    description text,
+    title text,
+    supdated_date timestamp without time zone,
+    work_commitment integer DEFAULT 0,
+    work_completed integer DEFAULT 0,
+    projet_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.sprints OWNER TO postgres;
+
+--
+-- Name: story; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.story (
+    id bigint NOT NULL,
+    plus_sp integer DEFAULT 0,
+    priority bigint,
+    sp_completed integer DEFAULT 0,
+    st_reference character varying(15),
+    description text,
+    title text,
+    story_point integer DEFAULT 0,
+    stupdated_date timestamp without time zone,
+    sprint_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.story OWNER TO postgres;
+
+--
+-- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tasks (
+    id bigint NOT NULL,
+    bugs integer DEFAULT 0,
+    estimation integer DEFAULT 0,
+    status character varying(255),
+    t_reference character varying(15),
+    tdate_debut date,
+    tdate_fin date,
+    description text,
+    title text,
+    tsupdated_date timestamp without time zone,
+    type_task character varying(255),
+    story_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.tasks OWNER TO postgres;
+
+--
+-- Name: byref_view; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.byref_view AS
+ SELECT p.p_reference AS refproject,
+    p.title AS projetc_name,
+    s.s_reference AS refsprint,
+    s.title AS sprint_name,
+    st.st_reference AS restory,
+    st.title AS story_name,
+    t.t_reference AS taskref,
+    t.title AS task_name,
+    t.tdate_debut AS task_startat
+   FROM (((public.projects p
+     JOIN public.sprints s ON ((s.projet_id = p.id)))
+     JOIN public.story st ON ((s.id = st.sprint_id)))
+     JOIN public.tasks t ON ((st.id = t.story_id)))
+  WHERE ((p.p_reference)::text = 'PUID1EBD9'::text)
+  ORDER BY t.tdate_debut;
+
+
+ALTER TABLE public.byref_view OWNER TO postgres;
+
+--
+-- Name: byview_generator; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.byview_generator
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.byview_generator OWNER TO postgres;
+
+--
 -- Name: days_sprints; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -130,26 +271,6 @@ CREATE SEQUENCE public.project_generator
 ALTER TABLE public.project_generator OWNER TO postgres;
 
 --
--- Name: projects; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.projects (
-    id bigint NOT NULL,
-    date_debut date,
-    date_fin date,
-    description text,
-    p_reference character varying(15),
-    pupdated_date timestamp without time zone,
-    title text,
-    totalsp_commitment integer DEFAULT 0,
-    totalsp_completed integer DEFAULT 0,
-    totalstorypointsinitiallycounts integer DEFAULT 0
-);
-
-
-ALTER TABLE public.projects OWNER TO postgres;
-
---
 -- Name: projet_more_sp; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -224,47 +345,6 @@ CREATE SEQUENCE public.sprint_generator
 ALTER TABLE public.sprint_generator OWNER TO postgres;
 
 --
--- Name: sprints; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.sprints (
-    id bigint NOT NULL,
-    more_sp integer DEFAULT 0,
-    s_reference character varying(15),
-    sdate_debut date,
-    sdate_fin date,
-    description text,
-    title text,
-    supdated_date timestamp without time zone,
-    work_commitment integer DEFAULT 0,
-    work_completed integer DEFAULT 0,
-    projet_id bigint NOT NULL
-);
-
-
-ALTER TABLE public.sprints OWNER TO postgres;
-
---
--- Name: story; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.story (
-    id bigint NOT NULL,
-    plus_sp integer DEFAULT 0,
-    priority bigint,
-    sp_completed integer DEFAULT 0,
-    st_reference character varying(15),
-    description text,
-    title text,
-    story_point integer DEFAULT 0,
-    stupdated_date timestamp without time zone,
-    sprint_id bigint NOT NULL
-);
-
-
-ALTER TABLE public.story OWNER TO postgres;
-
---
 -- Name: story_generator; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -291,28 +371,6 @@ CREATE SEQUENCE public.task_generator
 
 
 ALTER TABLE public.task_generator OWNER TO postgres;
-
---
--- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.tasks (
-    id bigint NOT NULL,
-    bugs integer DEFAULT 0,
-    estimation integer DEFAULT 0,
-    status character varying(255),
-    t_reference character varying(15),
-    tdate_debut date,
-    tdate_fin date,
-    description text,
-    title text,
-    tsupdated_date timestamp without time zone,
-    type_task character varying(255),
-    story_id bigint NOT NULL
-);
-
-
-ALTER TABLE public.tasks OWNER TO postgres;
 
 --
 -- Name: user_generator; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -389,6 +447,129 @@ CREATE TABLE public.workedl_sprints (
 
 
 ALTER TABLE public.workedl_sprints OWNER TO postgres;
+
+--
+-- Data for Name: by_ref_view; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.by_ref_view (id, ref_project, ref_sprint, ref_story, ref_task, task_stared_at, title_project, title_sprint, title_story, title_task) FROM stdin;
+1242701	PUID1441B	SUID118F5	STUID1A273	TUID181D3	2022-03-06 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Authentification	Ajοuter la cοuche Spring Security
+1242751	PUID1441B	SUID118F5	STUID1A273	TUID17BF7	2022-03-07 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Authentification	Intégrer le module authentification
+1242801	PUID1441B	SUID118F5	STUID1C117	TUID1CC1C	2022-03-11 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Mise en place de l’architecture	définir l'architecture logique de la partie back-end
+1242851	PUID1441B	SUID118F5	STUID1C117	TUID16FDC	2022-03-12 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Mise en place de l’architecture	Implémenter CRUD
+1242901	PUID1441B	SUID118F5	STUID1C117	TUID1AE80	2022-03-20 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Mise en place de l’architecture	La création des interfaces UI de crud
+1242951	PUID1441B	SUID118F5	STUID1C117	TUID141E6	2022-03-22 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Mise en place de l’architecture	Les méthodes de cοntrôle de saisie
+1243001	PUID1441B	SUID118F5	STUID1C117	TUID1A55A	2022-03-25 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Mise en place de l’architecture	Créer les méthodes dans la partie front-end
+1243051	PUID1441B	SUID118F5	STUID1C117	TUID1EEEA	2022-04-01 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Mise en place de l’architecture	Intégrer
+1243101	PUID1441B	SUID118F5	STUID128AE	TUID12F80	2022-04-03 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Gestion des fournisseurs et gestion des sous-traitants	Créer les repositories, DTOs, les services et les contrôleurs.
+1243151	PUID1441B	SUID118F5	STUID128AE	TUID12D6A	2022-04-04 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Gestion des fournisseurs et gestion des sous-traitants	Crud des sous-traitants
+1243201	PUID1441B	SUID118F5	STUID128AE	TUID18F4E	2022-04-10 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Gestion des fournisseurs et gestion des sous-traitants	Créer les interfaces pour la gestion des sous-traitants
+1243251	PUID1441B	SUID118F5	STUID128AE	TUID1A955	2022-04-12 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Gestion des fournisseurs et gestion des sous-traitants	Implémenter les méthodes et le contrôle de saisie .
+1243301	PUID1441B	SUID118F5	STUID128AE	TUID16104	2022-04-14 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 1	Gestion des fournisseurs et gestion des sous-traitants	Intégrer
+1243351	PUID1441B	SUID168B1	STUID1C9F0	TUID1EDC4	2022-04-16 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des contrats	l’architecture logique de la partie back-end des contrats
+1243401	PUID1441B	SUID168B1	STUID1C9F0	TUID1D69E	2022-04-17 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des contrats	CRUD methode pour les contrats
+1243451	PUID1441B	SUID168B1	STUID1C9F0	TUID1A887	2022-04-24 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des contrats	Créer les interfaces 
+1243501	PUID1441B	SUID168B1	STUID1C9F0	TUID1D6D0	2022-04-26 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des contrats	Implémenter les méthodes de la partie front-end.
+1243551	PUID1441B	SUID168B1	STUID1C9F0	TUID118E9	2022-04-29 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des contrats	Implémenter les méthodes de contrôle de saisie pour les formulaires.
+1243601	PUID1441B	SUID168B1	STUID133F6	TUID1AA8A	2022-04-30 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des factures	Créer le repository, les DTOs, les services 
+1243651	PUID1441B	SUID168B1	STUID133F6	TUID1EC8F	2022-05-01 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des factures	Recueillir les infοrmatiοns
+2287201	PUID1EBD9	SUID18F06	STUID15359	TUID1D149	2022-01-01 00:00:00	Telnet RSE	RSE Sprint 1	Gérer les sites de TELNET	Ajouter un nouveau site
+2287251	PUID1EBD9	SUID18F06	STUID15359	TUID1F8E3	2022-01-03 00:00:00	Telnet RSE	RSE Sprint 1	Gérer les sites de TELNET	lister les sites de TELNET disponibles
+2287301	PUID1EBD9	SUID18F06	STUID15359	TUID18F5D	2022-01-05 00:00:00	Telnet RSE	RSE Sprint 1	Gérer les sites de TELNET	Crud de site
+2287351	PUID1EBD9	SUID18F06	STUID15359	TUID17D43	2022-01-07 00:00:00	Telnet RSE	RSE Sprint 1	Gérer les sites de TELNET	Tester les crud de site
+2287401	PUID1EBD9	SUID18F06	STUID1F4D6	TUID1F98A	2022-01-08 00:00:00	Telnet RSE	RSE Sprint 1	La gestion d'événements	Recevoir les notifications
+2287451	PUID1EBD9	SUID18F06	STUID1F4D6	TUID17BCB	2022-01-11 00:00:00	Telnet RSE	RSE Sprint 1	La gestion d'événements	Apercevoir les événements en attentes.
+2287501	PUID1EBD9	SUID18F06	STUID1F4D6	TUID1599F	2022-01-12 00:00:00	Telnet RSE	RSE Sprint 1	La gestion d'événements	Implémenter les interfaces nécessaires pour apercevoir un événement
+2287551	PUID1EBD9	SUID18F06	STUID1F4D6	TUID1D593	2022-01-13 00:00:00	Telnet RSE	RSE Sprint 1	La gestion d'événements	Implémenter les méthodes et les services de validation des événements en attentes.
+2287601	PUID1EBD9	SUID18F06	STUID1F4D6	TUID10F60	2022-01-16 00:00:00	Telnet RSE	RSE Sprint 1	La gestion d'événements	Implémenter les méthodes et services pour participer a un événement
+2287651	PUID1EBD9	SUID17844	STUID107C5	TUID10D94	2022-01-20 00:00:00	Telnet RSE	RSE Sprint 2	Gérer des événements espace administrateur 	Implémenter les méthodes et les services nécessaires pour ajouter un événement
+2287701	PUID1EBD9	SUID17844	STUID107C5	TUID16ACC	2022-01-22 00:00:00	Telnet RSE	RSE Sprint 2	Gérer des événements espace administrateur 	Apercevoir un événément avant son ajout
+2287751	PUID1EBD9	SUID17844	STUID107C5	TUID1426C	2022-01-24 00:00:00	Telnet RSE	RSE Sprint 2	Gérer des événements espace administrateur 	 lister les événements disponibles et valides
+2287801	PUID1EBD9	SUID17844	STUID107C5	TUID14EB4	2022-01-25 00:00:00	Telnet RSE	RSE Sprint 2	Gérer des événements espace administrateur 	L'affichage l’ajout et la modification d’un événément
+2287851	PUID1EBD9	SUID17844	STUID107C5	TUID1E310	2022-01-30 00:00:00	Telnet RSE	RSE Sprint 2	Gérer des événements espace administrateur 	valider, réfuser et apercevoir les  événements en attente
+2287901	PUID1EBD9	SUID17844	STUID17802	TUID19510	2022-02-06 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les évenements espace collaborateur	Implémenter les méthodes et services nécessaires pour participer a un événement
+2287951	PUID1EBD9	SUID17844	STUID17802	TUID1C53B	2022-02-08 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les évenements espace collaborateur	Ajouter l’action de participation dans chaque événement
+2288001	PUID1EBD9	SUID17844	STUID17802	TUID11EF4	2022-02-09 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les évenements espace collaborateur	Tester la participation
+2288051	PUID1EBD9	SUID17844	STUID17802	TUID1747D	2022-02-10 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les évenements espace collaborateur	 lister les participants de chaque événement
+2288101	PUID1EBD9	SUID17844	STUID17802	TUID1BC80	2022-02-12 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les évenements espace collaborateur	Ajouter les images et les noms des participants dans chaque événement
+2288151	PUID1EBD9	SUID17844	STUID17802	TUID1FD14	2022-02-14 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les évenements espace collaborateur	Ajouter une publication
+2288201	PUID1EBD9	SUID17844	STUID17802	TUID15342	2022-02-15 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les évenements espace collaborateur	lister les publications disponibles et valides et  apercevoir une publication avant son ajout
+2288251	PUID1EBD9	SUID17844	STUID17802	TUID1B042	2022-02-16 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les évenements espace collaborateur	Crud de publication
+1243701	PUID1441B	SUID168B1	STUID133F6	TUID1686F	2022-05-06 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des factures	Implémenter les méthοdes de consultation et de recherche
+1243751	PUID1441B	SUID168B1	STUID133F6	TUID1F895	2022-05-10 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des factures	Créer les interfaces nécessaires
+1243801	PUID1441B	SUID168B1	STUID133F6	TUID1F54F	2022-05-12 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des factures	Implémenter les méthοdes de la partie frοnt-end
+1243851	PUID1441B	SUID168B1	STUID11FC3	TUID19B16	2022-05-16 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des documents	Créer le Dοcument DTΟ et le service et le service implémentatiοn.
+1243901	PUID1441B	SUID168B1	STUID11FC3	TUID14773	2022-05-17 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des documents	Créer la méthοde uplοad du dοcument 
+1243951	PUID1441B	SUID168B1	STUID11FC3	TUID1FDD8	2022-05-19 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des documents	Miniature d’un document enregistré
+1244001	PUID1441B	SUID168B1	STUID11FC3	TUID1F107	2022-05-22 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des documents	Implémenter la méthode de téléchargement
+1244051	PUID1441B	SUID168B1	STUID11FC3	TUID12593	2022-05-24 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des documents	Manipuler les documents
+1244101	PUID1441B	SUID168B1	STUID11FC3	TUID1F1ED	2022-05-26 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοss Sprint 2	La gestion des documents	Implementation des méthodes cotés front-end
+1244151	PUID1441B	SUID141EB	STUID1837D	TUID19C54	2022-05-30 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Export des données	Créer la méthοde d’expοrt dans la partie Back-end
+1244201	PUID1441B	SUID141EB	STUID1837D	TUID1558A	2022-06-04 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Export des données	Ajοuter l’οptiοn expοrter dans UI
+1244251	PUID1441B	SUID141EB	STUID1837D	TUID16B23	2022-06-05 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Export des données	Créer la méthode de l’export dans la partie front-end
+1244301	PUID1441B	SUID141EB	STUID19E2E	TUID120B2	2022-06-07 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Personnalisation du dashboard et statistiques	Ajouter au menu de l’application tous les liens utiles
+1244351	PUID1441B	SUID141EB	STUID19E2E	TUID12DCF	2022-06-09 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Personnalisation du dashboard et statistiques	Ajοuter le widget fοurnisseur à la base de dοnnées.
+1244401	PUID1441B	SUID141EB	STUID19E2E	TUID1B421	2022-06-10 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Personnalisation du dashboard et statistiques	Créer des statistiques
+1244451	PUID1441B	SUID141EB	STUID19E2E	TUID1272B	2022-06-13 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Personnalisation du dashboard et statistiques	Manage widget fοurnisseur
+1244501	PUID1441B	SUID141EB	STUID1951D	TUID1CCA2	2022-06-17 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Traduction	Créer les scripts de la traduction
+1244551	PUID1441B	SUID141EB	STUID1951D	TUID11326	2022-06-20 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Traduction	Récupérer la liste des champs traduit
+1244601	PUID1441B	SUID141EB	STUID1951D	TUID1E316	2022-06-21 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Traduction	Implémenter la traductiοn dans la partie frοnt-end 
+1244651	PUID1441B	SUID141EB	STUID1951D	TUID1CC09	2022-06-26 00:00:00	Gestion des fournisseurs de l’ERP Byblos	Byblοs Sprint 3	Traduction	Implémenter la traductiοn dans tοutes les interfaces de l’applicatiοn.
+2288301	PUID1EBD9	SUID17844	STUID1352D	TUID115CD	2022-02-17 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace administrateur	Recevoir des notifications
+2288351	PUID1EBD9	SUID17844	STUID1352D	TUID1CF0F	2022-02-18 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace administrateur	Apercevoir les publications en attentes
+2288401	PUID1EBD9	SUID17844	STUID1352D	TUID162E8	2022-02-19 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace administrateur	Ajouter l’action de validation sur ie dashboard de l’administrateur RH
+2288451	PUID1EBD9	SUID17844	STUID1352D	TUID19012	2022-02-21 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace administrateur	Tester la validation des publications en attentes
+2288501	PUID1EBD9	SUID17844	STUID1352D	TUID1F71A	2022-02-23 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace administrateur	Ajouter l’action "j’aime" et "commentaire"
+2288551	PUID1EBD9	SUID17844	STUID1352D	TUID10B73	2022-02-24 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace administrateur	Tester l’action "j’aime" et l’ajout d’un commentaire
+2288601	PUID1EBD9	SUID17844	STUID160AD	TUID13E72	2022-02-25 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace Com interne	Implémenter les méthodes et les services nécessaires pour ajouter une publication
+2288651	PUID1EBD9	SUID17844	STUID160AD	TUID162CB	2022-02-26 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace Com interne	l’ajout d’une publication et  apercevoir une publication avant son ajout
+2288701	PUID1EBD9	SUID17844	STUID160AD	TUID10E97	2022-02-27 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace Com interne	lister et afficher  les publications valides
+2288751	PUID1EBD9	SUID17844	STUID160AD	TUID1D110	2022-03-01 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace Com interne	Recevoir des notifications
+2288801	PUID1EBD9	SUID17844	STUID160AD	TUID123D8	2022-03-02 00:00:00	Telnet RSE	RSE Sprint 2	Gérer les publication et les commentaires espace Com interne	Ajouter l’action "j’aime" et  "commentaire" 
+2288851	PUID1EBD9	SUID12D17	STUID19016	TUID16051	2022-03-03 00:00:00	Telnet RSE	RSE Sprint 3	Gérer des sondages espace administrateur	Ajouter un sondage
+2288901	PUID1EBD9	SUID12D17	STUID19016	TUID1667A	2022-03-05 00:00:00	Telnet RSE	RSE Sprint 3	Gérer des sondages espace administrateur	Apercevoir un sondage avant son ajout
+2288951	PUID1EBD9	SUID12D17	STUID19016	TUID10E4F	2022-03-07 00:00:00	Telnet RSE	RSE Sprint 3	Gérer des sondages espace administrateur	Lister les sondages disponibles et valides
+2289001	PUID1EBD9	SUID12D17	STUID19016	TUID1E3D5	2022-03-08 00:00:00	Telnet RSE	RSE Sprint 3	Gérer des sondages espace administrateur	L’affichage,l’ajout et la modification d’un sondage
+2289051	PUID1EBD9	SUID12D17	STUID19016	TUID1A8E3	2022-03-10 00:00:00	Telnet RSE	RSE Sprint 3	Gérer des sondages espace administrateur	Ajouter l’action de suppression sur la page de consultation de la liste des sondages
+2289101	PUID1EBD9	SUID12D17	STUID19016	TUID156BD	2022-03-12 00:00:00	Telnet RSE	RSE Sprint 3	Gérer des sondages espace administrateur	Tester l’ajout et l’affichage des sondages et la suppression des sondages
+2289151	PUID1EBD9	SUID12D17	STUID1E069	TUID14771	2022-03-13 00:00:00	Telnet RSE	RSE Sprint 3	Gérer les notifications de sondage espace administrateur	Implémenter les méthodes et les services nécessaires pour recevoir des notifications
+2289201	PUID1EBD9	SUID12D17	STUID1E069	TUID14FCD	2022-03-14 00:00:00	Telnet RSE	RSE Sprint 3	Gérer les notifications de sondage espace administrateur	Ajouter l’action de validation sur ie dashboard 
+2289251	PUID1EBD9	SUID12D17	STUID1E069	TUID1F01A	2022-03-15 00:00:00	Telnet RSE	RSE Sprint 3	Gérer les notifications de sondage espace administrateur	validation des sondages en attentes
+2289301	PUID1EBD9	SUID12D17	STUID1E069	TUID11E0A	2022-03-16 00:00:00	Telnet RSE	RSE Sprint 3	Gérer les notifications de sondage espace administrateur	Tester la validation des sondages en attentes
+2289351	PUID1EBD9	SUID12D17	STUID1E069	TUID11F85	2022-03-17 00:00:00	Telnet RSE	RSE Sprint 3	Gérer les notifications de sondage espace administrateur	Ajouter l’action de réfusion sur ie dashboard 
+2289401	PUID1EBD9	SUID12D17	STUID1E069	TUID1E10B	2022-03-19 00:00:00	Telnet RSE	RSE Sprint 3	Gérer les notifications de sondage espace administrateur	Tester la réfusion des sondages en attentes
+2289451	PUID1EBD9	SUID12D17	STUID1E069	TUID13C8F	2022-03-20 00:00:00	Telnet RSE	RSE Sprint 3	Gérer les notifications de sondage espace administrateur	Répondre a un sondage
+2289501	PUID1EBD9	SUID12D17	STUID1E069	TUID1D792	2022-03-22 00:00:00	Telnet RSE	RSE Sprint 3	Gérer les notifications de sondage espace administrateur	Calculer le pourcentage de chaque réponse a chaque sondage 
+2289551	PUID1EBD9	SUID12D17	STUID19B86	TUID1B675	2022-03-24 00:00:00	Telnet RSE	RSE Sprint 3	Gestion des sondages espace Com intrene	lister les sondages dans la page d’accueil
+2289601	PUID1EBD9	SUID12D17	STUID19B86	TUID15A7C	2022-03-25 00:00:00	Telnet RSE	RSE Sprint 3	Gestion des sondages espace Com intrene	l’affichage des sondages dans la page d’accueil
+2289651	PUID1EBD9	SUID12D17	STUID19B86	TUID17690	2022-03-26 00:00:00	Telnet RSE	RSE Sprint 3	Gestion des sondages espace Com intrene	Tester l’action de répondre a un sondage
+2289701	PUID1EBD9	SUID12D17	STUID19B86	TUID1B9C6	2022-03-27 00:00:00	Telnet RSE	RSE Sprint 3	Gestion des sondages espace Com intrene	l’affichage des sondages dans la page d’accueil
+2289751	PUID1EBD9	SUID12D17	STUID19B86	TUID1263E	2022-03-29 00:00:00	Telnet RSE	RSE Sprint 3	Gestion des sondages espace Com intrene	Implémenter les méthodes de répondre a un sondage et tester l’action de répondre a un sondage
+2289801	PUID1EBD9	SUID154EC	STUID141D2	TUID15715	2022-03-31 00:00:00	Telnet RSE	RSE Sprint 4	Consulter mon profile espace administrateur	Récupérer les données de l’employé
+2289851	PUID1EBD9	SUID154EC	STUID141D2	TUID12187	2022-04-01 00:00:00	Telnet RSE	RSE Sprint 4	Consulter mon profile espace administrateur	Récupérer les publications de l’employé
+2289901	PUID1EBD9	SUID154EC	STUID141D2	TUID1433A	2022-04-02 00:00:00	Telnet RSE	RSE Sprint 4	Consulter mon profile espace administrateur	Réagir avec les publications
+2289951	PUID1EBD9	SUID154EC	STUID14272	TUID19CD8	2022-04-03 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Gérer les données personnelles
+2290001	PUID1EBD9	SUID154EC	STUID14272	TUID127C5	2022-04-04 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles
+2290051	PUID1EBD9	SUID154EC	STUID14272	TUID1003B	2022-04-05 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Implémenter les méthodes et les services nécessaires pour mettre a jour des données personnelles
+2290101	PUID1EBD9	SUID154EC	STUID14272	TUID1F20C	2022-04-06 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Tester la modification des données personnelles.
+2290151	PUID1EBD9	SUID154EC	STUID14272	TUID11A47	2022-04-07 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Ajouter des compétences
+2290201	PUID1EBD9	SUID154EC	STUID14272	TUID14490	2022-04-08 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Ajouter des centres d’intérét
+2290251	PUID1EBD9	SUID154EC	STUID14272	TUID17B33	2022-04-09 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Tester l’ajout des compétences et l’ajout des centres d’intérét
+2290301	PUID1EBD9	SUID154EC	STUID14272	TUID1453B	2022-04-10 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Ajouter des projets réalisés
+2290351	PUID1EBD9	SUID154EC	STUID14272	TUID17C79	2022-04-12 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Ajouter l’action sur les images et les noms des employés
+2290401	PUID1EBD9	SUID154EC	STUID14272	TUID16466	2022-04-14 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Récupérer ie profile de chaque employé
+2290451	PUID1EBD9	SUID154EC	STUID14272	TUID16CFF	2022-04-15 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Ajouter l’action sur les images et les noms de com interne
+2290501	PUID1EBD9	SUID154EC	STUID14272	TUID11E9B	2022-04-17 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mon profile espace com interne	Consulter les profiles des autres employés espace  Com interne
+2290551	PUID1EBD9	SUID154EC	STUID1BB3F	TUID1D1B8	2022-04-18 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mes données personnelles dans mon profile espace collaborateur	Ajouter un bouton dans ie profile qui redirige vers une page de modification des données personnelles
+2290601	PUID1EBD9	SUID154EC	STUID1BB3F	TUID1C6F4	2022-04-19 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mes données personnelles dans mon profile espace collaborateur	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles
+2290651	PUID1EBD9	SUID154EC	STUID1BB3F	TUID14277	2022-04-21 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mes données personnelles dans mon profile espace collaborateur	Mettre a jour des données personnelles
+2290701	PUID1EBD9	SUID154EC	STUID1BB3F	TUID1467C	2022-04-22 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mes données personnelles dans mon profile espace collaborateur	Ajouter des compétences
+2290751	PUID1EBD9	SUID154EC	STUID1BB3F	TUID1E43B	2022-04-23 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mes données personnelles dans mon profile espace collaborateur	Ajouter des centres d’intérét
+2290801	PUID1EBD9	SUID154EC	STUID1BB3F	TUID19855	2022-04-24 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mes données personnelles dans mon profile espace collaborateur	Regrouper les empoyés qui ont les mémes compétences et centres d’intérét
+2290851	PUID1EBD9	SUID154EC	STUID1BB3F	TUID1C4DF	2022-04-25 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mes données personnelles dans mon profile espace collaborateur	Consulter les recommandations disponibles dans la page d’accueil
+2290901	PUID1EBD9	SUID154EC	STUID1BB3F	TUID1B913	2022-04-26 00:00:00	Telnet RSE	RSE Sprint 4	Gérer mes données personnelles dans mon profile espace collaborateur	regrouper les empoyés qui ont les mémes compétences et centres d’intérét pour les com interne
+\.
+
 
 --
 -- Data for Name: days_sprints; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -888,6 +1069,10 @@ COPY public.jcoverage (id, covered, created_at, missed, percentage, project_ref,
 --
 
 COPY public.member_of_project (project_id, email) FROM stdin;
+52	yassine@scrumm.tn
+52	iheb@developer.tn
+52	chamsEddine@productowner.tn
+52	tasnime@developer.tn
 \.
 
 
@@ -896,6 +1081,10 @@ COPY public.member_of_project (project_id, email) FROM stdin;
 --
 
 COPY public.member_of_task (task_attached_id, mail) FROM stdin;
+202	syrine@scrumm.tn
+202	mohamed@developer.tn
+202	aymen@productowner.tn
+202	amine@developer.tn
 \.
 
 
@@ -904,8 +1093,8 @@ COPY public.member_of_task (task_attached_id, mail) FROM stdin;
 --
 
 COPY public.projects (id, date_debut, date_fin, description, p_reference, pupdated_date, title, totalsp_commitment, totalsp_completed, totalstorypointsinitiallycounts) FROM stdin;
-1	2022-03-06	2022-06-27	Refonte de module Gestion des Fournisseurs de Byblos consiste à assurer une refonte architecturale et fonctionnelle de module Gestion des Fournisseurs\nen migrant la solution existante du framework JSF vers une nouvelle solution utilisant Spring Boot et\nAngular et en passant de l’architecture monolithique vers une architecture à base de microservices.\n\nLe résultat souhaité est de réaliser une applicatiοn fiable, maintenable et évοlutive, facile à utiliser et qui\nallège les cοmplexités de l’architecture existante.	PUID1441B	2022-10-25 14:37:45.832576	Gestion des fournisseurs de l’ERP Byblos	111	0	111
-52	2022-01-01	2022-04-27	TELNET RSE (Réseau social d’entreprise TELNET) est une plateforme constituée de trois intervenants (Administrateur RH, le service de communication interne et les employés). Elle permet au service de communication interne et à l’administration RH de publier des évènements, des publications et des sondages et permet à ces employés de participer à ces évènements, faire réagir avec les publications et répondre aux sondages.	PUID1EBD9	2022-10-25 14:37:45.832576	Telnet RSE	116	0	116
+1	2022-03-06	2022-06-27	Refonte de module Gestion des Fournisseurs de Byblos consiste à assurer une refonte architecturale et fonctionnelle de module Gestion des Fournisseurs\nen migrant la solution existante du framework JSF vers une nouvelle solution utilisant Spring Boot et\nAngular et en passant de l’architecture monolithique vers une architecture à base de microservices.\n\nLe résultat souhaité est de réaliser une applicatiοn fiable, maintenable et évοlutive, facile à utiliser et qui\nallège les cοmplexités de l’architecture existante.	PUID1441B	2022-10-30 11:37:18.28542	Gestion des fournisseurs de l’ERP Byblos	111	0	111
+52	2022-01-01	2022-04-27	TELNET RSE (Réseau social d’entreprise TELNET) est une plateforme constituée de trois intervenants (Administrateur RH, le service de communication interne et les employés). Elle permet au service de communication interne et à l’administration RH de publier des évènements, des publications et des sondages et permet à ces employés de participer à ces évènements, faire réagir avec les publications et répondre aux sondages.	PUID1EBD9	2022-10-30 11:37:18.28542	Telnet RSE	116	0	116
 \.
 
 
@@ -986,13 +1175,13 @@ COPY public.roles (id, name) FROM stdin;
 --
 
 COPY public.sprints (id, more_sp, s_reference, sdate_debut, sdate_fin, description, title, supdated_date, work_commitment, work_completed, projet_id) FROM stdin;
-252	0	SUID154EC	2022-03-31	2022-04-27	Dans ce sprint intitulé "Gestion des profiles" nous avons visé la partie de gestion des profiles des employés de TELNET	RSE Sprint 4	2022-10-25 14:37:45.782703	28	0	52
-152	0	SUID17844	2022-01-20	2022-03-02	Dans ce sprint intitulé "Gestion des événements et des publications" nous avons visé la partie de gestion des événements et des publications au sein de TELNET	RSE Sprint 2	2022-10-25 14:37:45.782703	42	0	52
-202	0	SUID12D17	2022-03-03	2022-03-30	Dans ce sprint intitulé "Gestion des sondages" nous avons visé la partie de gestion des sondages au sein de TELNET	RSE Sprint 3	2022-10-25 14:37:45.782703	28	0	52
-3	0	SUID141EB	2022-05-29	2022-06-27	Export des données, traduction, personnalisation du dashboard et statistiques	Byblοs Sprint 3	2022-10-25 14:37:45.782703	27	0	1
-107	0	SUID18F06	2022-01-01	2022-01-19	Dans ce sprint intitulé "Gestion des utilisateurs" nous avons visé la partie de gestion des employés au sein de TELNET et suite à la réunion de planification du sprint 1, nous avons fixé la liste des tâches à réaliser et leurs estimations dans le Sprint Backlog.	RSE Sprint 1	2022-10-25 14:37:45.782703	18	0	52
-2	0	SUID168B1	2022-04-16	2022-05-28	Gestion des contrats, facturations et documents des fournisseurs	Byblοss Sprint 2	2022-10-25 14:37:45.782703	44	0	1
-1	0	SUID118F5	2022-03-06	2022-04-15	Mise en place de l’architecture, authentification, gestion des fournisseurs et gestion des sous-traitants	Byblοs Sprint 1	2022-10-25 14:37:45.782703	40	0	1
+252	0	SUID154EC	2022-03-31	2022-04-27	Dans ce sprint intitulé "Gestion des profiles" nous avons visé la partie de gestion des profiles des employés de TELNET	RSE Sprint 4	2022-10-30 11:37:18.237539	28	0	52
+152	0	SUID17844	2022-01-20	2022-03-02	Dans ce sprint intitulé "Gestion des événements et des publications" nous avons visé la partie de gestion des événements et des publications au sein de TELNET	RSE Sprint 2	2022-10-30 11:37:18.237539	42	0	52
+202	0	SUID12D17	2022-03-03	2022-03-30	Dans ce sprint intitulé "Gestion des sondages" nous avons visé la partie de gestion des sondages au sein de TELNET	RSE Sprint 3	2022-10-30 11:37:18.237539	28	0	52
+3	0	SUID141EB	2022-05-29	2022-06-27	Export des données, traduction, personnalisation du dashboard et statistiques	Byblοs Sprint 3	2022-10-30 11:37:18.237539	27	0	1
+107	0	SUID18F06	2022-01-01	2022-01-19	Dans ce sprint intitulé "Gestion des utilisateurs" nous avons visé la partie de gestion des employés au sein de TELNET et suite à la réunion de planification du sprint 1, nous avons fixé la liste des tâches à réaliser et leurs estimations dans le Sprint Backlog.	RSE Sprint 1	2022-10-30 11:37:18.237539	18	0	52
+2	0	SUID168B1	2022-04-16	2022-05-28	Gestion des contrats, facturations et documents des fournisseurs	Byblοss Sprint 2	2022-10-30 11:37:18.237539	44	0	1
+1	0	SUID118F5	2022-03-06	2022-04-15	Mise en place de l’architecture, authentification, gestion des fournisseurs et gestion des sous-traitants	Byblοs Sprint 1	2022-10-30 11:37:18.237539	40	0	1
 \.
 
 
@@ -1001,27 +1190,27 @@ COPY public.sprints (id, more_sp, s_reference, sdate_debut, sdate_fin, descripti
 --
 
 COPY public.story (id, plus_sp, priority, sp_completed, st_reference, description, title, story_point, stupdated_date, sprint_id) FROM stdin;
-404	0	3	0	STUID1BB3F	En tant que Collaborateur RH je veux gérer mes données personnelles dans mon profile, En tant que Collaborateur je veux consulter les profiles des autres employés,  En tant qu’Administrateur RH je veux consulter les recommandations des collaborateurs disponibles	Gérer mes données personnelles dans mon profile espace collaborateur	10	2022-10-25 14:37:45.79086	252
-402	0	1	0	STUID141D2	En tant qu’administrateur RH je veux consulter mon profile	Consulter mon profile espace administrateur	3	2022-10-25 14:37:45.79086	252
-403	0	2	0	STUID14272	En tant qu’administrateur RH je veux gérer mes données personnelles dans mon profile,  En tant qu’Administrateur RH je veux consulter les profiles des autres employés, En tant que Com interne je veux consulter mon profile, En tant que Com interne RH je veux gérer mes données personnelles dans mon profile, En tant que Com interne je veux consulter les profiles des autres employés et en tant que Collaborateur je veux consulter mon profile	Gérer mon profile espace com interne	15	2022-10-25 14:37:45.79086	252
-2	0	1	0	STUID1A273	L' authentification	Authentification	5	2022-10-25 14:37:45.79086	1
-302	0	2	0	STUID1F4D6	- En tant qu’administrateur RH je veux recevoir des notifications pour consulter les événements en attentes.\n- En tant qu’administrateur RH je veux apercevoir un événement en attente.\n-  En tant qu’administrateur RH je veux valider un événement en attente.\n- En tant qu’administrateur RH je veux participer a un événement.\n- En tant qu’administrateur RH je veux consulter la liste des participants de chaque événement	La gestion d'événements	11	2022-10-25 14:37:45.79086	107
-55	0	1	0	STUID1837D	Export des données	Export des données	6	2022-10-25 14:37:45.79086	3
-355	0	1	0	STUID19016	En tant qu’administrateur RH je veux gérer des sondages	Gérer des sondages espace administrateur	10	2022-10-25 14:37:45.79086	202
-54	0	3	0	STUID11FC3	la gestion des documents	La gestion des documents	13	2022-10-25 14:37:45.79086	2
-102	0	2	0	STUID19E2E	Personnalisation du dashboard et statistiques	Personnalisation du dashboard et statistiques	10	2022-10-25 14:37:45.79086	3
-356	0	2	0	STUID1E069	En tant qu’administrateur RH je veux recevoir des notifications pour consulter les sondages en attentes,  En tant qu’administrateur RH je veux valider un sondage en attente, En tant qu’administrateur RH je veux réfuser un sondage en attente, En tant qu’administrateur RH je veux répondre a un sondage, En tant qu’administrateur RH je veux consulter ie pourcentage de chaque réponse a chaque sondage	Gérer les notifications de sondage espace administrateur	11	2022-10-25 14:37:45.79086	202
-353	0	3	0	STUID1352D	En tant qu’administrateur RH je veux recevoir des notifications pour consulter les publications en attentes, En tant qu’administrateur RH je veux apercevoir une publication en attente, En tant qu’administrateur RH je veux valider une publication en attente, En tant qu’administrateur RH je veux réfuser une publication en attente, En tant qu’administrateur RH je veux\naimer et commenter une publication	Gérer les publication et les commentaires espace administrateur	8	2022-10-25 14:37:45.79086	152
-1	0	2	0	STUID1C117	Mise en place de l’architecture de la nοuvelle sοlutiοn du mοdule gestion des\nfournisseurs ainsi que la conception et réalisation de ces fonctionnalité.	Mise en place de l’architecture	22	2022-10-25 14:37:45.79086	1
-354	0	4	0	STUID160AD	En tant que Com interne je veux créer une publication, En tant que Com interne je veux consulter la liste de mes publications validées, En tant que Com interne je veux recevoir des notifications dés la validation de mes publications en attentes par l’administrateur RH, En tant que Com interne je veux aimer et commenter une publication et En tant que Com interne je veux consulter la liste des employés qui ont aimés une publication	Gérer les publication et les commentaires espace Com interne	6	2022-10-25 14:37:45.79086	152
-357	0	3	0	STUID19B86	En tant que Com interne je veux consulter la liste des sondages dans la page d’accueil, En tant que Com interne je veux répondre a un sondage, En tant que Collaborateur je veux consulter la liste des sondages dans la page d’accueil et En tant que Collaborateur je veux répondre a un sondage	Gestion des sondages espace Com intrene	7	2022-10-25 14:37:45.79086	202
-3	0	3	0	STUID128AE	- Gérer les fοurnisseurs.\n- Gérer les sous-traitants	Gestion des fournisseurs et gestion des sous-traitants	13	2022-10-25 14:37:45.79086	1
-303	0	1	0	STUID107C5	En tant qu’administrateur RH je veux gérer des événements, En tant qu’administrateur RH je veux recevoir des notifications pour consulter les événements en attentes, En tant qu’administrateur RH je veux apercevoir un événement en attente, En tant qu’administrateur RH je veux valider un événement en attente et En tant qu’administrateur RH je veux réfuser un événement en attente	Gérer des événements espace administrateur 	17	2022-10-25 14:37:45.79086	152
-352	0	2	0	STUID17802	En tant que Collaborateur je veux participer a un événement,  En tant que Collaborateur je veux consulter la liste des participants de chaque événement et en tant qu’administrateur RH je veux gérer des publications	Gérer les évenements espace collaborateur	11	2022-10-25 14:37:45.79086	152
-52	0	1	0	STUID1C9F0	Gestion des contrats	La gestion des contrats	15	2022-10-25 14:37:45.79086	2
-252	0	1	0	STUID15359	En tant qu’administrateur RH je veux gérer les sites de TELNET	Gérer les sites de TELNET	7	2022-10-25 14:37:45.79086	107
-53	0	2	0	STUID133F6	la gestion des factures	La gestion des factures	16	2022-10-25 14:37:45.79086	2
-56	0	3	0	STUID1951D	Traduction	Traduction	11	2022-10-25 14:37:45.79086	3
+402	0	1	0	STUID141D2	En tant qu’administrateur RH je veux consulter mon profile	Consulter mon profile espace administrateur	3	2022-10-30 11:37:18.243794	252
+356	0	2	0	STUID1E069	En tant qu’administrateur RH je veux recevoir des notifications pour consulter les sondages en attentes,  En tant qu’administrateur RH je veux valider un sondage en attente, En tant qu’administrateur RH je veux réfuser un sondage en attente, En tant qu’administrateur RH je veux répondre a un sondage, En tant qu’administrateur RH je veux consulter ie pourcentage de chaque réponse a chaque sondage	Gérer les notifications de sondage espace administrateur	11	2022-10-30 11:37:18.243794	202
+354	0	4	0	STUID160AD	En tant que Com interne je veux créer une publication, En tant que Com interne je veux consulter la liste de mes publications validées, En tant que Com interne je veux recevoir des notifications dés la validation de mes publications en attentes par l’administrateur RH, En tant que Com interne je veux aimer et commenter une publication et En tant que Com interne je veux consulter la liste des employés qui ont aimés une publication	Gérer les publication et les commentaires espace Com interne	6	2022-10-30 11:37:18.243794	152
+357	0	3	0	STUID19B86	En tant que Com interne je veux consulter la liste des sondages dans la page d’accueil, En tant que Com interne je veux répondre a un sondage, En tant que Collaborateur je veux consulter la liste des sondages dans la page d’accueil et En tant que Collaborateur je veux répondre a un sondage	Gestion des sondages espace Com intrene	7	2022-10-30 11:37:18.243794	202
+3	0	3	0	STUID128AE	- Gérer les fοurnisseurs.\n- Gérer les sous-traitants	Gestion des fournisseurs et gestion des sous-traitants	13	2022-10-30 11:37:18.243794	1
+1	0	2	0	STUID1C117	Mise en place de l’architecture de la nοuvelle sοlutiοn du mοdule gestion des\nfournisseurs ainsi que la conception et réalisation de ces fonctionnalité.	Mise en place de l’architecture	22	2022-10-30 11:37:18.243794	1
+404	0	3	0	STUID1BB3F	En tant que Collaborateur RH je veux gérer mes données personnelles dans mon profile, En tant que Collaborateur je veux consulter les profiles des autres employés,  En tant qu’Administrateur RH je veux consulter les recommandations des collaborateurs disponibles	Gérer mes données personnelles dans mon profile espace collaborateur	10	2022-10-30 11:37:18.243794	252
+2	0	1	0	STUID1A273	L' authentification	Authentification	5	2022-10-30 11:37:18.243794	1
+54	0	3	0	STUID11FC3	la gestion des documents	La gestion des documents	13	2022-10-30 11:37:18.243794	2
+102	0	2	0	STUID19E2E	Personnalisation du dashboard et statistiques	Personnalisation du dashboard et statistiques	10	2022-10-30 11:37:18.243794	3
+55	0	1	0	STUID1837D	Export des données	Export des données	6	2022-10-30 11:37:18.243794	3
+355	0	1	0	STUID19016	En tant qu’administrateur RH je veux gérer des sondages	Gérer des sondages espace administrateur	10	2022-10-30 11:37:18.243794	202
+302	0	2	0	STUID1F4D6	- En tant qu’administrateur RH je veux recevoir des notifications pour consulter les événements en attentes.\n- En tant qu’administrateur RH je veux apercevoir un événement en attente.\n-  En tant qu’administrateur RH je veux valider un événement en attente.\n- En tant qu’administrateur RH je veux participer a un événement.\n- En tant qu’administrateur RH je veux consulter la liste des participants de chaque événement	La gestion d'événements	11	2022-10-30 11:37:18.243794	107
+403	0	2	0	STUID14272	En tant qu’administrateur RH je veux gérer mes données personnelles dans mon profile,  En tant qu’Administrateur RH je veux consulter les profiles des autres employés, En tant que Com interne je veux consulter mon profile, En tant que Com interne RH je veux gérer mes données personnelles dans mon profile, En tant que Com interne je veux consulter les profiles des autres employés et en tant que Collaborateur je veux consulter mon profile	Gérer mon profile espace com interne	15	2022-10-30 11:37:18.243794	252
+353	0	3	0	STUID1352D	En tant qu’administrateur RH je veux recevoir des notifications pour consulter les publications en attentes, En tant qu’administrateur RH je veux apercevoir une publication en attente, En tant qu’administrateur RH je veux valider une publication en attente, En tant qu’administrateur RH je veux réfuser une publication en attente, En tant qu’administrateur RH je veux\naimer et commenter une publication	Gérer les publication et les commentaires espace administrateur	8	2022-10-30 11:37:18.243794	152
+303	0	1	0	STUID107C5	En tant qu’administrateur RH je veux gérer des événements, En tant qu’administrateur RH je veux recevoir des notifications pour consulter les événements en attentes, En tant qu’administrateur RH je veux apercevoir un événement en attente, En tant qu’administrateur RH je veux valider un événement en attente et En tant qu’administrateur RH je veux réfuser un événement en attente	Gérer des événements espace administrateur 	17	2022-10-30 11:37:18.243794	152
+352	0	2	0	STUID17802	En tant que Collaborateur je veux participer a un événement,  En tant que Collaborateur je veux consulter la liste des participants de chaque événement et en tant qu’administrateur RH je veux gérer des publications	Gérer les évenements espace collaborateur	11	2022-10-30 11:37:18.243794	152
+52	0	1	0	STUID1C9F0	Gestion des contrats	La gestion des contrats	15	2022-10-30 11:37:18.243794	2
+252	0	1	0	STUID15359	En tant qu’administrateur RH je veux gérer les sites de TELNET	Gérer les sites de TELNET	7	2022-10-30 11:37:18.243794	107
+53	0	2	0	STUID133F6	la gestion des factures	La gestion des factures	16	2022-10-30 11:37:18.243794	2
+56	0	3	0	STUID1951D	Traduction	Traduction	11	2022-10-30 11:37:18.243794	3
 \.
 
 
@@ -1030,121 +1219,121 @@ COPY public.story (id, plus_sp, priority, sp_completed, st_reference, descriptio
 --
 
 COPY public.tasks (id, bugs, estimation, status, t_reference, tdate_debut, tdate_fin, description, title, tsupdated_date, type_task, story_id) FROM stdin;
-375	0	2	Scheduled	TUID1B913	2022-04-26	2022-04-27	Implémenter les méthodes et les services nécessaires pour regrouper les empoyés qui ont les mémes\ncompétences et centres d’intérét	regrouper les empoyés qui ont les mémes compétences et centres d’intérét pour les com interne	2022-10-25 14:37:45.807498	Default_task	404
-371	0	1	Scheduled	TUID1E43B	2022-04-23	2022-04-23	Implémenter les méthodes et les services nécessaires pour ajouter des centres d’intérét	Ajouter des centres d’intérét	2022-10-25 14:37:45.807498	Default_task	404
-369	0	1	Scheduled	TUID14277	2022-04-21	2022-04-21	Implémenter les méthodes et les services nécessaires pour mettre a jour des données personnelles	Mettre a jour des données personnelles	2022-10-25 14:37:45.807498	Default_task	404
-365	0	2	Scheduled	TUID16CFF	2022-04-15	2022-04-16	Ajouter l’action sur les images et les noms des employés dans l’accueil pour rediriger vers ses profiles	Ajouter l’action sur les images et les noms de com interne	2022-10-25 14:37:45.807498	Default_task	403
-62	0	2	Scheduled	TUID1A955	2022-04-12	2022-04-13	Implémenter les méthodes et le contrôle de saisie .	Implémenter les méthodes et le contrôle de saisie .	2022-10-25 14:37:45.807498	Default_task	3
-363	0	2	Scheduled	TUID17C79	2022-04-12	2022-04-13	Ajouter l’action sur les images et les noms des employés dans l’accueil pour rediriger vers ses profiles	Ajouter l’action sur les images et les noms des employés	2022-10-25 14:37:45.807498	Default_task	403
-327	0	1	Scheduled	TUID14771	2022-03-13	2022-03-13	Implémenter les méthodes et les services nécessaires pour recevoir des notifications	Implémenter les méthodes et les services nécessaires pour recevoir des notifications	2022-10-25 14:37:45.807498	Default_task	356
-326	0	1	Scheduled	TUID156BD	2022-03-12	2022-03-12	Tester l’ajout et l’affichage des sondages et la suppression des sondages	Tester l’ajout et l’affichage des sondages et la suppression des sondages	2022-10-25 14:37:45.807498	Default_task	355
-77	0	2	Scheduled	TUID1F107	2022-05-22	2022-05-23	Implémenter la méthode de téléchargement	Implémenter la méthode de téléchargement	2022-10-25 14:37:45.807498	Default_task	54
-68	0	1	Scheduled	TUID118E9	2022-04-29	2022-04-29	Implémenter les méthodes de contrôle de saisie pour les formulaires.	Implémenter les méthodes de contrôle de saisie pour les formulaires.	2022-10-25 14:37:45.807498	Default_task	52
-358	0	1	Scheduled	TUID1F20C	2022-04-06	2022-04-06	Tester la modification des données personnelles	Tester la modification des données personnelles.	2022-10-25 14:37:45.807498	Default_task	403
-104	0	1	Scheduled	TUID1558A	2022-06-04	2022-06-04	Ajοuter l’οptiοn expοrter dans les différentes interfaces de gestiοn de cοntrats et de factures	Ajοuter l’οptiοn expοrter dans UI	2022-10-25 14:37:45.807498	Default_task	55
-71	0	4	Scheduled	TUID1686F	2022-05-06	2022-05-09	Implémenter les méthοdes nécessaires pοur la cοnsultatiοn en exécutant la requête et la mοdificatiοn d’une facture et la recherche multicritères..	Implémenter les méthοdes de consultation et de recherche	2022-10-25 14:37:45.807498	Default_task	53
-111	0	1	Scheduled	TUID11326	2022-06-20	2022-06-20	Utiliser le microservice PARAM pour récupérer la liste des champs traduits.	Récupérer la liste des champs traduit	2022-10-25 14:37:45.807498	Default_task	56
-360	0	1	Scheduled	TUID14490	2022-04-08	2022-04-08	Implémenter les méthodes et les services nécessaires pour ajouter des centres d’intérét	Ajouter des centres d’intérét	2022-10-25 14:37:45.807498	Default_task	403
-367	0	1	Scheduled	TUID1D1B8	2022-04-18	2022-04-18	Ajouter un bouton dans ie profile qui redirige vers une page de modification ou d’ajout des données personnelles	Ajouter un bouton dans ie profile qui redirige vers une page de modification des données personnelles	2022-10-25 14:37:45.807498	Default_task	404
-354	0	1	Scheduled	TUID1433A	2022-04-02	2022-04-02	Implémenter les méthodes et les services nécessaires pour réagir avec les publications dans ie profile	Réagir avec les publications	2022-10-25 14:37:45.807498	Default_task	402
-352	0	1	Scheduled	TUID15715	2022-03-31	2022-03-31	Implémenter les méthodes et les services nécessaires pour récupérer les données de l’employé	Récupérer les données de l’employé	2022-10-25 14:37:45.807498	Default_task	402
-334	0	2	Scheduled	TUID1D792	2022-03-22	2022-03-23	Implémenter les méthodes et les services nécessaires pour calculer le pourcentage de chaque réponse a\nchaque sondage et Ajouter les barres qui contients les pourcentages pour chaque réponse	Calculer le pourcentage de chaque réponse a chaque sondage 	2022-10-25 14:37:45.807498	Default_task	356
-105	0	2	Scheduled	TUID16B23	2022-06-05	2022-06-06	Créer la méthode de l’export dans la partie front-end	Créer la méthode de l’export dans la partie front-end	2022-10-25 14:37:45.807498	Default_task	55
-366	0	1	Scheduled	TUID11E9B	2022-04-17	2022-04-17	Implémenter les méthodes et les services nécessaires pour récupérer le profile de chaque employé	Consulter les profiles des autres employés espace  Com interne	2022-10-25 14:37:45.807498	Default_task	403
-362	0	2	Scheduled	TUID1453B	2022-04-10	2022-04-11	Implémenter les méthodes et les services nécessaires pour ajouter des projets réalisés et consulter ie profile pour voir les changements	Ajouter des projets réalisés	2022-10-25 14:37:45.807498	Default_task	403
-364	0	1	Scheduled	TUID16466	2022-04-14	2022-04-14	Implémenter les méthodes et les services nécessaires pour récupérer ie profile de chaque employé	Récupérer ie profile de chaque employé	2022-10-25 14:37:45.807498	Default_task	403
-359	0	1	Scheduled	TUID11A47	2022-04-07	2022-04-07	Implémenter les méthodes et les services nécessaires pour ajouter des compétences	Ajouter des compétences	2022-10-25 14:37:45.807498	Default_task	403
-322	0	2	Scheduled	TUID1667A	2022-03-05	2022-03-06	Implémenter les méthodes et les services nécessaires pour apercevoir un sondage avant son ajout	Apercevoir un sondage avant son ajout	2022-10-25 14:37:45.807498	Default_task	355
-60	0	6	Scheduled	TUID12D6A	2022-04-04	2022-04-09	Implémenter les différentes méthodes nécessaires pour la gestion des sous-traitants.	Crud des sous-traitants	2022-10-25 14:37:45.807498	Default_task	3
-260	0	2	Scheduled	TUID10D94	2022-01-20	2022-01-21	Implémenter les méthodes et les services nécessaires pour ajouter un événement	Implémenter les méthodes et les services nécessaires pour ajouter un événement	2022-10-25 14:37:45.807498	Default_task	303
-370	0	1	Scheduled	TUID1467C	2022-04-22	2022-04-22	Implémenter les méthodes et les services nécessaires pour ajouter des compétences	Ajouter des compétences	2022-10-25 14:37:45.807498	Default_task	404
-356	0	1	Scheduled	TUID127C5	2022-04-04	2022-04-04	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles comme la photo de profile, date de naissance, etc...	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles	2022-10-25 14:37:45.807498	Default_task	403
-325	0	2	Scheduled	TUID1A8E3	2022-03-10	2022-03-11	Ajouter l’action de suppression sur la page de consultation de la liste des sondages, Implémenter les méthodes et les services nécessaires de suppression des sondages	Ajouter l’action de suppression sur la page de consultation de la liste des sondages	2022-10-25 14:37:45.807498	Default_task	355
-338	0	2	Scheduled	TUID1B9C6	2022-03-27	2022-03-28	Implémenter les méthodes et les services nécessaires pour lister les sondages dans la page d’accueil, Implémenter les interfaces nécessaires pour l’affichage des sondages dans la page d’accueil	l’affichage des sondages dans la page d’accueil	2022-10-25 14:37:45.807498	Default_task	357
-333	0	2	Scheduled	TUID13C8F	2022-03-20	2022-03-21	Impiémenter les méthodes et services nécessaires pour répondre a un sondage, Ajouter un popup qui contient les réponse a un sondage et Ajouter l’action pour choisir une réponse	Répondre a un sondage	2022-10-25 14:37:45.807498	Default_task	356
-63	0	2	Scheduled	TUID16104	2022-04-14	2022-04-15	Intégrer	Intégrer	2022-10-25 14:37:45.807498	Default_task	3
-67	0	3	Scheduled	TUID1D6D0	2022-04-26	2022-04-28	Implémenter les méthodes de la partie front-end.	Implémenter les méthodes de la partie front-end.	2022-10-25 14:37:45.807498	Default_task	52
-373	0	1	Scheduled	TUID19855	2022-04-24	2022-04-24	Implémenter les méthodes et les services nécessaires pour regrouper les empoyés qui ont les mémes compétences et centres d’intérét	Regrouper les empoyés qui ont les mémes compétences et centres d’intérét	2022-10-25 14:37:45.807498	Default_task	404
-368	0	2	Scheduled	TUID1C6F4	2022-04-19	2022-04-20	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles comme la photo de profile, date de naissance, etc...	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles	2022-10-25 14:37:45.807498	Default_task	404
-374	0	1	Scheduled	TUID1C4DF	2022-04-25	2022-04-25	Consulter les recommandations disponibles dans la page d’accueil	Consulter les recommandations disponibles dans la page d’accueil	2022-10-25 14:37:45.807498	Default_task	404
-353	0	1	Scheduled	TUID12187	2022-04-01	2022-04-01	Implémenter les méthodes et les services nécessaires pour récupérer les\npublications de l’employé	Récupérer les publications de l’employé	2022-10-25 14:37:45.807498	Default_task	402
-304	0	1	Scheduled	TUID11EF4	2022-02-09	2022-02-09	Tester la participation	Tester la participation	2022-10-25 14:37:45.807498	Default_task	352
-64	0	1	Scheduled	TUID1EDC4	2022-04-16	2022-04-16	Créer les éléments définissant l’architecture logique de la partie back-end ( contrôleur , DTO , service, service implémentatiοn et repοsitοry )	l’architecture logique de la partie back-end des contrats	2022-10-25 14:37:45.807498	Default_task	52
-69	0	1	Scheduled	TUID1AA8A	2022-04-30	2022-04-30	Créer le repository, les DTOs, les services et leurs implémentation et les contrôleurs	Créer le repository, les DTOs, les services 	2022-10-25 14:37:45.807498	Default_task	53
-259	0	3	Scheduled	TUID10F60	2022-01-16	2022-01-19	Implémenter les méthodes et services nécessaires pour participer a un événement, Ajouter l’action de participation sur chaque événement dans la page d’accueil et Implémenter les méthodes et les services nécessaires pour lister les participants de chaque événement	Implémenter les méthodes et services pour participer a un événement	2022-10-25 14:37:45.807498	Default_task	302
-255	0	3	Scheduled	TUID1F98A	2022-01-08	2022-01-10	Impiémenter les méthodes et les services nécessaires pour recevoir des notifications.	Recevoir les notifications	2022-10-25 14:37:45.807498	Default_task	302
-257	0	1	Scheduled	TUID1599F	2022-01-12	2022-01-12	Implémenter les interfaces nécessaires pour apercevoir un événement en attente	Implémenter les interfaces nécessaires pour apercevoir un événement	2022-10-25 14:37:45.807498	Default_task	302
-253	0	2	Scheduled	TUID18F5D	2022-01-05	2022-01-06	Implémenter les interfaces nécessaires pour l’affichage, l’ajout et la modification d’un site	Crud de site	2022-10-25 14:37:45.807498	Default_task	252
-202	0	2	Scheduled	TUID1D149	2022-01-01	2022-01-02	Implémenter les méthodes et services nécessaires pour l’ajout d’un nouveau site	Ajouter un nouveau site	2022-10-25 14:37:45.807498	Default_task	252
-303	0	1	Scheduled	TUID1C53B	2022-02-08	2022-02-08	Ajouter l’action de participation dans chaque événement dans la page d’accueil	Ajouter l’action de participation dans chaque événement	2022-10-25 14:37:45.807498	Default_task	352
-314	0	1	Scheduled	TUID1F71A	2022-02-23	2022-02-23	Ajouter l’action "j’aime" et "commentaire"  dans chaque publication dans la page d’accueil	Ajouter l’action "j’aime" et "commentaire"	2022-10-25 14:37:45.807498	Default_task	353
-258	0	3	Scheduled	TUID1D593	2022-01-13	2022-01-15	Ajouter l’action de validation sur ie dashboard de l’administrateur RH, Implémenter les méthodes et les services nécessaires de validation des événements en attentes et Tester la validation des événements en attentes	Implémenter les méthodes et les services de validation des événements en attentes.	2022-10-25 14:37:45.807498	Default_task	302
-361	0	1	Scheduled	TUID17B33	2022-04-09	2022-04-09	Tester l’ajout des compétences et l’ajout des centres d’intérét.	Tester l’ajout des compétences et l’ajout des centres d’intérét	2022-10-25 14:37:45.807498	Default_task	403
-357	0	1	Scheduled	TUID1003B	2022-04-05	2022-04-05	Implémenter les méthodes et les services nécessaires pour mettre a jour des données personnelles	Implémenter les méthodes et les services nécessaires pour mettre a jour des données personnelles	2022-10-25 14:37:45.807498	Default_task	403
-355	0	1	Scheduled	TUID19CD8	2022-04-03	2022-04-03	Ajouter un bouton dans ie profile qui redirige vers une page de modification ou d’ajout des données personnelles	Gérer les données personnelles	2022-10-25 14:37:45.807498	Default_task	403
-106	0	2	Scheduled	TUID120B2	2022-06-07	2022-06-08	Ajouter au menu de l’application tous les liens utiles pour naviguer dans le module fournisseur	Ajouter au menu de l’application tous les liens utiles	2022-10-25 14:37:45.807498	Default_task	102
-256	0	1	Scheduled	TUID17BCB	2022-01-11	2022-01-11	Implémenter les méthodes et les services nécessaires pour apercevoir les événements en attentes	Apercevoir les événements en attentes.	2022-10-25 14:37:45.807498	Default_task	302
-73	0	4	Scheduled	TUID1F54F	2022-05-12	2022-05-15	Implémenter les méthοdes de la partie frοnt-end	Implémenter les méthοdes de la partie frοnt-end	2022-10-25 14:37:45.807498	Default_task	53
-110	0	3	Scheduled	TUID1CCA2	2022-06-17	2022-06-19	Créer les scripts de la traduction de tous les champs de l’application et l’exécuter dans la base	Créer les scripts de la traduction	2022-10-25 14:37:45.807498	Default_task	56
-52	0	4	Scheduled	TUID17BF7	2022-03-07	2022-03-10	Intégrer le module authentification avec notre module coté Front-end.	Intégrer le module authentification	2022-10-25 14:37:45.807498	Default_task	2
-305	0	2	Scheduled	TUID1747D	2022-02-10	2022-02-11	Implémenter les méthodes et les services nécessaires pour lister les participants de chaque événement	 lister les participants de chaque événement	2022-10-25 14:37:45.807498	Default_task	352
-306	0	2	Scheduled	TUID1BC80	2022-02-12	2022-02-13	Ajouter les images et les noms des participants dans chaque événement dans la page d’accueil	Ajouter les images et les noms des participants dans chaque événement	2022-10-25 14:37:45.807498	Default_task	352
-254	0	1	Scheduled	TUID17D43	2022-01-07	2022-01-07	Tester les crud de site	Tester les crud de site	2022-10-25 14:37:45.807498	Default_task	252
-311	0	1	Scheduled	TUID1CF0F	2022-02-18	2022-02-18	Implémenter les méthodes et les services nécessaires pour apercevoir les publications en attentes	Apercevoir les publications en attentes	2022-10-25 14:37:45.807498	Default_task	353
-315	0	1	Scheduled	TUID10B73	2022-02-24	2022-02-24	Tester l’action "j’aime" et l’ajout d’un commentaire	Tester l’action "j’aime" et l’ajout d’un commentaire	2022-10-25 14:37:45.807498	Default_task	353
-316	0	1	Scheduled	TUID13E72	2022-02-25	2022-02-25	Implémenter les méthodes et les services nécessaires pour ajouter une publication	Implémenter les méthodes et les services nécessaires pour ajouter une publication	2022-10-25 14:37:45.807498	Default_task	354
-313	0	2	Scheduled	TUID19012	2022-02-21	2022-02-22	Tester la validation des publications en attentes, Ajouter l’action de rétusion sur ie dashboard de l’administrateur RH et Tester la ré tusion des publications en attentes	Tester la validation des publications en attentes	2022-10-25 14:37:45.807498	Default_task	353
-310	0	1	Scheduled	TUID115CD	2022-02-17	2022-02-17	Implémenter les méthodes et les services nécessaires pour recevoir des notifications	Recevoir des notifications	2022-10-25 14:37:45.807498	Default_task	353
-321	0	2	Scheduled	TUID16051	2022-03-03	2022-03-04	Implémenter les méthodes et les services nécessaires pour ajouter un sondage	Ajouter un sondage	2022-10-25 14:37:45.807498	Default_task	355
-323	0	1	Scheduled	TUID10E4F	2022-03-07	2022-03-07	Implémenter les méthodes et les services nécessaires pour lister les sondages disponibles et valides	Lister les sondages disponibles et valides	2022-10-25 14:37:45.807498	Default_task	355
-332	0	1	Scheduled	TUID1E10B	2022-03-19	2022-03-19	Tester la réfusion des sondages en attentes	Tester la réfusion des sondages en attentes	2022-10-25 14:37:45.807498	Default_task	356
-339	0	2	Scheduled	TUID1263E	2022-03-29	2022-03-30	Implémenter les méthodes et les services nécessaires pour répondre a un sondage et tester l’action de répondre a un sondage	Implémenter les méthodes de répondre a un sondage et tester l’action de répondre a un sondage	2022-10-25 14:37:45.807498	Default_task	357
-337	0	1	Scheduled	TUID17690	2022-03-26	2022-03-26	Tester l’action de répondre a un sondage	Tester l’action de répondre a un sondage	2022-10-25 14:37:45.807498	Default_task	357
-335	0	1	Scheduled	TUID1B675	2022-03-24	2022-03-24	Implémenter les méthodes et les services nécessaires pour lister les sondages dans la page d’accueil	lister les sondages dans la page d’accueil	2022-10-25 14:37:45.807498	Default_task	357
-74	0	1	Scheduled	TUID19B16	2022-05-16	2022-05-16	Créer le Dοcument DTΟ et le service et le service implémentatiοn.	Créer le Dοcument DTΟ et le service et le service implémentatiοn.	2022-10-25 14:37:45.807498	Default_task	54
-328	0	1	Scheduled	TUID14FCD	2022-03-14	2022-03-14	Ajouter l’action de validation sur ie dashboard de l’administrateur RH	Ajouter l’action de validation sur ie dashboard 	2022-10-25 14:37:45.807498	Default_task	356
-263	0	5	Scheduled	TUID14EB4	2022-01-25	2022-01-29	Implémenter les interfaces nécessaires pour l’affichage,l’ajout et la modification d’un événément, Tester l’ajout et l’attichage des événements, Implémenter les méthodes et les services nécessaires de modification dev événements.\nAjouter l’action de suppression sur la page de consultation de la liste des événements.\nImplémenter les méthodes et les services nécessaires de suppression des\névénements et Tester la suppression des événements.	L'affichage l’ajout et la modification d’un événément	2022-10-25 14:37:45.807498	Default_task	303
-329	0	1	Scheduled	TUID1F01A	2022-03-15	2022-03-15	Implémenter les méthodes et les services nécessaires de validation des sondages en attentes	validation des sondages en attentes	2022-10-25 14:37:45.807498	Default_task	356
-324	0	2	Scheduled	TUID1E3D5	2022-03-08	2022-03-09	Implémenter les interfaces nécessaires pour l’affichage,l’ajout et la modification d’un sondage	L’affichage,l’ajout et la modification d’un sondage	2022-10-25 14:37:45.807498	Default_task	355
-58	0	2	Scheduled	TUID1EEEA	2022-04-01	2022-04-02	Intégrer	Intégrer	2022-10-25 14:37:45.807498	Default_task	1
-320	0	1	Scheduled	TUID123D8	2022-03-02	2022-03-02	Implémenter les méthodes et services nécessaires pour aimer et commenter une publication, Ajouter l’action "j’aime" et  "commentaire"  dans chaque publication dans la page d’accueil et tester l’action "j’aime" et commentaire	Ajouter l’action "j’aime" et  "commentaire" 	2022-10-25 14:37:45.807498	Default_task	354
-112	0	5	Scheduled	TUID1E316	2022-06-21	2022-06-25	Implémenter la traductiοn dans la partie frοnt-end en utilisant le service de translatiοn de ngx-translate d’Angular.	Implémenter la traductiοn dans la partie frοnt-end 	2022-10-25 14:37:45.807498	Default_task	56
-262	0	2	Scheduled	TUID1426C	2022-01-24	2022-10-25	Implémenter les méthodes et les services nécessaires pour lister les événements disponibles et valides	 lister les événements disponibles et valides	2022-10-25 14:37:45.807498	Default_task	303
-307	0	1	Scheduled	TUID1FD14	2022-02-14	2022-02-14	Implémenter les méthodes et les services nécessaires pour ajouter une publication	Ajouter une publication	2022-10-25 14:37:45.807498	Default_task	352
-308	0	1	Scheduled	TUID15342	2022-02-15	2022-02-15	Implémenter les méthodes et les services nécessaires pour apercevoir une publication avant son ajout, Implémenter les méthodes et les services nécessaires pour lister les publications disponibles et valides	lister les publications disponibles et valides et  apercevoir une publication avant son ajout	2022-10-25 14:37:45.807498	Default_task	352
-61	0	2	Scheduled	TUID18F4E	2022-04-10	2022-04-11	Créer les interfaces pour la gestion des sous-traitants	Créer les interfaces pour la gestion des sous-traitants	2022-10-25 14:37:45.807498	Default_task	3
-1	0	1	Scheduled	TUID181D3	2022-03-06	2022-03-06	- Ajοuter la cοuche Spring Security à nοtre microservice.	Ajοuter la cοuche Spring Security	2022-10-25 14:37:45.807498	Default_task	2
-72	0	2	Scheduled	TUID1F895	2022-05-10	2022-05-11	Créer les interfaces nécessaires	Créer les interfaces nécessaires	2022-10-25 14:37:45.807498	Default_task	53
-317	0	1	Scheduled	TUID162CB	2022-02-26	2022-02-26	lrnplémenter les interfaces nécessaires pour l’ajout d’une publication, Implémenter les méthodes et les services nécessaires pour apercevoir une publication avant son ajout	l’ajout d’une publication et  apercevoir une publication avant son ajout	2022-10-25 14:37:45.807498	Default_task	354
-53	0	1	Scheduled	TUID1CC1C	2022-03-11	2022-03-11	Créer les éléments définissant l’architecture logique de la partie back-end (repositοry, DTΟ, service, service implémentatiοn et cοntrôleur)	définir l'architecture logique de la partie back-end	2022-10-25 14:37:45.807498	Default_task	1
-65	0	8	Scheduled	TUID1D69E	2022-04-17	2022-04-23	Implémenter les méthοdes ajοuter, modifier, consulter et rechercher en respectant l’architecture définie précédemment.	CRUD methode pour les contrats	2022-10-25 14:37:45.807498	Default_task	52
-336	0	1	Scheduled	TUID15A7C	2022-03-25	2022-03-25	Implémenter les interfaces nécessaires pour l’affichage des sondages dans la page d’accueil	l’affichage des sondages dans la page d’accueil	2022-10-25 14:37:45.807498	Default_task	357
-108	0	3	Scheduled	TUID1B421	2022-06-10	2022-06-12	Créer des statistiques qui vοnt être affichées dans le widget fοurnisseur.	Créer des statistiques	2022-10-25 14:37:45.807498	Default_task	102
-330	0	1	Scheduled	TUID11E0A	2022-03-16	2022-03-16	Tester la validation des sondages en attentes	Tester la validation des sondages en attentes	2022-10-25 14:37:45.807498	Default_task	356
-331	0	2	Scheduled	TUID11F85	2022-03-17	2022-03-18	Ajouter l’action de réfusion sur ie dashboard de l’administrateur RH, Implémenter les méthodes et les services nécessaires de réfusion des sondages en attentes	Ajouter l’action de réfusion sur ie dashboard 	2022-10-25 14:37:45.807498	Default_task	356
-109	0	4	Scheduled	TUID1272B	2022-06-13	2022-06-16	Afficher le widget fοurnisseur , le déplacer , le supprimer du dashbοard en consommant les api fournis par le microservice PARAM	Manage widget fοurnisseur	2022-10-25 14:37:45.807498	Default_task	102
-57	0	6	Scheduled	TUID1A55A	2022-03-25	2022-03-31	Créer les méthodes dans la partie front-end en utilisant un shared-service pour cοnserver les informations lorsqu’on navigue entre compοsants.	Créer les méthodes dans la partie front-end	2022-10-25 14:37:45.807498	Default_task	1
-59	0	1	Scheduled	TUID12F80	2022-04-03	2022-04-03	Créer les repositories, DTOs, les services et les contrôleurs des sous-traitants	Créer les repositories, DTOs, les services et les contrôleurs.	2022-10-25 14:37:45.807498	Default_task	3
-76	0	3	Scheduled	TUID1FDD8	2022-05-19	2022-05-21	Créer la méthode qui retourne une miniature d’un document enregistré ( en consommant les services offerts par GED )	Miniature d’un document enregistré	2022-10-25 14:37:45.807498	Default_task	54
-113	0	2	Scheduled	TUID1CC09	2022-06-26	2022-06-27	Implémenter la traductiοn dans tοutes les interfaces de l’applicatiοn.	Implémenter la traductiοn dans tοutes les interfaces de l’applicatiοn.	2022-10-25 14:37:45.807498	Default_task	56
-319	0	1	Scheduled	TUID1D110	2022-03-01	2022-03-01	Implémenter les méthodes et les services nécessaires pour recevoir des notifications	Recevoir des notifications	2022-10-25 14:37:45.807498	Default_task	354
-79	0	3	Scheduled	TUID1F1ED	2022-05-26	2022-05-28	Créer les différentes méthodes cotés front-end	Implementation des méthodes cotés front-end	2022-10-25 14:37:45.807498	Default_task	54
-107	0	1	Scheduled	TUID12DCF	2022-06-09	2022-06-09	Ajοuter le widget fοurnisseur à la base de dοnnées.	Ajοuter le widget fοurnisseur à la base de dοnnées.	2022-10-25 14:37:45.807498	Default_task	102
-56	0	3	Scheduled	TUID141E6	2022-03-22	2022-03-24	Implémenter les méthodes de cοntrôle de saisie pour les formulaires.	Les méthodes de cοntrôle de saisie	2022-10-25 14:37:45.807498	Default_task	1
-309	0	1	Scheduled	TUID1B042	2022-02-16	2022-02-16	Implémenter les interfaces nécessaires pour l’affichage,l’ajout et la modification d’une publication et tester l'ajout et l’attichage des\npublications	Crud de publication	2022-10-25 14:37:45.807498	Default_task	352
-318	0	2	Scheduled	TUID10E97	2022-02-27	2022-02-28	Implémenter les méthodes et les services nécessaires pour lister les publications valides, Implémenter les interfaces nécessaires pour l’affichage des publications	lister et afficher  les publications valides	2022-10-25 14:37:45.807498	Default_task	354
-312	0	2	Scheduled	TUID162E8	2022-02-19	2022-02-20	Implémenter les interfaces nécessaires pour apercevoir une publication en attente, Ajouter l’action de validation sur ie dashboard de l’administrateur RH	Ajouter l’action de validation sur ie dashboard de l’administrateur RH	2022-10-25 14:37:45.807498	Default_task	353
-302	0	2	Scheduled	TUID19510	2022-02-06	2022-02-07	Implémenter les méthodes et services nécessaires pour participer a un événement	Implémenter les méthodes et services nécessaires pour participer a un événement	2022-10-25 14:37:45.807498	Default_task	352
-264	0	6	Scheduled	TUID1E310	2022-01-30	2022-02-05	Implémenter les méthodes et les services nécessaires pour recevoir des notifications. Implémenter les méthodes et les services nécessaires pour apercevoir les événements en attentes. Implémenter les interfaces nécessaires pour apercevoir un événement en attente. Ajouter l’action de validation sur ie dashboard de l’administrateur RH. Implémenter les méthodes et les services nécessaires de validation des événements en attentes. Teser la validation des événements en attentes. Ajouter l’action de rétusion sur ie dashboard de l’administrateur RH	valider, réfuser et apercevoir les  événements en attente	2022-10-25 14:37:45.807498	Default_task	303
-55	0	2	Scheduled	TUID1AE80	2022-03-20	2022-03-21	Créer les interfaces de cοnsultation, de recherche et les formulaires d’ajout et de modification.	La création des interfaces UI de crud	2022-10-25 14:37:45.807498	Default_task	1
-54	0	8	Scheduled	TUID16FDC	2022-03-12	2022-03-19	Implémenter les méthodes ajouter , modifier, cοnsulter et rechercher en respectant l’architecture définie précédemment.	Implémenter CRUD	2022-10-25 14:37:45.807498	Default_task	1
-103	0	3	Scheduled	TUID19C54	2022-05-30	2022-06-03	Créer la méthοde d’expοrt dans la partie Back-end qui permet d’expοrter une liste de dοnnées en respectant l’architecture lοgicielle	Créer la méthοde d’expοrt dans la partie Back-end	2022-10-25 14:37:45.807498	Default_task	55
-252	0	2	Scheduled	TUID1F8E3	2022-01-03	2022-01-04	Implémenter les méthodes et services nécessaires pour lister les sites de TELNET disponibles	lister les sites de TELNET disponibles	2022-10-25 14:37:45.807498	Default_task	252
-261	0	2	Scheduled	TUID16ACC	2022-01-22	2022-01-23	Implémenter les méthodes et les services nécessaires pour apercevoir un événément avant son ajout	Apercevoir un événément avant son ajout	2022-10-25 14:37:45.807498	Default_task	303
-66	0	2	Scheduled	TUID1A887	2022-04-24	2022-04-25	Créer les interfaces de consultation, de recherche et les formulaires d’ajout et de modification.	Créer les interfaces 	2022-10-25 14:37:45.807498	Default_task	52
-75	0	2	Scheduled	TUID14773	2022-05-17	2022-05-18	Créer la méthοde uplοad du dοcument qui utilise le micrοservice GED qui nοus fournit le GED Path qu’on doit persister dans la base avec les informations du document.	Créer la méthοde uplοad du dοcument 	2022-10-25 14:37:45.807498	Default_task	54
-78	0	2	Scheduled	TUID12593	2022-05-24	2022-05-25	Créer l’interface à travers laquelle nous allons pouvoir manipuler les documents	Manipuler les documents	2022-10-25 14:37:45.807498	Default_task	54
-70	0	5	Scheduled	TUID1EC8F	2022-05-01	2022-05-05	Ecrire la requête permettant de recueillir les infοrmatiοns des factures à partir de plusieurs tables dans myBatis.	Recueillir les infοrmatiοns	2022-10-25 14:37:45.807498	Default_task	53
+365	0	2	Scheduled	TUID16CFF	2022-04-15	2022-04-16	Ajouter l’action sur les images et les noms des employés dans l’accueil pour rediriger vers ses profiles	Ajouter l’action sur les images et les noms de com interne	2022-10-30 11:37:18.260383	Default_task	403
+62	0	2	Scheduled	TUID1A955	2022-04-12	2022-04-13	Implémenter les méthodes et le contrôle de saisie .	Implémenter les méthodes et le contrôle de saisie .	2022-10-30 11:37:18.260383	Default_task	3
+65	0	8	Scheduled	TUID1D69E	2022-04-17	2022-04-23	Implémenter les méthοdes ajοuter, modifier, consulter et rechercher en respectant l’architecture définie précédemment.	CRUD methode pour les contrats	2022-10-30 11:37:18.260383	Default_task	52
+336	0	1	Scheduled	TUID15A7C	2022-03-25	2022-03-25	Implémenter les interfaces nécessaires pour l’affichage des sondages dans la page d’accueil	l’affichage des sondages dans la page d’accueil	2022-10-30 11:37:18.260383	Default_task	357
+330	0	1	Scheduled	TUID11E0A	2022-03-16	2022-03-16	Tester la validation des sondages en attentes	Tester la validation des sondages en attentes	2022-10-30 11:37:18.260383	Default_task	356
+364	0	1	Scheduled	TUID16466	2022-04-14	2022-04-14	Implémenter les méthodes et les services nécessaires pour récupérer ie profile de chaque employé	Récupérer ie profile de chaque employé	2022-10-30 11:37:18.260383	Default_task	403
+60	0	6	Scheduled	TUID12D6A	2022-04-04	2022-04-09	Implémenter les différentes méthodes nécessaires pour la gestion des sous-traitants.	Crud des sous-traitants	2022-10-30 11:37:18.260383	Default_task	3
+77	0	2	Scheduled	TUID1F107	2022-05-22	2022-05-23	Implémenter la méthode de téléchargement	Implémenter la méthode de téléchargement	2022-10-30 11:37:18.260383	Default_task	54
+326	0	1	Scheduled	TUID156BD	2022-03-12	2022-03-12	Tester l’ajout et l’affichage des sondages et la suppression des sondages	Tester l’ajout et l’affichage des sondages et la suppression des sondages	2022-10-30 11:37:18.260383	Default_task	355
+360	0	1	Scheduled	TUID14490	2022-04-08	2022-04-08	Implémenter les méthodes et les services nécessaires pour ajouter des centres d’intérét	Ajouter des centres d’intérét	2022-10-30 11:37:18.260383	Default_task	403
+367	0	1	Scheduled	TUID1D1B8	2022-04-18	2022-04-18	Ajouter un bouton dans ie profile qui redirige vers une page de modification ou d’ajout des données personnelles	Ajouter un bouton dans ie profile qui redirige vers une page de modification des données personnelles	2022-10-30 11:37:18.260383	Default_task	404
+354	0	1	Scheduled	TUID1433A	2022-04-02	2022-04-02	Implémenter les méthodes et les services nécessaires pour réagir avec les publications dans ie profile	Réagir avec les publications	2022-10-30 11:37:18.260383	Default_task	402
+352	0	1	Scheduled	TUID15715	2022-03-31	2022-03-31	Implémenter les méthodes et les services nécessaires pour récupérer les données de l’employé	Récupérer les données de l’employé	2022-10-30 11:37:18.260383	Default_task	402
+334	0	2	Scheduled	TUID1D792	2022-03-22	2022-03-23	Implémenter les méthodes et les services nécessaires pour calculer le pourcentage de chaque réponse a\nchaque sondage et Ajouter les barres qui contients les pourcentages pour chaque réponse	Calculer le pourcentage de chaque réponse a chaque sondage 	2022-10-30 11:37:18.260383	Default_task	356
+68	0	1	Scheduled	TUID118E9	2022-04-29	2022-04-29	Implémenter les méthodes de contrôle de saisie pour les formulaires.	Implémenter les méthodes de contrôle de saisie pour les formulaires.	2022-10-30 11:37:18.260383	Default_task	52
+308	0	1	Scheduled	TUID15342	2022-02-15	2022-02-15	Implémenter les méthodes et les services nécessaires pour apercevoir une publication avant son ajout, Implémenter les méthodes et les services nécessaires pour lister les publications disponibles et valides	lister les publications disponibles et valides et  apercevoir une publication avant son ajout	2022-10-30 11:37:18.260383	Default_task	352
+1	0	1	Scheduled	TUID181D3	2022-03-06	2022-03-06	- Ajοuter la cοuche Spring Security à nοtre microservice.	Ajοuter la cοuche Spring Security	2022-10-30 11:37:18.260383	Default_task	2
+72	0	2	Scheduled	TUID1F895	2022-05-10	2022-05-11	Créer les interfaces nécessaires	Créer les interfaces nécessaires	2022-10-30 11:37:18.260383	Default_task	53
+371	0	1	Scheduled	TUID1E43B	2022-04-23	2022-04-23	Implémenter les méthodes et les services nécessaires pour ajouter des centres d’intérét	Ajouter des centres d’intérét	2022-10-30 11:37:18.260383	Default_task	404
+363	0	2	Scheduled	TUID17C79	2022-04-12	2022-04-13	Ajouter l’action sur les images et les noms des employés dans l’accueil pour rediriger vers ses profiles	Ajouter l’action sur les images et les noms des employés	2022-10-30 11:37:18.260383	Default_task	403
+327	0	1	Scheduled	TUID14771	2022-03-13	2022-03-13	Implémenter les méthodes et les services nécessaires pour recevoir des notifications	Implémenter les méthodes et les services nécessaires pour recevoir des notifications	2022-10-30 11:37:18.260383	Default_task	356
+338	0	2	Scheduled	TUID1B9C6	2022-03-27	2022-03-28	Implémenter les méthodes et les services nécessaires pour lister les sondages dans la page d’accueil, Implémenter les interfaces nécessaires pour l’affichage des sondages dans la page d’accueil	l’affichage des sondages dans la page d’accueil	2022-10-30 11:37:18.260383	Default_task	357
+333	0	2	Scheduled	TUID13C8F	2022-03-20	2022-03-21	Impiémenter les méthodes et services nécessaires pour répondre a un sondage, Ajouter un popup qui contient les réponse a un sondage et Ajouter l’action pour choisir une réponse	Répondre a un sondage	2022-10-30 11:37:18.260383	Default_task	356
+359	0	1	Scheduled	TUID11A47	2022-04-07	2022-04-07	Implémenter les méthodes et les services nécessaires pour ajouter des compétences	Ajouter des compétences	2022-10-30 11:37:18.260383	Default_task	403
+322	0	2	Scheduled	TUID1667A	2022-03-05	2022-03-06	Implémenter les méthodes et les services nécessaires pour apercevoir un sondage avant son ajout	Apercevoir un sondage avant son ajout	2022-10-30 11:37:18.260383	Default_task	355
+63	0	2	Scheduled	TUID16104	2022-04-14	2022-04-15	Intégrer	Intégrer	2022-10-30 11:37:18.260383	Default_task	3
+67	0	3	Scheduled	TUID1D6D0	2022-04-26	2022-04-28	Implémenter les méthodes de la partie front-end.	Implémenter les méthodes de la partie front-end.	2022-10-30 11:37:18.260383	Default_task	52
+260	0	2	Scheduled	TUID10D94	2022-01-20	2022-01-21	Implémenter les méthodes et les services nécessaires pour ajouter un événement	Implémenter les méthodes et les services nécessaires pour ajouter un événement	2022-10-30 11:37:18.260383	Default_task	303
+370	0	1	Scheduled	TUID1467C	2022-04-22	2022-04-22	Implémenter les méthodes et les services nécessaires pour ajouter des compétences	Ajouter des compétences	2022-10-30 11:37:18.260383	Default_task	404
+356	0	1	Scheduled	TUID127C5	2022-04-04	2022-04-04	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles comme la photo de profile, date de naissance, etc...	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles	2022-10-30 11:37:18.260383	Default_task	403
+325	0	2	Scheduled	TUID1A8E3	2022-03-10	2022-03-11	Ajouter l’action de suppression sur la page de consultation de la liste des sondages, Implémenter les méthodes et les services nécessaires de suppression des sondages	Ajouter l’action de suppression sur la page de consultation de la liste des sondages	2022-10-30 11:37:18.260383	Default_task	355
+374	0	1	Scheduled	TUID1C4DF	2022-04-25	2022-04-25	Consulter les recommandations disponibles dans la page d’accueil	Consulter les recommandations disponibles dans la page d’accueil	2022-10-30 11:37:18.260383	Default_task	404
+373	0	1	Scheduled	TUID19855	2022-04-24	2022-04-24	Implémenter les méthodes et les services nécessaires pour regrouper les empoyés qui ont les mémes compétences et centres d’intérét	Regrouper les empoyés qui ont les mémes compétences et centres d’intérét	2022-10-30 11:37:18.260383	Default_task	404
+368	0	2	Scheduled	TUID1C6F4	2022-04-19	2022-04-20	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles comme la photo de profile, date de naissance, etc...	Implémenter les méthodes et les services nécessaires pour ajouter des données personnelles	2022-10-30 11:37:18.260383	Default_task	404
+358	0	1	Scheduled	TUID1F20C	2022-04-06	2022-04-06	Tester la modification des données personnelles	Tester la modification des données personnelles.	2022-10-30 11:37:18.260383	Default_task	403
+104	0	1	Scheduled	TUID1558A	2022-06-04	2022-06-04	Ajοuter l’οptiοn expοrter dans les différentes interfaces de gestiοn de cοntrats et de factures	Ajοuter l’οptiοn expοrter dans UI	2022-10-30 11:37:18.260383	Default_task	55
+71	0	4	Scheduled	TUID1686F	2022-05-06	2022-05-09	Implémenter les méthοdes nécessaires pοur la cοnsultatiοn en exécutant la requête et la mοdificatiοn d’une facture et la recherche multicritères..	Implémenter les méthοdes de consultation et de recherche	2022-10-30 11:37:18.260383	Default_task	53
+111	0	1	Scheduled	TUID11326	2022-06-20	2022-06-20	Utiliser le microservice PARAM pour récupérer la liste des champs traduits.	Récupérer la liste des champs traduit	2022-10-30 11:37:18.260383	Default_task	56
+353	0	1	Scheduled	TUID12187	2022-04-01	2022-04-01	Implémenter les méthodes et les services nécessaires pour récupérer les\npublications de l’employé	Récupérer les publications de l’employé	2022-10-30 11:37:18.260383	Default_task	402
+304	0	1	Scheduled	TUID11EF4	2022-02-09	2022-02-09	Tester la participation	Tester la participation	2022-10-30 11:37:18.260383	Default_task	352
+64	0	1	Scheduled	TUID1EDC4	2022-04-16	2022-04-16	Créer les éléments définissant l’architecture logique de la partie back-end ( contrôleur , DTO , service, service implémentatiοn et repοsitοry )	l’architecture logique de la partie back-end des contrats	2022-10-30 11:37:18.260383	Default_task	52
+69	0	1	Scheduled	TUID1AA8A	2022-04-30	2022-04-30	Créer le repository, les DTOs, les services et leurs implémentation et les contrôleurs	Créer le repository, les DTOs, les services 	2022-10-30 11:37:18.260383	Default_task	53
+259	0	3	Scheduled	TUID10F60	2022-01-16	2022-01-19	Implémenter les méthodes et services nécessaires pour participer a un événement, Ajouter l’action de participation sur chaque événement dans la page d’accueil et Implémenter les méthodes et les services nécessaires pour lister les participants de chaque événement	Implémenter les méthodes et services pour participer a un événement	2022-10-30 11:37:18.260383	Default_task	302
+255	0	3	Scheduled	TUID1F98A	2022-01-08	2022-01-10	Impiémenter les méthodes et les services nécessaires pour recevoir des notifications.	Recevoir les notifications	2022-10-30 11:37:18.260383	Default_task	302
+257	0	1	Scheduled	TUID1599F	2022-01-12	2022-01-12	Implémenter les interfaces nécessaires pour apercevoir un événement en attente	Implémenter les interfaces nécessaires pour apercevoir un événement	2022-10-30 11:37:18.260383	Default_task	302
+253	0	2	Scheduled	TUID18F5D	2022-01-05	2022-01-06	Implémenter les interfaces nécessaires pour l’affichage, l’ajout et la modification d’un site	Crud de site	2022-10-30 11:37:18.260383	Default_task	252
+202	0	2	Scheduled	TUID1D149	2022-01-01	2022-01-02	Implémenter les méthodes et services nécessaires pour l’ajout d’un nouveau site	Ajouter un nouveau site	2022-10-30 11:37:18.260383	Default_task	252
+303	0	1	Scheduled	TUID1C53B	2022-02-08	2022-02-08	Ajouter l’action de participation dans chaque événement dans la page d’accueil	Ajouter l’action de participation dans chaque événement	2022-10-30 11:37:18.260383	Default_task	352
+314	0	1	Scheduled	TUID1F71A	2022-02-23	2022-02-23	Ajouter l’action "j’aime" et "commentaire"  dans chaque publication dans la page d’accueil	Ajouter l’action "j’aime" et "commentaire"	2022-10-30 11:37:18.260383	Default_task	353
+258	0	3	Scheduled	TUID1D593	2022-01-13	2022-01-15	Ajouter l’action de validation sur ie dashboard de l’administrateur RH, Implémenter les méthodes et les services nécessaires de validation des événements en attentes et Tester la validation des événements en attentes	Implémenter les méthodes et les services de validation des événements en attentes.	2022-10-30 11:37:18.260383	Default_task	302
+361	0	1	Scheduled	TUID17B33	2022-04-09	2022-04-09	Tester l’ajout des compétences et l’ajout des centres d’intérét.	Tester l’ajout des compétences et l’ajout des centres d’intérét	2022-10-30 11:37:18.260383	Default_task	403
+357	0	1	Scheduled	TUID1003B	2022-04-05	2022-04-05	Implémenter les méthodes et les services nécessaires pour mettre a jour des données personnelles	Implémenter les méthodes et les services nécessaires pour mettre a jour des données personnelles	2022-10-30 11:37:18.260383	Default_task	403
+355	0	1	Scheduled	TUID19CD8	2022-04-03	2022-04-03	Ajouter un bouton dans ie profile qui redirige vers une page de modification ou d’ajout des données personnelles	Gérer les données personnelles	2022-10-30 11:37:18.260383	Default_task	403
+110	0	3	Scheduled	TUID1CCA2	2022-06-17	2022-06-19	Créer les scripts de la traduction de tous les champs de l’application et l’exécuter dans la base	Créer les scripts de la traduction	2022-10-30 11:37:18.260383	Default_task	56
+52	0	4	Scheduled	TUID17BF7	2022-03-07	2022-03-10	Intégrer le module authentification avec notre module coté Front-end.	Intégrer le module authentification	2022-10-30 11:37:18.260383	Default_task	2
+305	0	2	Scheduled	TUID1747D	2022-02-10	2022-02-11	Implémenter les méthodes et les services nécessaires pour lister les participants de chaque événement	 lister les participants de chaque événement	2022-10-30 11:37:18.260383	Default_task	352
+306	0	2	Scheduled	TUID1BC80	2022-02-12	2022-02-13	Ajouter les images et les noms des participants dans chaque événement dans la page d’accueil	Ajouter les images et les noms des participants dans chaque événement	2022-10-30 11:37:18.260383	Default_task	352
+254	0	1	Scheduled	TUID17D43	2022-01-07	2022-01-07	Tester les crud de site	Tester les crud de site	2022-10-30 11:37:18.260383	Default_task	252
+311	0	1	Scheduled	TUID1CF0F	2022-02-18	2022-02-18	Implémenter les méthodes et les services nécessaires pour apercevoir les publications en attentes	Apercevoir les publications en attentes	2022-10-30 11:37:18.260383	Default_task	353
+315	0	1	Scheduled	TUID10B73	2022-02-24	2022-02-24	Tester l’action "j’aime" et l’ajout d’un commentaire	Tester l’action "j’aime" et l’ajout d’un commentaire	2022-10-30 11:37:18.260383	Default_task	353
+316	0	1	Scheduled	TUID13E72	2022-02-25	2022-02-25	Implémenter les méthodes et les services nécessaires pour ajouter une publication	Implémenter les méthodes et les services nécessaires pour ajouter une publication	2022-10-30 11:37:18.260383	Default_task	354
+313	0	2	Scheduled	TUID19012	2022-02-21	2022-02-22	Tester la validation des publications en attentes, Ajouter l’action de rétusion sur ie dashboard de l’administrateur RH et Tester la ré tusion des publications en attentes	Tester la validation des publications en attentes	2022-10-30 11:37:18.260383	Default_task	353
+310	0	1	Scheduled	TUID115CD	2022-02-17	2022-02-17	Implémenter les méthodes et les services nécessaires pour recevoir des notifications	Recevoir des notifications	2022-10-30 11:37:18.260383	Default_task	353
+321	0	2	Scheduled	TUID16051	2022-03-03	2022-03-04	Implémenter les méthodes et les services nécessaires pour ajouter un sondage	Ajouter un sondage	2022-10-30 11:37:18.260383	Default_task	355
+323	0	1	Scheduled	TUID10E4F	2022-03-07	2022-03-07	Implémenter les méthodes et les services nécessaires pour lister les sondages disponibles et valides	Lister les sondages disponibles et valides	2022-10-30 11:37:18.260383	Default_task	355
+332	0	1	Scheduled	TUID1E10B	2022-03-19	2022-03-19	Tester la réfusion des sondages en attentes	Tester la réfusion des sondages en attentes	2022-10-30 11:37:18.260383	Default_task	356
+339	0	2	Scheduled	TUID1263E	2022-03-29	2022-03-30	Implémenter les méthodes et les services nécessaires pour répondre a un sondage et tester l’action de répondre a un sondage	Implémenter les méthodes de répondre a un sondage et tester l’action de répondre a un sondage	2022-10-30 11:37:18.260383	Default_task	357
+337	0	1	Scheduled	TUID17690	2022-03-26	2022-03-26	Tester l’action de répondre a un sondage	Tester l’action de répondre a un sondage	2022-10-30 11:37:18.260383	Default_task	357
+106	0	2	Scheduled	TUID120B2	2022-06-07	2022-06-08	Ajouter au menu de l’application tous les liens utiles pour naviguer dans le module fournisseur	Ajouter au menu de l’application tous les liens utiles	2022-10-30 11:37:18.260383	Default_task	102
+256	0	1	Scheduled	TUID17BCB	2022-01-11	2022-01-11	Implémenter les méthodes et les services nécessaires pour apercevoir les événements en attentes	Apercevoir les événements en attentes.	2022-10-30 11:37:18.260383	Default_task	302
+73	0	4	Scheduled	TUID1F54F	2022-05-12	2022-05-15	Implémenter les méthοdes de la partie frοnt-end	Implémenter les méthοdes de la partie frοnt-end	2022-10-30 11:37:18.260383	Default_task	53
+329	0	1	Scheduled	TUID1F01A	2022-03-15	2022-03-15	Implémenter les méthodes et les services nécessaires de validation des sondages en attentes	validation des sondages en attentes	2022-10-30 11:37:18.260383	Default_task	356
+58	0	2	Scheduled	TUID1EEEA	2022-04-01	2022-04-02	Intégrer	Intégrer	2022-10-30 11:37:18.260383	Default_task	1
+335	0	1	Scheduled	TUID1B675	2022-03-24	2022-03-24	Implémenter les méthodes et les services nécessaires pour lister les sondages dans la page d’accueil	lister les sondages dans la page d’accueil	2022-10-30 11:37:18.260383	Default_task	357
+74	0	1	Scheduled	TUID19B16	2022-05-16	2022-05-16	Créer le Dοcument DTΟ et le service et le service implémentatiοn.	Créer le Dοcument DTΟ et le service et le service implémentatiοn.	2022-10-30 11:37:18.260383	Default_task	54
+328	0	1	Scheduled	TUID14FCD	2022-03-14	2022-03-14	Ajouter l’action de validation sur ie dashboard de l’administrateur RH	Ajouter l’action de validation sur ie dashboard 	2022-10-30 11:37:18.260383	Default_task	356
+263	0	5	Scheduled	TUID14EB4	2022-01-25	2022-01-29	Implémenter les interfaces nécessaires pour l’affichage,l’ajout et la modification d’un événément, Tester l’ajout et l’attichage des événements, Implémenter les méthodes et les services nécessaires de modification dev événements.\nAjouter l’action de suppression sur la page de consultation de la liste des événements.\nImplémenter les méthodes et les services nécessaires de suppression des\névénements et Tester la suppression des événements.	L'affichage l’ajout et la modification d’un événément	2022-10-30 11:37:18.260383	Default_task	303
+324	0	2	Scheduled	TUID1E3D5	2022-03-08	2022-03-09	Implémenter les interfaces nécessaires pour l’affichage,l’ajout et la modification d’un sondage	L’affichage,l’ajout et la modification d’un sondage	2022-10-30 11:37:18.260383	Default_task	355
+262	0	2	Scheduled	TUID1426C	2022-01-24	2022-10-25	Implémenter les méthodes et les services nécessaires pour lister les événements disponibles et valides	 lister les événements disponibles et valides	2022-10-30 11:37:18.260383	Default_task	303
+105	0	2	Scheduled	TUID16B23	2022-06-05	2022-06-06	Créer la méthode de l’export dans la partie front-end	Créer la méthode de l’export dans la partie front-end	2022-10-30 11:37:18.260383	Default_task	55
+366	0	1	Scheduled	TUID11E9B	2022-04-17	2022-04-17	Implémenter les méthodes et les services nécessaires pour récupérer le profile de chaque employé	Consulter les profiles des autres employés espace  Com interne	2022-10-30 11:37:18.260383	Default_task	403
+362	0	2	Scheduled	TUID1453B	2022-04-10	2022-04-11	Implémenter les méthodes et les services nécessaires pour ajouter des projets réalisés et consulter ie profile pour voir les changements	Ajouter des projets réalisés	2022-10-30 11:37:18.260383	Default_task	403
+320	0	1	Scheduled	TUID123D8	2022-03-02	2022-03-02	Implémenter les méthodes et services nécessaires pour aimer et commenter une publication, Ajouter l’action "j’aime" et  "commentaire"  dans chaque publication dans la page d’accueil et tester l’action "j’aime" et commentaire	Ajouter l’action "j’aime" et  "commentaire" 	2022-10-30 11:37:18.260383	Default_task	354
+112	0	5	Scheduled	TUID1E316	2022-06-21	2022-06-25	Implémenter la traductiοn dans la partie frοnt-end en utilisant le service de translatiοn de ngx-translate d’Angular.	Implémenter la traductiοn dans la partie frοnt-end 	2022-10-30 11:37:18.260383	Default_task	56
+307	0	1	Scheduled	TUID1FD14	2022-02-14	2022-02-14	Implémenter les méthodes et les services nécessaires pour ajouter une publication	Ajouter une publication	2022-10-30 11:37:18.260383	Default_task	352
+61	0	2	Scheduled	TUID18F4E	2022-04-10	2022-04-11	Créer les interfaces pour la gestion des sous-traitants	Créer les interfaces pour la gestion des sous-traitants	2022-10-30 11:37:18.260383	Default_task	3
+317	0	1	Scheduled	TUID162CB	2022-02-26	2022-02-26	lrnplémenter les interfaces nécessaires pour l’ajout d’une publication, Implémenter les méthodes et les services nécessaires pour apercevoir une publication avant son ajout	l’ajout d’une publication et  apercevoir une publication avant son ajout	2022-10-30 11:37:18.260383	Default_task	354
+53	0	1	Scheduled	TUID1CC1C	2022-03-11	2022-03-11	Créer les éléments définissant l’architecture logique de la partie back-end (repositοry, DTΟ, service, service implémentatiοn et cοntrôleur)	définir l'architecture logique de la partie back-end	2022-10-30 11:37:18.260383	Default_task	1
+375	0	2	Scheduled	TUID1B913	2022-04-26	2022-04-27	Implémenter les méthodes et les services nécessaires pour regrouper les empoyés qui ont les mémes\ncompétences et centres d’intérét	regrouper les empoyés qui ont les mémes compétences et centres d’intérét pour les com interne	2022-10-30 11:37:18.260383	Default_task	404
+369	0	1	Scheduled	TUID14277	2022-04-21	2022-04-21	Implémenter les méthodes et les services nécessaires pour mettre a jour des données personnelles	Mettre a jour des données personnelles	2022-10-30 11:37:18.260383	Default_task	404
+108	0	3	Scheduled	TUID1B421	2022-06-10	2022-06-12	Créer des statistiques qui vοnt être affichées dans le widget fοurnisseur.	Créer des statistiques	2022-10-30 11:37:18.260383	Default_task	102
+331	0	2	Scheduled	TUID11F85	2022-03-17	2022-03-18	Ajouter l’action de réfusion sur ie dashboard de l’administrateur RH, Implémenter les méthodes et les services nécessaires de réfusion des sondages en attentes	Ajouter l’action de réfusion sur ie dashboard 	2022-10-30 11:37:18.260383	Default_task	356
+109	0	4	Scheduled	TUID1272B	2022-06-13	2022-06-16	Afficher le widget fοurnisseur , le déplacer , le supprimer du dashbοard en consommant les api fournis par le microservice PARAM	Manage widget fοurnisseur	2022-10-30 11:37:18.260383	Default_task	102
+57	0	6	Scheduled	TUID1A55A	2022-03-25	2022-03-31	Créer les méthodes dans la partie front-end en utilisant un shared-service pour cοnserver les informations lorsqu’on navigue entre compοsants.	Créer les méthodes dans la partie front-end	2022-10-30 11:37:18.260383	Default_task	1
+59	0	1	Scheduled	TUID12F80	2022-04-03	2022-04-03	Créer les repositories, DTOs, les services et les contrôleurs des sous-traitants	Créer les repositories, DTOs, les services et les contrôleurs.	2022-10-30 11:37:18.260383	Default_task	3
+76	0	3	Scheduled	TUID1FDD8	2022-05-19	2022-05-21	Créer la méthode qui retourne une miniature d’un document enregistré ( en consommant les services offerts par GED )	Miniature d’un document enregistré	2022-10-30 11:37:18.260383	Default_task	54
+113	0	2	Scheduled	TUID1CC09	2022-06-26	2022-06-27	Implémenter la traductiοn dans tοutes les interfaces de l’applicatiοn.	Implémenter la traductiοn dans tοutes les interfaces de l’applicatiοn.	2022-10-30 11:37:18.260383	Default_task	56
+319	0	1	Scheduled	TUID1D110	2022-03-01	2022-03-01	Implémenter les méthodes et les services nécessaires pour recevoir des notifications	Recevoir des notifications	2022-10-30 11:37:18.260383	Default_task	354
+79	0	3	Scheduled	TUID1F1ED	2022-05-26	2022-05-28	Créer les différentes méthodes cotés front-end	Implementation des méthodes cotés front-end	2022-10-30 11:37:18.260383	Default_task	54
+107	0	1	Scheduled	TUID12DCF	2022-06-09	2022-06-09	Ajοuter le widget fοurnisseur à la base de dοnnées.	Ajοuter le widget fοurnisseur à la base de dοnnées.	2022-10-30 11:37:18.260383	Default_task	102
+56	0	3	Scheduled	TUID141E6	2022-03-22	2022-03-24	Implémenter les méthodes de cοntrôle de saisie pour les formulaires.	Les méthodes de cοntrôle de saisie	2022-10-30 11:37:18.260383	Default_task	1
+309	0	1	Scheduled	TUID1B042	2022-02-16	2022-02-16	Implémenter les interfaces nécessaires pour l’affichage,l’ajout et la modification d’une publication et tester l'ajout et l’attichage des\npublications	Crud de publication	2022-10-30 11:37:18.260383	Default_task	352
+318	0	2	Scheduled	TUID10E97	2022-02-27	2022-02-28	Implémenter les méthodes et les services nécessaires pour lister les publications valides, Implémenter les interfaces nécessaires pour l’affichage des publications	lister et afficher  les publications valides	2022-10-30 11:37:18.260383	Default_task	354
+312	0	2	Scheduled	TUID162E8	2022-02-19	2022-02-20	Implémenter les interfaces nécessaires pour apercevoir une publication en attente, Ajouter l’action de validation sur ie dashboard de l’administrateur RH	Ajouter l’action de validation sur ie dashboard de l’administrateur RH	2022-10-30 11:37:18.260383	Default_task	353
+302	0	2	Scheduled	TUID19510	2022-02-06	2022-02-07	Implémenter les méthodes et services nécessaires pour participer a un événement	Implémenter les méthodes et services nécessaires pour participer a un événement	2022-10-30 11:37:18.260383	Default_task	352
+264	0	6	Scheduled	TUID1E310	2022-01-30	2022-02-05	Implémenter les méthodes et les services nécessaires pour recevoir des notifications. Implémenter les méthodes et les services nécessaires pour apercevoir les événements en attentes. Implémenter les interfaces nécessaires pour apercevoir un événement en attente. Ajouter l’action de validation sur ie dashboard de l’administrateur RH. Implémenter les méthodes et les services nécessaires de validation des événements en attentes. Teser la validation des événements en attentes. Ajouter l’action de rétusion sur ie dashboard de l’administrateur RH	valider, réfuser et apercevoir les  événements en attente	2022-10-30 11:37:18.260383	Default_task	303
+55	0	2	Scheduled	TUID1AE80	2022-03-20	2022-03-21	Créer les interfaces de cοnsultation, de recherche et les formulaires d’ajout et de modification.	La création des interfaces UI de crud	2022-10-30 11:37:18.260383	Default_task	1
+54	0	8	Scheduled	TUID16FDC	2022-03-12	2022-03-19	Implémenter les méthodes ajouter , modifier, cοnsulter et rechercher en respectant l’architecture définie précédemment.	Implémenter CRUD	2022-10-30 11:37:18.260383	Default_task	1
+103	0	3	Scheduled	TUID19C54	2022-05-30	2022-06-03	Créer la méthοde d’expοrt dans la partie Back-end qui permet d’expοrter une liste de dοnnées en respectant l’architecture lοgicielle	Créer la méthοde d’expοrt dans la partie Back-end	2022-10-30 11:37:18.260383	Default_task	55
+252	0	2	Scheduled	TUID1F8E3	2022-01-03	2022-01-04	Implémenter les méthodes et services nécessaires pour lister les sites de TELNET disponibles	lister les sites de TELNET disponibles	2022-10-30 11:37:18.260383	Default_task	252
+261	0	2	Scheduled	TUID16ACC	2022-01-22	2022-01-23	Implémenter les méthodes et les services nécessaires pour apercevoir un événément avant son ajout	Apercevoir un événément avant son ajout	2022-10-30 11:37:18.260383	Default_task	303
+66	0	2	Scheduled	TUID1A887	2022-04-24	2022-04-25	Créer les interfaces de consultation, de recherche et les formulaires d’ajout et de modification.	Créer les interfaces 	2022-10-30 11:37:18.260383	Default_task	52
+75	0	2	Scheduled	TUID14773	2022-05-17	2022-05-18	Créer la méthοde uplοad du dοcument qui utilise le micrοservice GED qui nοus fournit le GED Path qu’on doit persister dans la base avec les informations du document.	Créer la méthοde uplοad du dοcument 	2022-10-30 11:37:18.260383	Default_task	54
+78	0	2	Scheduled	TUID12593	2022-05-24	2022-05-25	Créer l’interface à travers laquelle nous allons pouvoir manipuler les documents	Manipuler les documents	2022-10-30 11:37:18.260383	Default_task	54
+70	0	5	Scheduled	TUID1EC8F	2022-05-01	2022-05-05	Ecrire la requête permettant de recueillir les infοrmatiοns des factures à partir de plusieurs tables dans myBatis.	Recueillir les infοrmatiοns	2022-10-30 11:37:18.260383	Default_task	53
 \.
 
 
@@ -1169,6 +1358,10 @@ COPY public.users (id, email, password, username) FROM stdin;
 --
 
 COPY public.users_projects (user_id, project_id) FROM stdin;
+52	3
+52	1
+52	2
+52	4
 \.
 
 
@@ -1193,6 +1386,10 @@ COPY public.users_roles (user_id, role_id) FROM stdin;
 --
 
 COPY public.users_tasks (users_id, tasks_id) FROM stdin;
+202	53
+202	54
+202	52
+202	55
 \.
 
 
@@ -1214,6 +1411,13 @@ COPY public.workedl_sprints (sprint_id, workedl_array) FROM stdin;
 3	20
 3	{"(40,30,20)"}
 \.
+
+
+--
+-- Name: byview_generator; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.byview_generator', 2290901, true);
 
 
 --
@@ -1263,6 +1467,14 @@ SELECT pg_catalog.setval('public.task_generator', 401, true);
 --
 
 SELECT pg_catalog.setval('public.user_generator', 101, true);
+
+
+--
+-- Name: by_ref_view by_ref_view_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.by_ref_view
+    ADD CONSTRAINT by_ref_view_pkey PRIMARY KEY (id);
 
 
 --
@@ -1319,6 +1531,14 @@ ALTER TABLE ONLY public.tasks
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT uk6dotkott2kjsp8vw4d0m25fb7 UNIQUE (email);
+
+
+--
+-- Name: by_ref_view ukaa7i3v2l1mf1jyfbb1wh96ksk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.by_ref_view
+    ADD CONSTRAINT ukaa7i3v2l1mf1jyfbb1wh96ksk UNIQUE (ref_task);
 
 
 --
