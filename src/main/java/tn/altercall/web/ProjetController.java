@@ -486,27 +486,21 @@ public class ProjetController {
         allByRefRepository.insertAllReferenceByProject(ref_p);
 
         allReference = allByRefRepository.getAllReferenceByProject(ref_p);
+       /* Comparator<ViewAllReference> comparator = (c1, c2) -> {
+            return Long.valueOf(c1.getTaskStaredAt().getTime()).compareTo(c2.getTaskStaredAt().getTime());
+        };
 
-        // .orElseThrow(() -> new ResourceNotFoundException("Not found List with Reference : " + ref_p));
-
-       /* for (var obj : allReference ) {
-            log.info("The result is::::::::::::  {} ", obj);
-        }*/
-
-        // log.info("The result is::::::::::::  {} ", allReference);
+        Collections.sort(allReference, comparator);*/
         // Group By Multiple Fields with Collectors.groupingBy()
        // https://www.javacodegeeks.com/2021/05/java-8-streams-group-by-multiple-fields-with-collectors-groupingby.html
-        Map<String, Map<String, Map<String, List<ViewAllReference>>>> viewMapList = allReference.stream()
+        Map<String, Map<String, List<ViewAllReference>>> viewMapList = allReference.stream()
                 .collect(
 
-                        Collectors.groupingBy(ViewAllReference::getRefProject,
+                       // Collectors.groupingBy(ViewAllReference::getRefProject,
                                 Collectors.groupingBy(ViewAllReference::getRefSprint,
                                 Collectors.groupingBy(ViewAllReference::getRefStory
                                       // Collectors.groupingBy(ViewAllReference::getRefTask
-                                      )))); //);
-
-
-
+                                      ))); //); //);
 
 
 
