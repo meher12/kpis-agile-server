@@ -33,7 +33,7 @@ services:
     #command: docker cp ./db/data/datasqlkpiagile db-kpis-agile:/datasqlkpiagile
     volumes:
       - pg-akk:/var/lib/postgresql/data
-#      - ./db/dumps.sql:/docker-entrypoint-initdb.d/0_dumps.sql
+      - ./db/dumps.sql:/docker-entrypoint-initdb.d/0_dumps.sql
 
     environment:
       - POSTGRES_USER=postgres

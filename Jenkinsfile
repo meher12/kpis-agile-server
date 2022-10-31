@@ -99,7 +99,7 @@ pipeline {
              '''
              sh 'chmod +x crebuild.sh'
              sh './crebuild.sh'
-            sh 'docker-compose up'
+             sh 'docker-compose up'
 //             sh 'docker compose up'
 
             // script for production mode
