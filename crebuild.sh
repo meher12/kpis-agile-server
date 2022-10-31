@@ -1,6 +1,6 @@
 #!/bin/bash
 docker network prune -f
-CNAME_Server="akk-backend"
+CNAME_Server="akk-server-container"
 CNAME_Client="akk-ui-container"
 CNAME_db="akk-db-container"
 
