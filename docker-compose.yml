@@ -61,9 +61,9 @@ services:
     image: 'akk-frontend:latest'
     container_name: akk-ui-container
     build:
-#         context: ../CICD-KPIsAgiles-Client
+         context: ../CICD-UI-AgileKK
          #for production mode
-         context: ../kpis-agile-client
+#         context: ../kpis-agile-client
 
     ports:
       - 4200:80
