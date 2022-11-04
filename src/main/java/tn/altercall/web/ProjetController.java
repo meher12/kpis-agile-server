@@ -1,10 +1,20 @@
 package tn.altercall.web;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.json.CDL;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.altercall.entities.Project;
@@ -15,9 +25,15 @@ import tn.altercall.repository.*;
 import tn.altercall.services.ProjectServiceImp;
 import tn.altercall.utils.*;
 
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -51,6 +67,41 @@ public class ProjetController {
             tmp[i] = tmp[i].trim();
         }
         return tmp;
+    }
+
+    public static void parseObject(JSONObject json, String key) {
+        System.out.println("Key : " + key + " has value : " + json.get(key));
+    }
+
+    public static void getKey(JSONObject json, String key) {
+        boolean exists = json.has(key);
+        Iterator<?> keys;
+        String nextKeys;
+        if (!exists) {
+            keys = json.keys();
+            while (keys.hasNext()) {
+                nextKeys = (String) keys.next();
+                try {
+                    if (json.get(nextKeys) instanceof JSONObject) {
+                        if (exists == false) {
+                            getKey(json.getJSONObject(nextKeys), key);
+                        }
+                    } else if (json.get(nextKeys) instanceof JSONArray) {
+                        JSONArray jsonarray = json.getJSONArray(nextKeys);
+                        for (int i = 0; i < jsonarray.length(); i++) {
+                            String jsonarrayString = jsonarray.get(i).toString();
+                            JSONObject innerJSOn = new JSONObject(jsonarrayString);
+                            if (exists == false) {
+                                getKey(innerJSOn, key);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                }
+            }
+        } else {
+            parseObject(json, key);
+        }
     }
 
     // get all project by Title or All
@@ -161,6 +212,26 @@ public class ProjetController {
         return new ResponseEntity<>(projetRepository.saveAndFlush(_projet), HttpStatus.OK);
     }
 
+    // update all story points
+//    @GetMapping("/projects/updateallsp")
+//    public ResponseEntity<Map<String, Boolean>> updatetotalSpInProject() {
+//
+//        this.storyRepository.StoryPointUpdate();
+//        this.sprintRepository.sprintStoryPointUpdate();
+//
+//
+//        storyRepository.updatePlusSp();
+//        sprintRepository.updateMoreSp();
+//
+//        taskRepository.tasktimeUpdate();
+//        projetRepository.totalSpInProject();
+//
+//        Map<String, Boolean> response = new HashMap<String, Boolean>();
+//        response.put("story points updated", Boolean.TRUE);
+//        return ResponseEntity.ok(response);
+//
+//    }
+
     @DeleteMapping("/projects/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteProjectById(@PathVariable Long id) {
 
@@ -191,27 +262,6 @@ public class ProjetController {
         }
 
     }
-
-    // update all story points
-//    @GetMapping("/projects/updateallsp")
-//    public ResponseEntity<Map<String, Boolean>> updatetotalSpInProject() {
-//
-//        this.storyRepository.StoryPointUpdate();
-//        this.sprintRepository.sprintStoryPointUpdate();
-//
-//
-//        storyRepository.updatePlusSp();
-//        sprintRepository.updateMoreSp();
-//
-//        taskRepository.tasktimeUpdate();
-//        projetRepository.totalSpInProject();
-//
-//        Map<String, Boolean> response = new HashMap<String, Boolean>();
-//        response.put("story points updated", Boolean.TRUE);
-//        return ResponseEntity.ok(response);
-//
-//    }
-
 
     //  product burndown chart by Project reference in params
     @GetMapping("/projects/productbdchart")
@@ -423,7 +473,6 @@ public class ProjetController {
         return new ResponseEntity<>(dataChart, HttpStatus.OK);
     }
 
-
     // Add, update member
     @PutMapping(value = "/project/addmember/{id}")
     public ResponseEntity<Map<String, Boolean>> createTeam(@PathVariable("id") Long id,
@@ -474,9 +523,8 @@ public class ProjetController {
         return ResponseEntity.ok(response);
     }
 
-
     @RequestMapping(value = "/projects/theref", method = RequestMethod.GET)
-    public ResponseEntity<?> getAllPReference(@RequestParam("ref_p") String ref_p) {
+    public ResponseEntity<?> getAllPReference(@RequestParam("ref_p") String ref_p) throws IOException {
 
         var allReference = new ArrayList<ViewAllReference>();
 
@@ -492,24 +540,61 @@ public class ProjetController {
 
         Collections.sort(allReference, comparator);*/
         // Group By Multiple Fields with Collectors.groupingBy()
-       // https://www.javacodegeeks.com/2021/05/java-8-streams-group-by-multiple-fields-with-collectors-groupingby.html
+        // https://www.javacodegeeks.com/2021/05/java-8-streams-group-by-multiple-fields-with-collectors-groupingby.html
         Map<String, Map<String, List<ViewAllReference>>> viewMapList = allReference.stream()
                 .collect(
 
-                       // Collectors.groupingBy(ViewAllReference::getRefProject,
-                                Collectors.groupingBy(ViewAllReference::getRefSprint,
+                        // Collectors.groupingBy(ViewAllReference::getRefProject,
+                        Collectors.groupingBy(ViewAllReference::getRefSprint,
                                 Collectors.groupingBy(ViewAllReference::getRefStory
-                                      // Collectors.groupingBy(ViewAllReference::getRefTask
-                                      ))); //); //);
-
-
+                                        // Collectors.groupingBy(ViewAllReference::getRefTask
+                                ))); //); //);
 
 
         // printing the count based on the designation and gender.
-        log.info("Group by on multiple properties: {}", viewMapList);
+       // log.info("Group by on multiple properties: {}", viewMapList);
 
-        return new ResponseEntity<>(viewMapList, HttpStatus.OK);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonData ="";
+        Map<?, ?> formatData;
+
+        try {
+            // convert user object to json string and return it
+            jsonData =mapper.writeValueAsString(viewMapList);
+           // log.info("Data json {}: ",jsonData);
+            // create object mapper instance
+            ObjectMapper mapper2 = new ObjectMapper();
+
+            // convert JSON file to map
+            // Map<?, ?> map = mapper2.readValue(Paths.get("/home/meher/j2eews/kpis-agile/kpis-agile-server/src/main/resources/test.json").toFile(), Map.class);
+            formatData = mapper2.readValue(jsonData, Map.class);
+
+            // print map entries
+            for (Map.Entry<?, ?> entry : formatData.entrySet()) {
+              //  System.out.println(entry.getKey() + "::::" + entry.getValue());
+            }
+            mapper2.writeValue(new File("/home/meher/j2eews/kpis-agile/kpis-agile-server/src/main/resources/test.json"), formatData);
+        }
+
+        // catch various errors
+        catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
 
+
+
 }
+
