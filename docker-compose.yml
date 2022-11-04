@@ -40,7 +40,7 @@ services:
       - POSTGRES_PASSWORD=mypass
     networks:
       - akk-network
-#  For production
+#  For production mode
 #  pgadmin:
 #      container_name: pgadmin
 #      image: dpage/pgadmin4
