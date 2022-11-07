@@ -98,7 +98,7 @@ pipeline {
              echo ' Check for a running container, stop it, then remove it '
              '''
              sh 'chmod +x crebuild.sh'
-             sh './crebuild.sh'
+             //sh './crebuild.sh'
              sh 'docker-compose up'
 //             sh 'docker compose up'
 
