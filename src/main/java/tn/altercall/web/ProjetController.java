@@ -5,8 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import tn.altercall.repository.*;
 import tn.altercall.services.ProjectServiceImp;
 import tn.altercall.utils.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -50,9 +47,6 @@ public class ProjetController {
 
     @Autowired
     ViewAllReferenceRepository allByRefRepository;
-
-
-
 
 
     // get all project by Title or All
