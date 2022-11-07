@@ -5,16 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.json.CDL;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.altercall.entities.Project;
@@ -25,11 +21,8 @@ import tn.altercall.repository.*;
 import tn.altercall.services.ProjectServiceImp;
 import tn.altercall.utils.*;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -83,7 +76,7 @@ public class ProjetController {
                 nextKeys = (String) keys.next();
                 try {
                     if (json.get(nextKeys) instanceof JSONObject) {
-                        if (exists == false) {
+                        if (!exists) {
                             getKey(json.getJSONObject(nextKeys), key);
                         }
                     } else if (json.get(nextKeys) instanceof JSONArray) {
@@ -91,7 +84,7 @@ public class ProjetController {
                         for (int i = 0; i < jsonarray.length(); i++) {
                             String jsonarrayString = jsonarray.get(i).toString();
                             JSONObject innerJSOn = new JSONObject(jsonarrayString);
-                            if (exists == false) {
+                            if (!exists) {
                                 getKey(innerJSOn, key);
                             }
                         }
@@ -552,16 +545,16 @@ public class ProjetController {
 
 
         // printing the count based on the designation and gender.
-       // log.info("Group by on multiple properties: {}", viewMapList);
+        // log.info("Group by on multiple properties: {}", viewMapList);
 
         ObjectMapper mapper = new ObjectMapper();
-        String jsonData ="";
+        String jsonData = "";
         Map<?, ?> formatData;
 
         try {
             // convert user object to json string and return it
-            jsonData =mapper.writeValueAsString(viewMapList);
-           // log.info("Data json {}: ",jsonData);
+            jsonData = mapper.writeValueAsString(viewMapList);
+            // log.info("Data json {}: ",jsonData);
             // create object mapper instance
             ObjectMapper mapper2 = new ObjectMapper();
 
@@ -571,7 +564,7 @@ public class ProjetController {
 
             // print map entries
             for (Map.Entry<?, ?> entry : formatData.entrySet()) {
-              //  System.out.println(entry.getKey() + "::::" + entry.getValue());
+                //  System.out.println(entry.getKey() + "::::" + entry.getValue());
             }
             mapper2.writeValue(new File("/home/meher/j2eews/kpis-agile/kpis-agile-server/src/main/resources/test.json"), formatData);
         }
@@ -588,12 +581,8 @@ public class ProjetController {
         }
 
 
-
-
         return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
-
-
 
 
 }
