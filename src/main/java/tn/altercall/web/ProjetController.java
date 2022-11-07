@@ -51,51 +51,9 @@ public class ProjetController {
     @Autowired
     ViewAllReferenceRepository allByRefRepository;
 
-    public static String[] toArray(String emails) {
-        if (emails == null)
-            return new String[0];
 
-        String[] tmp = emails.split(",");
-        for (int i = 0; i < tmp.length; i++) {
-            tmp[i] = tmp[i].trim();
-        }
-        return tmp;
-    }
 
-    public static void parseObject(JSONObject json, String key) {
-        System.out.println("Key : " + key + " has value : " + json.get(key));
-    }
 
-    public static void getKey(JSONObject json, String key) {
-        boolean exists = json.has(key);
-        Iterator<?> keys;
-        String nextKeys;
-        if (!exists) {
-            keys = json.keys();
-            while (keys.hasNext()) {
-                nextKeys = (String) keys.next();
-                try {
-                    if (json.get(nextKeys) instanceof JSONObject) {
-                        if (!exists) {
-                            getKey(json.getJSONObject(nextKeys), key);
-                        }
-                    } else if (json.get(nextKeys) instanceof JSONArray) {
-                        JSONArray jsonarray = json.getJSONArray(nextKeys);
-                        for (int i = 0; i < jsonarray.length(); i++) {
-                            String jsonarrayString = jsonarray.get(i).toString();
-                            JSONObject innerJSOn = new JSONObject(jsonarrayString);
-                            if (!exists) {
-                                getKey(innerJSOn, key);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                }
-            }
-        } else {
-            parseObject(json, key);
-        }
-    }
 
     // get all project by Title or All
     // @PreAuthorize("hasRole('PRODUCTOWNER')")
@@ -563,10 +521,10 @@ public class ProjetController {
             formatData = mapper2.readValue(jsonData, Map.class);
 
             // print map entries
-            for (Map.Entry<?, ?> entry : formatData.entrySet()) {
-                //  System.out.println(entry.getKey() + "::::" + entry.getValue());
+           /* for (Map.Entry<?, ?> entry : formatData.entrySet()) {
+                  System.out.println(entry.getKey() + "::::" + entry.getValue());
             }
-            mapper2.writeValue(new File("/home/meher/j2eews/kpis-agile/kpis-agile-server/src/main/resources/test.json"), formatData);
+            mapper2.writeValue(new File("/home/meher/j2eews/kpis-agile/kpis-agile-server/src/main/resources/test.json"), formatData);*/
         }
 
         // catch various errors
