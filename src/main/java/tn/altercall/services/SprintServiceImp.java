@@ -149,7 +149,7 @@ public class SprintServiceImp implements SprintService {
 
         float sumCapacity = 0;
         float sumDaysSprint = 0;
-        int jourSprint = 17;
+        int jourSprint = 27;
 
         for (int numberCapacity : commitmentSprintTab) {
             sumCapacity += numberCapacity;

@@ -99,7 +99,7 @@ pipeline {
              '''
              sh 'chmod +x crebuild.sh'
 //              comment it in the first run (if we want to check if docker container run)
-              sh './crebuild.sh'
+             sh './crebuild.sh'
              sh 'docker-compose up'
 //             sh 'docker compose up'
 
