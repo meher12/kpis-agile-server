@@ -1,27 +1,20 @@
 package tn.altercall.web;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import tn.altercall.exception.ResourceNotFoundException;
 import tn.altercall.entities.Project;
 import tn.altercall.entities.Sprint;
+import tn.altercall.exception.ResourceNotFoundException;
 import tn.altercall.repository.ProjetRepository;
 import tn.altercall.repository.SprintRepository;
 import tn.altercall.repository.StoryRepository;
 import tn.altercall.repository.TaskRepository;
 import tn.altercall.services.SprintServiceImp;
+
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,26 +41,26 @@ public class SprintController {
     // search by project reference
     @GetMapping("/projects/searchByPReference")
     public ResponseEntity<List<Sprint>> getAllSprintsByPReference(@RequestParam(required = false) String projectReference) {
-       // try {
-            var project = new Project();
-            List<Sprint> sprints = new ArrayList<>();
+        // try {
+        var project = new Project();
+        List<Sprint> sprints = new ArrayList<>();
 
-            if (projectReference == null)
-                sprintRepository.findAll().forEach(sprints::add);
-            else
-                project   = projetRepository.findBypReference(projectReference)
-                                .orElseThrow(() -> new ResourceNotFoundException("Not found Project with reference: " + projectReference));
+        if (projectReference == null)
+            sprintRepository.findAll().forEach(sprints::add);
+        else
+            project = projetRepository.findBypReference(projectReference)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found Project with reference: " + projectReference));
 
-                sprintRepository.findByProjetId(project.getId()).forEach(sprints::add);
+        sprintRepository.findByProjetId(project.getId()).forEach(sprints::add);
 
-            if (sprints.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+        if (sprints.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
-            Comparator<Sprint> comparator = (c1, c2) -> Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
+        Comparator<Sprint> comparator = (c1, c2) -> Long.valueOf(c1.getSdateDebut().getTime()).compareTo(c2.getSdateDebut().getTime());
 
-            Collections.sort(sprints, comparator);
-            return new ResponseEntity<>(sprints, HttpStatus.OK);
+        Collections.sort(sprints, comparator);
+        return new ResponseEntity<>(sprints, HttpStatus.OK);
        /* } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }*/
@@ -143,7 +136,7 @@ public class SprintController {
     // create Sprint
     @PostMapping("/sprints/projects/{projet_id}/sprints")
     public ResponseEntity<Sprint> createSprint(@PathVariable(value = "projet_id") Long projet_id,
-            @RequestBody Sprint sprintRequest) {
+                                               @RequestBody Sprint sprintRequest) {
         Sprint sprint = projetRepository.findById(projet_id).map(project -> {
             sprintRequest.setProjet(project);
             return sprintRepository.save(sprintRequest);
@@ -209,7 +202,7 @@ public class SprintController {
     // get number of days in sprint
     @RequestMapping(value = "/sprints/daysbrundownChart", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Boolean>> daysInSprint() throws Exception {
-        
+
         this.storyRepository.StoryPointUpdate();
         this.sprintRepository.sprintStoryPointUpdate();
 
@@ -231,15 +224,17 @@ public class SprintController {
 
         this.storyRepository.StoryPointUpdate();
         this.sprintRepository.sprintStoryPointUpdate();
-        
+
         List<Sprint> sprints = sprintRepository.findAll();
+        int SpTotalForIdealLine = 0;
         for (Sprint sprint : sprints) {
-            
+
             // Insert in db
-            sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(), sprint.getWorkCommitment()));
+            SpTotalForIdealLine = sprint.getWorkCompleted() + sprint.getWorkCommitment();
+            sprint.setIdealLinearray(sprintServiceImp.getIdealLine(sprint.getSdateDebut(), sprint.getSdateFin(), SpTotalForIdealLine));
             List<String> arrayLine = sprint.getIdealLinearray();
             sprintRepository.sprintArrayOfIdealLine(sprint.getId(), arrayLine);
-          // log.info("ideal line {} ",arrayLine);
+            // log.info("ideal line {} ",arrayLine);
         }
 
         Map<String, Boolean> response = new HashMap<String, Boolean>();
@@ -250,15 +245,15 @@ public class SprintController {
     // update sprint work completed for brundown chart
     @RequestMapping(value = "/sprints/addspCompleted/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Map<String, Boolean>> updateSprintWorkCompleted(@PathVariable("id") Long id,
-            @RequestBody ArrayList<Object> storiesRequest) {
-        
+                                                                          @RequestBody ArrayList<Object> storiesRequest) {
+
         this.storyRepository.StoryPointUpdate();
         this.sprintRepository.sprintStoryPointUpdate();
 
         Sprint sprint = sprintRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("SprintId " + id + "not found"));
 
-         //System.out.println("--- ***************************** ***********************" + storiesRequest);
+        //System.out.println("--- ***************************** ***********************" + storiesRequest);
 
         ArrayList<String> arrayJson = new ArrayList<String>();
         ArrayList<String> arrayFiltred = new ArrayList<String>();
@@ -271,7 +266,7 @@ public class SprintController {
             String number = item.replaceAll("[^0-9]", "");
             arrayFiltred.add(number);
         }
-       // System.out.println("*****" + arrayFiltred);
+        // System.out.println("*****" + arrayFiltred);
 
         sprint.setWorkedlarray(arrayFiltred);
         // List<String> arraysp = sprintRequest.getWorkedlarray();
@@ -315,7 +310,7 @@ public class SprintController {
         List<Map.Entry<String, Float>> list = new ArrayList<>(set);
 
         //for (int i = 0; i < list.size(); i++) {
-           // System.out.println(list.get(i).getKey() + ": " + list.get(i).getValue());
+        // System.out.println(list.get(i).getKey() + ": " + list.get(i).getValue());
         //}
 
         return new ResponseEntity<>(list, HttpStatus.OK);
