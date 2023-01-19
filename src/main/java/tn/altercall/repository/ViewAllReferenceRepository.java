@@ -46,6 +46,6 @@ public interface ViewAllReferenceRepository extends JpaRepository<ViewAllReferen
     @Query(value = "INSERT INTO by_ref_view (id, ref_project, ref_sprint, ref_story, ref_task, task_stared_at, title_project, title_sprint, title_story, title_task) select nextval('byview_generator'), P.p_reference , S.s_reference , ST.st_reference , T.t_reference, T.tdate_debut ,  P.title , S.title , ST.title , T.title FROM projects P JOIN sprints S ON S.projet_id = P.id JOIN story ST ON S.id = ST.sprint_id  JOIN tasks T ON ST.id = T.story_id  WHERE (P.p_reference=:p_reference) ORDER BY T.tdate_debut", nativeQuery  = true)
     void insertAllReferenceByProject(@Param("p_reference") String p_reference);
 
-    @Query(value = "select * from by_ref_view WHERE (ref_project=:ref_project);", nativeQuery = true)
+    @Query(value = "select * from by_ref_view WHERE (ref_project=:ref_project) ORDER BY task_stared_at ASC;", nativeQuery = true)
     ArrayList<ViewAllReference> getAllReferenceByProject(@Param("ref_project") String ref_project);
 }

@@ -22,6 +22,7 @@ import tn.altercall.utils.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -486,7 +487,11 @@ public class ProjetController {
         Collections.sort(allReference, comparator);*/
         // Group By Multiple Fields with Collectors.groupingBy()
         // https://www.javacodegeeks.com/2021/05/java-8-streams-group-by-multiple-fields-with-collectors-groupingby.html
+
+        log.info("Group properties: {}", allReference);
+
         Map<String, Map<String, List<ViewAllReference>>> viewMapList = allReference.stream()
+
                 .collect(
 
                         // Collectors.groupingBy(ViewAllReference::getRefProject,
@@ -497,7 +502,10 @@ public class ProjetController {
 
 
         // printing the count based on the designation and gender.
-        // log.info("Group by on multiple properties: {}", viewMapList);
+        log.info("Group by on multiple properties: {}", viewMapList);
+
+
+
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonData = "";
@@ -505,6 +513,9 @@ public class ProjetController {
 
         try {
             // convert user object to json string and return it
+
+
+
             jsonData = mapper.writeValueAsString(viewMapList);
             // log.info("Data json {}: ",jsonData);
             // create object mapper instance
@@ -532,8 +543,11 @@ public class ProjetController {
             throw new RuntimeException(e);
         }
 
-
-        return new ResponseEntity<>(jsonData, HttpStatus.OK);
+       /* for (String key : viewMapList.keySet()) {
+            System.out.println(key + ":" + viewMapList.get(key));
+        }*/
+       // LOGGER.info(jsonData);
+        return new ResponseEntity<>(viewMapList, HttpStatus.OK);
     }
 
 
