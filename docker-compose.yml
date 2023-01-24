@@ -61,7 +61,7 @@ services:
     image: 'akk-frontend:latest'
     container_name: akk-ui-container
     build:
-         context: ../CICD-UI-AgileKK
+         context: ../AKK-Client
          #for production mode
 #         context: ../kpis-agile-client
 
