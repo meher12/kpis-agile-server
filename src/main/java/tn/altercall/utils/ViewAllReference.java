@@ -26,7 +26,7 @@ public class ViewAllReference {
     private String refTask;
     private String titleTask;
 
-    private String storyTitle;
+
 
     private Date taskStaredAt;
 
@@ -110,15 +110,6 @@ public class ViewAllReference {
         this.taskStaredAt = taskStaredAt;
     }
 
-
-
-    public String getStoryTitle() {
-        return storyTitle;
-    }
-
-    public void setStoryTitle(String storyTitle) {
-        this.storyTitle = storyTitle;
-    }
 }
 
 
