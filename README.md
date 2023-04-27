@@ -10,4 +10,9 @@
 - Spring Framework (Spring Boot, Spring Security)
 - Database: PostgreSQL
 - Webservices: RESTful Webservices
-- Build tools: Maven, Jenkins, Sonar, Docker
+- Build tools: Maven
+
+### DevOps
+- Jenkins
+- Docker
+- Sonar
