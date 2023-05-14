@@ -1,7 +1,7 @@
 # Agile KPIs Dashboards Implementation
 
 ## Missions:
-- Design and build the backend.
+- Build the backend.
 - Set up a CI/CD chain.
 - Deployment of the dashboards.
 
